@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "declaration": true,
+    "outDir": "./dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "lib": [
+      "es5",
+      "es6",
+      "es2017",
+      "es2018",
+      "dom",
+      "es2015",
+      "es2015.core",
+      "es2015.collection",
+      "es2015.generator",
+      "es2015.iterable",
+      "es2015.promise",
+      "es2015.proxy",
+      "es2015.reflect",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "esnext.asynciterable"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

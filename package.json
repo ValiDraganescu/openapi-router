@@ -1,0 +1,17 @@
+{
+  "name": "openapi-router",
+  "version": "0.1",
+  "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "compile": "./node_modules/typescript/bin/tsc -w"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.9.1",
+    "@types/node": "^13.5.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.0.0",
+    "typescript": "^3.7.5"
+  }
+}
