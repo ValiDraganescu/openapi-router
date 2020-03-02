@@ -3,6 +3,8 @@ A (very opinionated, no dependency) NodeJS Typescript router that implements the
 
 Early stage development, not to be used in production apps.
 
+[See app implementation example here](https://github.com/ValiDraganescu/openapi-router/blob/master/example/app.ts)
+
 ###Router components
 * Router
 * Validator
