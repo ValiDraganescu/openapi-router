@@ -14,27 +14,43 @@
  limitations under the License.
  */
 
-import {ObjectType} from "../object-type";
-import {getMetadataStorage} from "../metadata/metadata-storage";
-import {PropertyMetadata} from "../metadata/router-metadata";
+import { ObjectType } from "../object-type";
+import { getMetadataStorage } from "../metadata/metadata-storage";
+import { PropertyMetadata } from "../metadata/router-metadata";
 
 type PropType = "undefined" | "object" | "boolean" | "number" | "string" | "function" | "symbol" | "bigint";
 
-const validateIsRequired = <T>(propMeta: PropertyMetadata, property: any, Model: ObjectType<T>, modelKey: string): string | null => {
+const validateIsRequired = <T>(
+  propMeta: PropertyMetadata,
+  property: any,
+  Model: ObjectType<T>,
+  modelKey: string,
+): string | null => {
   if (propMeta.isRequired && !property) {
     return `${Model.name}.${modelKey} is required`;
   }
   return null;
 };
 
-const validateIsCorrectType = <T>(propType: PropType, propMeta: PropertyMetadata, Model: ObjectType<T>, modelKey: string): string | null => {
+const validateIsCorrectType = <T>(
+  propType: PropType,
+  propMeta: PropertyMetadata,
+  Model: ObjectType<T>,
+  modelKey: string,
+): string | null => {
   if (propType !== propMeta.type) {
     return `${Model.name}.${modelKey} should be of type ${propMeta.type}`;
   }
   return null;
 };
 
-const validateMinSize = <T>(propMeta: PropertyMetadata, propType: PropType, property: any, Model: ObjectType<T>, modelKey: string): string | null => {
+const validateMinSize = <T>(
+  propMeta: PropertyMetadata,
+  propType: PropType,
+  property: any,
+  Model: ObjectType<T>,
+  modelKey: string,
+): string | null => {
   if (propMeta.minSize) {
     if (propType === "string" || (propType === "object" && Array.isArray(property))) {
       if (property.length < propMeta.minSize) {
@@ -50,7 +66,12 @@ const validateMinSize = <T>(propMeta: PropertyMetadata, propType: PropType, prop
   return null;
 };
 
-const validateFormat = <T>(propMeta: PropertyMetadata, property: string, Model: ObjectType<T>, modelKey: string): string | null => {
+const validateFormat = <T>(
+  propMeta: PropertyMetadata,
+  property: string,
+  Model: ObjectType<T>,
+  modelKey: string,
+): string | null => {
   if (propMeta.format) {
     const regex = new RegExp(propMeta.format);
     const isCorrectFormat = regex.test(property);
@@ -61,7 +82,13 @@ const validateFormat = <T>(propMeta: PropertyMetadata, property: string, Model: 
   return null;
 };
 
-const validateMaxSize = <T>(propMeta: PropertyMetadata, propType: PropType, property: any, Model: ObjectType<T>, modelKey: string): string | null => {
+const validateMaxSize = <T>(
+  propMeta: PropertyMetadata,
+  propType: PropType,
+  property: any,
+  Model: ObjectType<T>,
+  modelKey: string,
+): string | null => {
   if (propMeta.maxSize) {
     if (propType === "string" || (propType === "object" && Array.isArray(property))) {
       if (property.length > propMeta.maxSize) {
@@ -89,7 +116,12 @@ const validateObject = (propMeta: PropertyMetadata, property: any): string[] => 
   return errors;
 };
 
-const validateRequiredProperties = <T>(property: any, propMeta: PropertyMetadata, Model: ObjectType<T>, modelKey: string): string[] => {
+const validateRequiredProperties = <T>(
+  property: any,
+  propMeta: PropertyMetadata,
+  Model: ObjectType<T>,
+  modelKey: string,
+): string[] => {
   const errors: string[] = [];
   let error: string | null;
 
@@ -138,7 +170,6 @@ export class Validator {
     const modelKeys = Object.keys(entityMeta);
 
     for (let modelKey of modelKeys) {
-
       const propMeta = entityMeta[modelKey];
       const property = body[modelKey];
 
@@ -160,4 +191,3 @@ export class Validator {
     return errors;
   };
 }
-

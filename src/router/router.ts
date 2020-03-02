@@ -14,14 +14,13 @@
  limitations under the License.
  */
 
-import {IPathParams, Request, Response} from "./event";
-import {Validator} from "../validator/validator";
-import {RouteMetadata} from "../metadata/router-metadata";
-import {getMetadataStorage} from "../metadata/metadata-storage";
-import {generateDoc} from "../doc/generator";
+import { IPathParams, Request, Response } from "./event";
+import { Validator } from "../validator/validator";
+import { RouteMetadata } from "../metadata/router-metadata";
+import { getMetadataStorage } from "../metadata/metadata-storage";
+import { generateDoc } from "../doc/generator";
 
 class Router {
-
   handleEvent = async (request: Request): Promise<Response> => {
     const [route, pathParams] = this.resolveHandler(request.method, request.path);
     if (route) {
@@ -30,7 +29,7 @@ class Router {
       if (route.requestBody) {
         const inputValidationErrors = Validator.validate(request.body, route.requestBody);
         if (inputValidationErrors && inputValidationErrors.length) {
-          return new Response(400).setBody({errors: inputValidationErrors});
+          return new Response(400).setBody({ errors: inputValidationErrors });
         }
       }
 
@@ -79,21 +78,18 @@ class Router {
         const routeComponents = routeKey.split("/");
 
         if (routeComponents.length === basePathComponents.length) {
-
           let isValidRoute = true;
           for (let i = 0; i < routeComponents.length; i++) {
-
             const routeComponent = routeComponents[i];
             const basePathComponent = basePathComponents[i];
 
             if (basePathComponent !== routeComponent) {
               if (routeComponent.startsWith("{")) {
-
-                const paramName = routeComponent.slice(1, routeComponent.length -1);
+                const paramName = routeComponent.slice(1, routeComponent.length - 1);
                 pathParams[paramName] = {
                   name: paramName,
                   value: basePathComponents[i],
-                  index: i
+                  index: i,
                 };
               } else {
                 isValidRoute = false;
@@ -107,7 +103,6 @@ class Router {
               routeMeta = methodMeta[method];
               break;
             }
-
           }
         }
       }

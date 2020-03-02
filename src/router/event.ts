@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {HttpMethod} from "../doc/http-method";
+import { HttpMethod } from "../doc/http-method";
 
 export interface IPathParam {
   name: string;
@@ -22,11 +22,11 @@ export interface IPathParam {
 }
 
 export interface IPathParams {
-  [key: string]: IPathParam
+  [key: string]: IPathParam;
 }
 
 export interface IQueryParams {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export interface IRequestOpts<RequestBody> {

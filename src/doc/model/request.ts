@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import {DocContent} from "./contents";
+import { DocContent } from "./contents";
 
 export class DocRequest {
   required: boolean = true;

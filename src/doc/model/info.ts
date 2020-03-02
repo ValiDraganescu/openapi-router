@@ -14,10 +14,10 @@
  limitations under the License.
  */
 
-import {DocContact} from "./contact";
-import {DocLicense} from "./license";
-import {DocSecurityScheme} from "./security-scheme";
-import {DocServer} from "./server";
+import { DocContact } from "./contact";
+import { DocLicense } from "./license";
+import { DocSecurityScheme } from "./security-scheme";
+import { DocServer } from "./server";
 
 export class DocInfo {
   version: string;
@@ -27,6 +27,6 @@ export class DocInfo {
   contact?: DocContact;
   license?: DocLicense;
   securitySchemes?: { [key in "BasicAuth" | "BearerAuth" | "ApiKeyAuth" | "OpenID" | "OAuth2"]?: DocSecurityScheme };
-  security?: {[key: string]: any[]}[];
+  security?: { [key: string]: any[] }[];
   servers: DocServer[];
 }

@@ -14,9 +14,9 @@
  limitations under the License.
  */
 
-import {getMetadataStorage} from "../../metadata/metadata-storage";
-import {PropertyMetadata} from "../../metadata/router-metadata";
-import {DocInfo} from "../model/info";
+import { getMetadataStorage } from "../../metadata/metadata-storage";
+import { PropertyMetadata } from "../../metadata/router-metadata";
+import { DocInfo } from "../model/info";
 
 export const DocProperty = (props: PropertyMetadata) => {
   return (target: any, propertyKey: string) => {
@@ -30,7 +30,6 @@ export const DocProperty = (props: PropertyMetadata) => {
     }
   };
 };
-
 
 export const DocMetadata = (opts: DocInfo) => {
   return (_target: any) => {

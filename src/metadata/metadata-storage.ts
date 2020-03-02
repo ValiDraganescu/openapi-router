@@ -1,5 +1,4 @@
-import {RouterMetadata} from "./router-metadata";
-
+import { RouterMetadata } from "./router-metadata";
 
 const getGlobal = (): any => {
   return global;

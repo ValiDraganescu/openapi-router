@@ -1,9 +1,8 @@
-
-import {ObjectType} from "../object-type";
-import {PropertyType} from "../doc/property-type";
-import {DocInfo} from "../doc/model/info";
-import {DocParameter} from "../doc/model/parameter";
-import {Request, Response} from "../router/event";
+import { ObjectType } from "../object-type";
+import { PropertyType } from "../doc/property-type";
+import { DocInfo } from "../doc/model/info";
+import { DocParameter } from "../doc/model/parameter";
+import { Request, Response } from "../router/event";
 
 type RequestHandler = (request: Request) => Promise<Response>;
 

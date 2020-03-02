@@ -2,16 +2,41 @@
   "name": "openapi-router",
   "version": "0.1",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
+  "author": {
+    "name": "Vali Draganescu",
+    "email": "vali.draganescu88+github@gmail.com"
+  },
+  "license": "Apache License Version 2.0",
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "serverless",
+    "router"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ValiDraganescu/openapi-router.git"
+  },
   "scripts": {
-    "compile": "./node_modules/typescript/bin/tsc -w"
+    "build": "./node_modules/typescript/bin/tsc",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test",
+    "format": "./node_modules/prettier/bin-prettier.js --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
     "@types/jest": "^24.9.1",
     "@types/node": "^13.5.0",
     "jest": "^25.1.0",
     "ts-jest": "^25.0.0",
-    "typescript": "^3.7.5"
-  }
+    "tslint": "^6.0.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.5",
+    "prettier": "^1.19.1"
+  },
+  "files": [
+    "dist/**/*"
+  ]
 }

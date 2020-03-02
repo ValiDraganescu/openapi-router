@@ -14,9 +14,9 @@
  limitations under the License.
  */
 
-import {DocParameter} from "./parameter";
-import {DocResponses} from "./responses";
-import {DocRequest} from "./request";
+import { DocParameter } from "./parameter";
+import { DocResponses } from "./responses";
+import { DocRequest } from "./request";
 
 export class DocMethod {
   operationId: string;

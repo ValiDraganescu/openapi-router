@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-import {DocSchema} from "./schema";
-import {DocSecurityScheme} from "./security-scheme";
+import { DocSchema } from "./schema";
+import { DocSecurityScheme } from "./security-scheme";
 
 export class DocComponents {
   schemas: {
-    [key: string]: DocSchema
+    [key: string]: DocSchema;
   };
   securitySchemes?: { [key in "BasicAuth" | "BearerAuth" | "ApiKeyAuth" | "OpenID" | "OAuth2"]?: DocSecurityScheme };
 }

@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import {PropertyType} from "../property-type";
-import {DocItems} from "./item";
+import { PropertyType } from "../property-type";
+import { DocItems } from "./item";
 
 export class DocSchema {
   type?: PropertyType;

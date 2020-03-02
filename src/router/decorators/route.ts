@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-import {getMetadataStorage} from "../../metadata/metadata-storage";
-import {MethodMetadata, ResponseMetadata, RouteMetadata} from "../../metadata/router-metadata";
-import {ObjectType} from "../../object-type";
-import {HttpMethod} from "../../doc/http-method";
-import {DocParameter} from "../../doc/model/parameter";
+import { getMetadataStorage } from "../../metadata/metadata-storage";
+import { MethodMetadata, ResponseMetadata, RouteMetadata } from "../../metadata/router-metadata";
+import { ObjectType } from "../../object-type";
+import { HttpMethod } from "../../doc/http-method";
+import { DocParameter } from "../../doc/model/parameter";
 
 export interface IRouteProps {
   method: HttpMethod;
