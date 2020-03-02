@@ -6,7 +6,7 @@
     "name": "Vali Draganescu",
     "email": "vali.draganescu88+github@gmail.com"
   },
-  "license": "Apache License Version 2.0",
+  "license": "https://opensource.org/licenses/EUPL-1.2",
   "keywords": [
     "nodejs",
     "typescript",
@@ -21,8 +21,12 @@
   },
   "scripts": {
     "build": "./node_modules/typescript/bin/tsc",
+    "test": "jest",
     "prepare": "yarn build",
-    "prepublishOnly": "yarn test",
+    "prepublishOnly": "yarn test && yarn lint",
+    "preversion": "yarn lint",
+    "postversion" : "git push && git push --tags",
+    "version" : "yarn format && git add -A src",
     "format": "./node_modules/prettier/bin-prettier.js --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },

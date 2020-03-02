@@ -106,4 +106,9 @@ defines the behaviour and documentation for a route.
 The router also defines the method `getApiDoc` which returns an OpenAPI 3 standard
 json documentation based on the `DocMetadata` and `Route`s defined in the API implementation.
 
+#Licence
+![License](https://raw.githubusercontent.com/ValiDraganescu/serverless-log-remover/HEAD/eupl.jpg
+)
+
+[Distributed under European Union Public License, version 1.2 (EUPL-1.2)](https://opensource.org/licenses/EUPL-1.2)
 
