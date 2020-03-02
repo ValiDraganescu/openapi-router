@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+import {HttpMethod} from "../doc/http-method";
+import {IPathParams} from "./path-params.interface";
 
-export class DocSecurityScheme {
-  type: "http" | "apiKey" | "openIdConnect";
-  scheme?: "basic" | "bearer";
-  in?: "header";
-  name?: string | "X-API-Key";
-  openIdConnectUrl?: string;
+export interface IRequestOpts<RequestBody> {
+  headers?: { [key: string]: string };
+  path: string;
+  method: HttpMethod;
+  body?: RequestBody;
+  pathParams?: IPathParams;
 }

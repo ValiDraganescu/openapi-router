@@ -1,5 +1,5 @@
 import {App} from "../example/app";
-import {Request} from "../src/router/event";
+import {Request} from "../src/router/request";
 import {HttpMethod} from "../src/doc/http-method";
 
 describe("Test the validation capabilities", () => {

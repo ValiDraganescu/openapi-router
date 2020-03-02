@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
+import {DocContent} from "./doc-content";
 
-export class DocSecurityScheme {
-  type: "http" | "apiKey" | "openIdConnect";
-  scheme?: "basic" | "bearer";
-  in?: "header";
-  name?: string | "X-API-Key";
-  openIdConnectUrl?: string;
+export class DocResponse {
+  description: string;
+  content?: DocContent;
 }

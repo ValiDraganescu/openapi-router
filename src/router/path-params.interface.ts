@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
+import {IPathParam} from "./path-param.interface";
 
-export class DocSecurityScheme {
-  type: "http" | "apiKey" | "openIdConnect";
-  scheme?: "basic" | "bearer";
-  in?: "header";
-  name?: string | "X-API-Key";
-  openIdConnectUrl?: string;
+export interface IPathParams {
+  [key: string]: IPathParam;
 }

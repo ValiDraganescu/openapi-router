@@ -1,61 +1,22 @@
-import { ObjectType } from "../object-type";
-import { PropertyType } from "../doc/property-type";
-import { DocInfo } from "../doc/model/info";
-import { DocParameter } from "../doc/model/parameter";
-import { Request, Response } from "../router/event";
+/**
+ * Copyright 2020 Valentin Draganescu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import {MethodMetadata} from "./method-metadata";
+import {DocInfo} from "../doc/model/info";
+import {ModelMetadata} from "./model-metadata";
 
-type RequestHandler = (request: Request) => Promise<Response>;
-
-export class PropertyMetadata {
-  type: PropertyType;
-  nullable?: boolean;
-  objectType?: ObjectType<any>;
-  minSize?: number;
-  maxSize?: number;
-  isRequired?: boolean;
-  description?: string;
-  format?: string;
-}
-
-export class ResponseMetadata {
-  statusCode: number;
-  description: string;
-  body?: ObjectType<any>;
-}
-
-export class ModelMetadata {
-  [key: string]: PropertyMetadata;
-}
-
-export class RouteMetadata {
-  handler: RequestHandler;
-  responses: ResponseMetadata[] = [];
-  description?: string;
-  summary?: string;
-  requestBody?: ObjectType<any>;
-  parameters?: DocParameter[];
-  security?: any[];
-
-  constructor(handler: RequestHandler) {
-    this.handler = handler;
-  }
-
-  setRequestBody = (requestBody?: ObjectType<any>): RouteMetadata => {
-    if (requestBody) {
-      this.requestBody = requestBody;
-    }
-    return this;
-  };
-
-  setResponses = (responses: ResponseMetadata[]): RouteMetadata => {
-    this.responses = responses;
-    return this;
-  };
-}
-
-export class MethodMetadata {
-  [key: string]: RouteMetadata;
-}
 
 export class RouterMetadata {
   paths: Map<string, MethodMetadata> = new Map<string, MethodMetadata>();

@@ -1,24 +1,26 @@
 /**
- Copyright 2020 Valentin Draganescu
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+ * Copyright 2020 Valentin Draganescu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-import { IPathParams, Request, Response } from "./event";
-import { Validator } from "../validator/validator";
-import { RouteMetadata } from "../metadata/router-metadata";
-import { getMetadataStorage } from "../metadata/metadata-storage";
-import { generateDoc } from "../doc/generator";
+import {Validator} from "../validator/validator";
+import {getMetadataStorage} from "../metadata/metadata-storage";
+import {generateDoc} from "../doc/generator";
+import {RouteMetadata} from "../metadata/route-metadata";
+import {Request} from "./request";
+import {Response} from "./response";
+import {IPathParams} from "./path-params.interface";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -29,7 +31,7 @@ class Router {
       if (route.requestBody) {
         const inputValidationErrors = Validator.validate(request.body, route.requestBody);
         if (inputValidationErrors && inputValidationErrors.length) {
-          return new Response(400).setBody({ errors: inputValidationErrors });
+          return new Response(400).setBody({errors: inputValidationErrors});
         }
       }
 
@@ -74,7 +76,7 @@ class Router {
       const basePathComponents = basePath.split("/");
       const routeKeys = metadata.getPaths();
       pathParams = {};
-      for (let routeKey of routeKeys) {
+      for (const routeKey of routeKeys) {
         const routeComponents = routeKey.split("/");
 
         if (routeComponents.length === basePathComponents.length) {
@@ -89,7 +91,7 @@ class Router {
                 pathParams[paramName] = {
                   name: paramName,
                   value: basePathComponents[i],
-                  index: i,
+                  index: i
                 };
               } else {
                 isValidRoute = false;
@@ -98,9 +100,9 @@ class Router {
           }
 
           if (isValidRoute) {
-            const methodMeta = metadata.paths.get(routeKey);
-            if (methodMeta) {
-              routeMeta = methodMeta[method];
+            const validMethodMeta = metadata.paths.get(routeKey);
+            if (validMethodMeta) {
+              routeMeta = validMethodMeta[method];
               break;
             }
           }

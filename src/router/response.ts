@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
+export class Response<ResponseBody = any> {
+  statusCode: number;
+  body?: ResponseBody;
 
-export class DocSecurityScheme {
-  type: "http" | "apiKey" | "openIdConnect";
-  scheme?: "basic" | "bearer";
-  in?: "header";
-  name?: string | "X-API-Key";
-  openIdConnectUrl?: string;
+  constructor(statusCode?: number) {
+    this.statusCode = statusCode ?? 200;
+  }
+
+  setBody = (body: ResponseBody): Response<ResponseBody> => {
+    this.body = body;
+    return this;
+  };
 }

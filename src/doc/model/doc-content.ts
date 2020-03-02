@@ -15,10 +15,9 @@
  */
 
 
-export class DocSecurityScheme {
-  type: "http" | "apiKey" | "openIdConnect";
-  scheme?: "basic" | "bearer";
-  in?: "header";
-  name?: string | "X-API-Key";
-  openIdConnectUrl?: string;
+import {ContentType} from "./content-type";
+
+export class DocContent {
+  [key: string]: ContentType;
 }
+

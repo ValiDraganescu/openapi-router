@@ -1,7 +1,7 @@
 import {App} from "../example/app";
-import {Request} from "../src/router/event";
 import {DocApi} from "../src/doc/model/api";
 import {HttpMethod} from "../src/doc/http-method";
+import {Request} from "../src/router/request";
 
 describe("Test the api doc generation capabilities", () => {
 

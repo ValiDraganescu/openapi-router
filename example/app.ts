@@ -1,4 +1,5 @@
-import {Request, Response} from "../src/router/event";
+import {Response} from "../src/router/response";
+import {Request} from "../src/router/request";
 import {Route} from "../src/router/decorators/route";
 import {HelloResponse} from "./model/response/hello-response";
 import {AuthResponse} from "./model/response/auth-response";

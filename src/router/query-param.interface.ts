@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-
-export class DocSecurityScheme {
-  type: "http" | "apiKey" | "openIdConnect";
-  scheme?: "basic" | "bearer";
-  in?: "header";
-  name?: string | "X-API-Key";
-  openIdConnectUrl?: string;
+export interface IQueryParams {
+  [key: string]: any;
 }
