@@ -1,11 +1,12 @@
-import {ObjectType} from "../object-type";
-import {DocParameter} from "../doc/model/parameter";
-import {RequestHandler} from "../router/request-handler";
-import {ResponseMetadata} from "./response-metadata";
+import { ObjectType } from "../object-type";
+import { DocParameter } from "../doc/model/parameter";
+import { RequestHandler } from "..";
+import { ResponseMetadata } from "./response-metadata";
 
 export class RouteMetadata {
   handler: RequestHandler;
   responses: ResponseMetadata[] = [];
+  path: string;
   description?: string;
   summary?: string;
   requestBody?: ObjectType<any>;

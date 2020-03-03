@@ -17,11 +17,12 @@
 
 import { getMetadataStorage } from "../../metadata/metadata-storage";
 import { ObjectType } from "../../object-type";
-import { HttpMethod } from "../../doc/http-method";
+import { HttpMethod } from "../..";
 import { DocParameter } from "../../doc/model/parameter";
 import {ResponseMetadata} from "../../metadata/response-metadata";
 import {RouteMetadata} from "../../metadata/route-metadata";
 import {MethodMetadata} from "../../metadata/method-metadata";
+import { Logger } from "../../logger";
 
 export interface IRouteProps {
   method: HttpMethod;
@@ -36,12 +37,17 @@ export interface IRouteProps {
 
 export const Route = (props: IRouteProps) => {
   return (target: any, propertyKey: string) => {
+    Logger.log("Adding route target::", target.constructor.name);
+    Logger.log("Adding route prop key::", propertyKey);
+
     const metadata = getMetadataStorage();
     const routeMeta = new RouteMetadata(target[propertyKey])
       .setResponses(props.responses)
       .setRequestBody(props.requestBody);
+
     routeMeta.description = props.description;
     routeMeta.summary = props.summary;
+    routeMeta.path = props.path;
     routeMeta.parameters = props.parameters;
     routeMeta.security = props.security;
 

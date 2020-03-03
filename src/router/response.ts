@@ -16,14 +16,20 @@
 
 export class Response<ResponseBody = any> {
   statusCode: number;
-  body?: ResponseBody;
+  body?: string;
 
   constructor(statusCode?: number) {
     this.statusCode = statusCode ?? 200;
   }
 
   setBody = (body: ResponseBody): Response<ResponseBody> => {
-    this.body = body;
+    this.body = JSON.stringify(body);
     return this;
   };
+
+  getBody = (): any => {
+    if (this.body) {
+      return JSON.parse(this.body);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import {App} from "../example/app";
-import {Request} from "../src/router/request";
-import {HttpMethod} from "../src/doc/http-method";
+import {Request} from "../src";
+import {HttpMethod} from "../src";
 
 describe("Test the routing capabilities", () => {
 
@@ -14,7 +14,7 @@ describe("Test the routing capabilities", () => {
       method: HttpMethod.GET
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.message).toEqual("hello");
+    expect(resp.getBody().message).toEqual("hello");
   });
 
   it("should test say hello with POST handler", async () => {
@@ -27,7 +27,7 @@ describe("Test the routing capabilities", () => {
       method: HttpMethod.POST
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.message).toEqual("hello with POST");
+    expect(resp.getBody().message).toEqual("hello with POST");
   });
 
   it("should return 404 when a route is not found", async () => {
@@ -53,7 +53,7 @@ describe("Test the routing capabilities", () => {
       method: HttpMethod.GET
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.message).toEqual("hello foo");
+    expect(resp.getBody().message).toEqual("hello foo");
   });
 
   it("should test say hello foo john handler", async () => {
@@ -67,7 +67,7 @@ describe("Test the routing capabilities", () => {
 
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.message).toEqual("hello james from rocket team of pokemon");
+    expect(resp.getBody().message).toEqual("hello james from rocket team of pokemon");
   });
 
   it("should test handler with body", async () => {
@@ -87,7 +87,7 @@ describe("Test the routing capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.message).toEqual("Auth email address is test@test.test and password is very_secret");
+    expect(resp.getBody().message).toEqual("Auth email address is test@test.test and password is very_secret");
   });
 
   it("should test handler with body and path params", async () => {
@@ -107,7 +107,7 @@ describe("Test the routing capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.message).toEqual("Auth email address is test@test.test and password is very_secret, logging in as admin");
+    expect(resp.getBody().message).toEqual("Auth email address is test@test.test and password is very_secret, logging in as admin");
   });
 
   it("should test delete user", async () => {
@@ -135,6 +135,6 @@ describe("Test the routing capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(200);
-    expect(resp.body.email).toEqual("test@test.test");
+    expect(resp.getBody().email).toEqual("test@test.test");
   });
 });

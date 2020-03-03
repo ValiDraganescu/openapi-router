@@ -21,11 +21,13 @@ import {RouteMetadata} from "../metadata/route-metadata";
 import {Request} from "./request";
 import {Response} from "./response";
 import {IPathParams} from "./path-params.interface";
+import { Logger } from "../logger";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
     const [route, pathParams] = this.resolveHandler(request.method, request.path);
     if (route) {
+      Logger.log("Route resolved to::", route.path);
       request.pathParams = pathParams;
       // validate request;
       if (route.requestBody) {
@@ -46,6 +48,8 @@ class Router {
       }
 
       return result;
+    } else {
+      Logger.log("Route not resolved::", JSON.stringify(request));
     }
     return new Response(404);
   };
@@ -65,6 +69,9 @@ class Router {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
     const metadata = getMetadataStorage();
+
+    Logger.log("Router registered paths::", metadata.getPaths());
+
     let routeMeta: RouteMetadata | null = null;
     const methodMeta = metadata.paths.get(requestPath);
     if (methodMeta) {

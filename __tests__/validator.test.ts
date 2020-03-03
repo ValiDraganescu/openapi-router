@@ -1,6 +1,6 @@
 import {App} from "../example/app";
-import {Request} from "../src/router/request";
-import {HttpMethod} from "../src/doc/http-method";
+import {Request} from "../src";
+import {HttpMethod} from "../src";
 
 describe("Test the validation capabilities", () => {
 
@@ -20,7 +20,7 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.body.errors;
+    const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
     expect(errors[0]).toEqual("AuthRequest.email is required");
@@ -41,7 +41,7 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.body.errors;
+    const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
     expect(errors[0]).toEqual("AuthRequest.email is required");
@@ -58,7 +58,7 @@ describe("Test the validation capabilities", () => {
       method: HttpMethod.POST
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.body.errors;
+    const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
     expect(errors[0]).toEqual("AuthRequest is required");
@@ -82,7 +82,7 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.body.errors;
+    const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
     expect(errors[0]).toEqual("AuthRequest.password should be of type string");
@@ -103,7 +103,7 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.body.errors;
+    const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
     expect(errors).toContain("AuthRequest.password should be of type string");
@@ -127,7 +127,7 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.body.errors;
+    const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
     expect(errors).toContain("UserDetails.firstName is required");

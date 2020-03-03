@@ -1,6 +1,6 @@
 {
   "name": "typescript-openapi-router",
-  "version": "0.1.0",
+  "version": "0.1.10",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
   "author": {
     "name": "Vali Draganescu",
@@ -25,20 +25,21 @@
     "prepare": "yarn build",
     "prepublishOnly": "yarn test && yarn lint",
     "preversion": "yarn lint",
-    "postversion" : "git push && git push --tags",
-    "version" : "yarn format && git add -A src",
+    "postversion": "git push && git push --tags",
+    "version": "yarn format && git add -A src",
     "format": "./node_modules/prettier/bin-prettier.js --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.46",
     "@types/jest": "^24.9.1",
     "@types/node": "^13.5.0",
     "jest": "^25.1.0",
+    "prettier": "^1.19.1",
     "ts-jest": "^25.0.0",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.5",
-    "prettier": "^1.19.1"
+    "typescript": "^3.7.5"
   },
   "files": [
     "dist/**/*"

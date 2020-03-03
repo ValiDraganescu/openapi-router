@@ -1,7 +1,7 @@
 import {App} from "../example/app";
 import {DocApi} from "../src/doc/model/api";
-import {HttpMethod} from "../src/doc/http-method";
-import {Request} from "../src/router/request";
+import {HttpMethod} from "../src";
+import {Request} from "../src";
 
 describe("Test the api doc generation capabilities", () => {
 
@@ -16,7 +16,7 @@ describe("Test the api doc generation capabilities", () => {
       path: "/api/doc",
       method: HttpMethod.GET
     }));
-    doc = resp.body as DocApi;
+    doc = resp.getBody() as DocApi;
     console.log("Api Doc::", JSON.stringify(doc));
   });
 

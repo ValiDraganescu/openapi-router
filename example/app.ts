@@ -1,12 +1,9 @@
-import {Response} from "../src/router/response";
-import {Request} from "../src/router/request";
-import {Route} from "../src/router/decorators/route";
-import {HelloResponse} from "./model/response/hello-response";
-import {AuthResponse} from "./model/response/auth-response";
-import {AuthRequest} from "./model/request/auth-request";
-import {HttpMethod} from "../src/doc/http-method";
-import {getRouter} from "../src";
-import {DocMetadata} from "../src/doc/decorators/doc";
+import { getRouter, HttpMethod, LambdaRouter, Request, Response } from "../src";
+import { Route } from "../src";
+import { HelloResponse } from "./model/response/hello-response";
+import { AuthResponse } from "./model/response/auth-response";
+import { AuthRequest } from "./model/request/auth-request";
+import { DocMetadata } from "../src";
 
 @DocMetadata({
   version: "1.0.0",
@@ -41,18 +38,19 @@ import {DocMetadata} from "../src/doc/decorators/doc";
       BearerAuth: []
     }
   ],
-  servers: [{
-    url: "localhost:8080",
-    description: "localhost"
-  }, {
-    url: "https://dev-api.test.com",
-    description: "Development"
-  }, {
-    url: "https://api.test.com",
-    description: "Production"
-  }]
+  servers: [
+    {
+      url: "localhost:8080",
+      description: "localhost"
+    }, {
+      url: "https://dev-api.test.com",
+      description: "Development"
+    }, {
+      url: "https://api.test.com",
+      description: "Production"
+    }]
 })
-export class App {
+export class App extends LambdaRouter {
 
   @Route({
     description: "simple method, just says hello to the user",
@@ -66,7 +64,7 @@ export class App {
     }]
   })
   async sayHelloHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({message: "hello"});
+    return new Response<HelloResponse>().setBody({ message: "hello" });
   };
 
   @Route({
@@ -93,7 +91,7 @@ export class App {
     }]
   })
   async sayHelloWithPostHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({message: "hello with POST"});
+    return new Response<HelloResponse>().setBody({ message: "hello with POST" });
   }
 
   @Route({
@@ -107,7 +105,7 @@ export class App {
     }]
   })
   async sayHelloFooHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({message: "hello foo"});
+    return new Response<HelloResponse>().setBody({ message: "hello foo" });
   }
 
   @Route({
@@ -149,7 +147,7 @@ export class App {
     const name = request.pathParams?.name.value;
     const org = request.pathParams?.organization.value;
     const team = request.pathParams?.team.value;
-    return new Response<HelloResponse>().setBody({message: `hello ${name} from ${team} team of ${org}`});
+    return new Response<HelloResponse>().setBody({ message: `hello ${name} from ${team} team of ${org}` });
   }
 
   @Route({
