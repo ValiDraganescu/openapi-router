@@ -17,6 +17,9 @@
 export class Response<ResponseBody = any> {
   statusCode: number;
   body?: string;
+  headers: { [key: string]: string } = {
+    "Content-Type": "application/json"
+  };
 
   constructor(statusCode?: number) {
     this.statusCode = statusCode ?? 200;
@@ -31,5 +34,24 @@ export class Response<ResponseBody = any> {
     if (this.body) {
       return JSON.parse(this.body);
     }
+  };
+
+  addHeader = (key: string, value: string) => {
+    this.headers[key] = value;
+  };
+
+  addHeaders = (headers: { [key: string]: string }) => {
+    for (const [key, value] of Object.entries(headers)) {
+      this.addHeader(key, value);
+    }
+  };
+
+  setHeaders = (headers: { [key: string]: string }) => {
+    this.headers = headers;
+  };
+
+  toJSON() {
+    const { statusCode, headers, body } = this;
+    return { statusCode, headers, body };
   }
 }

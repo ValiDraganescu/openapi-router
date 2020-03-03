@@ -40,10 +40,10 @@ class Router {
       const result = await route.handler(request);
       // validate response
       if (route.responses[0].body) {
-        const outputValidationResult = Validator.validate(result.body, route.responses[0].body);
+        const outputValidationResult = Validator.validate(result.getBody(), route.responses[0].body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
-          return new Response(500);
+          return new Response(500).setBody(outputValidationResult);
         }
       }
 

@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
+import { DocSecurityScheme } from "./security-scheme";
 
-import { DocContact } from "./contact";
-import { DocLicense } from "./license";
-import { DocServer } from "./server";
-import { DocSecurity } from "./doc-security";
-import { SecuritySchemes } from "./security-schemes";
-
-export class DocInfo {
-  version: string;
-  title?: string;
-  description?: string;
-  termsOfService?: string;
-  contact?: DocContact;
-  license?: DocLicense;
-  securitySchemes?: SecuritySchemes;
-  security?: DocSecurity[];
-  servers: DocServer[];
+export type SecuritySchemes = {
+  [key in "BasicAuth" | "BearerAuth" | "ApiKeyAuth" | "OpenID" | "OAuth2"]?: DocSecurityScheme
 }

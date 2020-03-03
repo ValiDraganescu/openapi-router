@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-
-import { DocContact } from "./contact";
-import { DocLicense } from "./license";
-import { DocServer } from "./server";
-import { DocSecurity } from "./doc-security";
-import { SecuritySchemes } from "./security-schemes";
-
-export class DocInfo {
-  version: string;
-  title?: string;
-  description?: string;
-  termsOfService?: string;
-  contact?: DocContact;
-  license?: DocLicense;
-  securitySchemes?: SecuritySchemes;
-  security?: DocSecurity[];
-  servers: DocServer[];
+export class DocSecurity {
+  [key: string]: any[]
 }
