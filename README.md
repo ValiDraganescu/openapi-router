@@ -5,13 +5,13 @@ Early stage development, not to be used in production apps.
 
 [See app implementation example here](https://github.com/ValiDraganescu/openapi-router/blob/master/example/app.ts)
 
-###Router components
+### Router components
 * Router
 * Validator
 * Class and method decorators for OpenAPI 3
 * Documentation generator
 
-####Router
+#### Router
 Router is provided as a singleton and can be obtained by calling `getRouter()`. 
 The router exposes two methods `handleEvent` and `getApiDoc`.
 
@@ -31,13 +31,13 @@ export class Request<RequestBody = any> {
 The `handleEvent` method will search for the correct handler to process the
 request.
 
-####Validator
+#### Validator
 The validator is used to validate the input and output. It is done automatically
 and relies on the OpenAPI 3 specs (see implementation, tests and example project).
 The validator returns common sense error messages like `AuthRequest.email is required`, 
 `UserDetails.lastName should be of type string` etc
 
-####Decorators
+#### Decorators
 There are two decorators defined `DocMetadata` which defines the documentation
 info and global settings and `Route` which registers a method with the router and
 defines the behaviour and documentation for a route.
@@ -104,11 +104,41 @@ defines the behaviour and documentation for a route.
   })
 ```
 
-####Documentation generator
+#### Documentation generator
 The router also defines the method `getApiDoc` which returns an OpenAPI 3 standard
 json documentation based on the `DocMetadata` and `Route`s defined in the API implementation.
 
-#Licence
+#### Default headers for all API responses
+
+```json
+{
+    "Content-Type": "application/json",
+    "Cache-Control": "private, max-age=0, no-cache, no-store, must-revalidate'",
+    "Expires": "-1",
+    "Pragma": "no-cache",
+    "Access-Control-Expose-Headers": "X-Api-Version",
+    "Access-Control-Allow-Origin" : "*",
+    "Access-Control-Allow-Credentials": "true"
+}
+```
+
+Can be overridden using one of the following methods
+```typescript
+  addHeader = (key: string, value: string) => {
+    this.headers[key] = value;
+  };
+
+  addHeaders = (headers: { [key: string]: string }) => {
+    for (const [key, value] of Object.entries(headers)) {
+      this.addHeader(key, value);
+    }
+  };
+
+  setHeaders = (headers: { [key: string]: string }) => {
+    this.headers = headers;
+  };
+``` 
+# Licence
 ![License](https://raw.githubusercontent.com/ValiDraganescu/serverless-log-remover/HEAD/eupl.jpg
 )
 

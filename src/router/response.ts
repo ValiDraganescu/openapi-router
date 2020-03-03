@@ -18,7 +18,13 @@ export class Response<ResponseBody = any> {
   statusCode: number;
   body?: string;
   headers: { [key: string]: string } = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Cache-Control": "private, max-age=0, no-cache, no-store, must-revalidate'",
+    "Expires": "-1",
+    "Pragma": "no-cache",
+    "Access-Control-Expose-Headers": "X-Api-Version",
+    "Access-Control-Allow-Origin" : "*",
+    "Access-Control-Allow-Credentials": "true"
   };
 
   constructor(statusCode?: number) {

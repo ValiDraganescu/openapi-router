@@ -16,6 +16,8 @@
 
 import { DocSecurityScheme } from "./security-scheme";
 
-export type SecuritySchemes = {
-  [key in "BasicAuth" | "BearerAuth" | "ApiKeyAuth" | "OpenID" | "OAuth2"]?: DocSecurityScheme
+export class SecuritySchemes {
+  // TODO: how to make the class know which keys are accepted?
+  // "BasicAuth" | "BearerAuth" | "ApiKeyAuth" | "OpenID" | "OAuth2"
+  [key: string]: DocSecurityScheme;
 }
