@@ -155,7 +155,7 @@ const validateRequiredProperties = <T>(
 
 export class Validator {
   static validate = <T>(body: any, Model: ObjectType<T>): string[] => {
-    Logger.log("Validating", Model.name);
+    Logger.log("Validating", Model.name, JSON.stringify(body));
     const errors: string[] = [];
     if (!body) {
       errors.push(`${Model.name} is required`);

@@ -21,11 +21,20 @@ import { APIGatewayEvent } from "aws-lambda";
 export abstract class LambdaRouter {
 
   router = async (event: APIGatewayEvent): Promise<Response> => {
+    let parsedBody: any;
+    if (event.body) {
+      try {
+        parsedBody = JSON.parse(event.body)
+      } catch (e) {
+        return new Response<any>(400).setBody({ message: e })
+      }
+    }
+
     const request = new Request({
       headers: event.headers,
       path: event.path,
       method: event.httpMethod as HttpMethod,
-      body: event.body
+      body: parsedBody
     });
     try {
       return getRouter().handleEvent(request);
