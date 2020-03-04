@@ -18,16 +18,17 @@
 import { ObjectType } from "../object-type";
 import { getMetadataStorage } from "../metadata/metadata-storage";
 import {PropertyMetadata} from "../metadata/property-metadata";
+import { Logger } from "../logger";
 
 type PropType = "undefined" | "object" | "boolean" | "number" | "string" | "function" | "symbol" | "bigint";
 
 const validateIsRequired = <T>(
   propMeta: PropertyMetadata,
-  property: any,
+  propertyValue: any,
   Model: ObjectType<T>,
   modelKey: string,
 ): string | null => {
-  if (propMeta.isRequired && !property) {
+  if (propMeta.isRequired && !propertyValue) {
     return `${Model.name}.${modelKey} is required`;
   }
   return null;
@@ -105,12 +106,12 @@ const validateMaxSize = <T>(
   return null;
 };
 
-const validateObject = (propMeta: PropertyMetadata, property: any): string[] => {
+const validateObject = (propMeta: PropertyMetadata, propertyVallue: any): string[] => {
   const errors: string[] = [];
   if (propMeta.objectType) {
-    errors.push(...Validator.validate(property, propMeta.objectType));
+    errors.push(...Validator.validate(propertyVallue, propMeta.objectType));
   } else {
-    const message = `No entity defined for object ${JSON.stringify(property)}`;
+    const message = `No entity defined for object ${JSON.stringify(propertyVallue)}`;
     console.error(message);
     errors.push(message);
   }
@@ -154,6 +155,7 @@ const validateRequiredProperties = <T>(
 
 export class Validator {
   static validate = <T>(body: any, Model: ObjectType<T>): string[] => {
+    Logger.log("Validating", Model.name);
     const errors: string[] = [];
     if (!body) {
       errors.push(`${Model.name} is required`);
@@ -172,19 +174,23 @@ export class Validator {
 
     for (const modelKey of modelKeys) {
       const propMeta = entityMeta[modelKey];
-      const property = body[modelKey];
+      const propertyValue = body[modelKey];
 
-      if (typeof property === "object") {
-        errors.push(...validateObject(propMeta, property));
+      Logger.log(`Validating ${Model.name}.${modelKey}`);
+
+      if (typeof propertyValue === "object") {
+        Logger.log("Property is an object");
+        errors.push(...validateObject(propMeta, propertyValue));
       } else {
+        Logger.log("Property is a primitive with value", propertyValue);
         if (propMeta) {
-          const error = validateIsRequired(propMeta, property, Model, modelKey);
+          const error = validateIsRequired(propMeta, propertyValue, Model, modelKey);
           if (error) {
             errors.push(error);
           }
 
-          if (property) {
-            errors.push(...validateRequiredProperties(property, propMeta, Model, modelKey));
+          if (propertyValue) {
+            errors.push(...validateRequiredProperties(propertyValue, propMeta, Model, modelKey));
           }
         }
       }
