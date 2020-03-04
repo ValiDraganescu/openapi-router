@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { StatusCode } from "./status-code";
 
 export class Response<ResponseBody = any> {
-  statusCode: number;
+  statusCode: StatusCode;
   body?: string;
   headers: { [key: string]: string } = {
     "Content-Type": "application/json",
@@ -27,8 +28,8 @@ export class Response<ResponseBody = any> {
     "Access-Control-Allow-Credentials": "true"
   };
 
-  constructor(statusCode?: number) {
-    this.statusCode = statusCode ?? 200;
+  constructor(statusCode?: StatusCode) {
+    this.statusCode = statusCode ?? StatusCode.okay;
   }
 
   setBody = (body: ResponseBody): Response<ResponseBody> => {

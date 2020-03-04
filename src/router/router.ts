@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {Validator} from "../validator/validator";
-import {getMetadataStorage} from "../metadata/metadata-storage";
-import {generateDoc} from "../doc/generator";
-import {RouteMetadata} from "../metadata/route-metadata";
-import {Request} from "./request";
-import {Response} from "./response";
-import {IPathParams} from "./path-params.interface";
+import { Validator } from "../validator/validator";
+import { getMetadataStorage } from "../metadata/metadata-storage";
+import { generateDoc } from "../doc/generator";
+import { RouteMetadata } from "../metadata/route-metadata";
+import { Request } from "./request";
+import { Response } from "./response";
+import { IPathParams } from "./path-params.interface";
 import { Logger } from "../logger";
 
 class Router {
@@ -33,7 +33,7 @@ class Router {
       if (route.requestBody) {
         const inputValidationErrors = Validator.validate(request.body, route.requestBody);
         if (inputValidationErrors && inputValidationErrors.length) {
-          return new Response(400).setBody({errors: inputValidationErrors});
+          return new Response(400).setBody({ errors: inputValidationErrors });
         }
       }
 
@@ -43,7 +43,10 @@ class Router {
         const outputValidationResult = Validator.validate(result.getBody(), route.responses[0].body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
-          return new Response(500).setBody(outputValidationResult);
+          return new Response(500).setBody({
+            message: "The output model brakes the API contract",
+            info: outputValidationResult
+          });
         }
       }
 

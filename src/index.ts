@@ -22,7 +22,8 @@ export { Response } from "./router/response";
 export { HttpMethod } from "./doc/http-method";
 export { LambdaRouter } from "./router/lambda-router";
 export { Route } from "./router/decorators/route";
-export { DocMetadata } from "./doc/decorators/doc";
+export { ApiRouter } from "./router/decorators/api-router";
 export { DocProperty } from "./doc/decorators/doc";
 export { DocInfo } from "./doc/model/info";
+export { StatusCode } from "./router/status-code";
 

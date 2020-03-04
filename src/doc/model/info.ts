@@ -20,6 +20,7 @@ import { DocLicense } from "./license";
 import { DocServer } from "./server";
 import { DocSecurity } from "./doc-security";
 import { SecuritySchemes } from "./security-schemes";
+import { ObjectType } from "../../object-type";
 
 export class DocInfo {
   version: string;
@@ -31,4 +32,5 @@ export class DocInfo {
   securitySchemes?: SecuritySchemes;
   security?: DocSecurity[];
   servers: DocServer[];
+  additionalRouters?: ObjectType<any>[];
 }

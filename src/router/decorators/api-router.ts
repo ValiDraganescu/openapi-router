@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-
+import { DocInfo } from "../..";
 import { getMetadataStorage } from "../../metadata/metadata-storage";
-import { PropertyMetadata } from "../../metadata/property-metadata";
 
-export const DocProperty = (props: PropertyMetadata) => {
-  return (target: any, propertyKey: string) => {
-    const metadata = getMetadataStorage();
-    if (!metadata.entities[target.constructor.name]) {
-      metadata.entities[target.constructor.name] = {};
-    }
-
-    if (props) {
-      metadata.entities[target.constructor.name][propertyKey] = props;
+export const ApiRouter = (opts?: DocInfo) => {
+  return (_target: any) => {
+    if (opts) {
+      const metadata = getMetadataStorage();
+      metadata.docMetadata = opts;
     }
   };
 };

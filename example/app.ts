@@ -1,11 +1,9 @@
-import { getRouter, HttpMethod, LambdaRouter, Request, Response } from "../src";
-import { Route } from "../src";
+import { ApiRouter, getRouter, HttpMethod, LambdaRouter, Request, Response, Route } from "../src";
 import { HelloResponse } from "./model/response/hello-response";
 import { AuthResponse } from "./model/response/auth-response";
 import { AuthRequest } from "./model/request/auth-request";
-import { DocMetadata } from "../src";
 
-@DocMetadata({
+@ApiRouter({
   version: "1.0.0",
   title: "A test app",
   description: "Exactly as the name suggests",
