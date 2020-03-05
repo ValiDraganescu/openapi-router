@@ -30,6 +30,52 @@ export class Request<RequestBody = any> {
 ```
 The `handleEvent` method will search for the correct handler to process the
 request.
+##### Middleware
+The router also supports optional middleware that can execute functions
+before and after the original handler (you can add a top level logging 
+of the request and response for all handlers for example or alter the 
+request or the response)
+
+The `@Route` supports the `middleware` property which in turn has the 
+`before` and `after` properties (which are arrays of `BeforeMiddlewareHandler`
+and `AfterMiddlewareHandler`)
+
+Example
+```typescript
+
+export const beforeAuth: BeforeMiddlewareHandler = async (request:Request<AuthRequest>): Promise<Request> => {
+  if (request.body) {
+    request.body.email = `before-${request.body.email}`;
+  }
+  return request;
+};
+
+export const afterAuth: AfterMiddlewareRequestHandler = async (response: Response<AuthResponse>): Promise<Response> => {
+  if (response.body) {
+    const body = response.getBody();
+    if (body) {
+      body.message = body.message + " after";
+      response.setBody(body);
+    }
+  }
+  return response;
+};
+
+
+@Route({
+    ...
+    middleware: {
+      before: [
+        beforeAuth
+      ],
+      after: [
+        afterAuth
+      ]
+    }
+   ...
+  })
+```
+[See here a more detailed implementation](https://github.com/ValiDraganescu/openapi-router/blob/master/example/app.ts)
 
 #### Validator
 The validator is used to validate the input and output. It is done automatically
