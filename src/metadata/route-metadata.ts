@@ -2,6 +2,7 @@ import { ObjectType } from "../object-type";
 import { DocParameter } from "../doc/model/parameter";
 import { RequestHandler } from "..";
 import { ResponseMetadata } from "./response-metadata";
+import { IMiddleware } from "../router/decorators/route";
 
 export class RouteMetadata {
   handler: RequestHandler;
@@ -12,6 +13,7 @@ export class RouteMetadata {
   requestBody?: ObjectType<any>;
   parameters?: DocParameter[];
   security?: any[];
+  middleware?: IMiddleware;
 
   constructor(handler: RequestHandler) {
     this.handler = handler;

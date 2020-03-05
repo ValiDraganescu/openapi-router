@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {Response} from "./response";
-import {Request} from "./request";
+import { Response } from "./response";
+import { Request } from "./request";
 
 export type RequestHandler = (request: Request) => Promise<Response>;
+export type BeforeMiddlewareHandler = (request: Request) => Promise<Request>;
+export type AfterMiddlewareRequestHandler = (response: Response) => Promise<Response>;

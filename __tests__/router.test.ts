@@ -137,4 +137,64 @@ describe("Test the routing capabilities", () => {
     expect(resp.statusCode).toEqual(200);
     expect(resp.getBody().email).toEqual("test@test.test");
   });
+
+  it("should correctly execute before middleware", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/auth-before",
+      method: HttpMethod.POST,
+      body: {
+        email: "test@test.test",
+        password: "very_secret",
+        userDetails: {
+          firstName: "John"
+        }
+      }
+    }));
+    expect(resp.statusCode).toEqual(200);
+    expect(resp.getBody().message).toEqual("Auth email address is before-test@test.test and password is very_secret");
+  });
+
+  it("should correctly execute after middleware", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/auth-after",
+      method: HttpMethod.POST,
+      body: {
+        email: "test@test.test",
+        password: "very_secret",
+        userDetails: {
+          firstName: "John"
+        }
+      }
+    }));
+    expect(resp.statusCode).toEqual(200);
+    expect(resp.getBody().message).toEqual("Auth email address is test@test.test and password is very_secret after");
+  });
+
+  it("should correctly execute before and after middleware", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/auth-before-and-after",
+      method: HttpMethod.POST,
+      body: {
+        email: "test@test.test",
+        password: "very_secret",
+        userDetails: {
+          firstName: "John"
+        }
+      }
+    }));
+    expect(resp.statusCode).toEqual(200);
+    expect(resp.getBody().message).toEqual("Auth email address is before-test@test.test and password is very_secret after");
+  });
 });

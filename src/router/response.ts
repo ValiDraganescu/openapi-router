@@ -37,10 +37,11 @@ export class Response<ResponseBody = any> {
     return this;
   };
 
-  getBody = (): any => {
+  getBody = (): ResponseBody | null => {
     if (this.body) {
       return JSON.parse(this.body);
     }
+    return null;
   };
 
   addHeader = (key: string, value: string) => {

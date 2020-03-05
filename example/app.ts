@@ -2,6 +2,7 @@ import { ApiRouter, getRouter, HttpMethod, LambdaRouter, Request, Response, Rout
 import { HelloResponse } from "./model/response/hello-response";
 import { AuthResponse } from "./model/response/auth-response";
 import { AuthRequest } from "./model/request/auth-request";
+import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
 
 @ApiRouter({
   version: "1.0.0",
@@ -164,6 +165,87 @@ export class App extends LambdaRouter {
     }]
   })
   async authHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
+    return new Response<AuthResponse>().setBody({
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+    });
+  }
+
+  @Route({
+    description: "Post method with body and before middleware",
+    summary: "A POST method with request and response bodies",
+    method: HttpMethod.POST,
+    path: "/auth-before",
+    requestBody: AuthRequest,
+    responses: [{
+      statusCode: 200,
+      description: "mock",
+      body: AuthResponse
+    }],
+    security: [{
+      ApiKeyAuth: []
+    }],
+    middleware: {
+      before: [
+        beforeAuth
+      ]
+    }
+  })
+  async authBeforeHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
+    return new Response<AuthResponse>().setBody({
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+    });
+  }
+
+  @Route({
+    description: "Post method with body and after middleware",
+    summary: "A POST method with request and response bodies",
+    method: HttpMethod.POST,
+    path: "/auth-after",
+    requestBody: AuthRequest,
+    responses: [{
+      statusCode: 200,
+      description: "mock",
+      body: AuthResponse
+    }],
+    security: [{
+      ApiKeyAuth: []
+    }],
+    middleware: {
+      after: [
+        afterAuth
+      ]
+    }
+  })
+  async authAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
+    return new Response<AuthResponse>().setBody({
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+    });
+  }
+
+  @Route({
+    description: "Post method with body and before, after middleware",
+    summary: "A POST method with request and response bodies",
+    method: HttpMethod.POST,
+    path: "/auth-before-and-after",
+    requestBody: AuthRequest,
+    responses: [{
+      statusCode: 200,
+      description: "mock",
+      body: AuthResponse
+    }],
+    security: [{
+      ApiKeyAuth: []
+    }],
+    middleware: {
+      before: [
+        beforeAuth
+      ],
+      after: [
+        afterAuth
+      ]
+    }
+  })
+  async authBeforeAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
     });

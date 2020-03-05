@@ -22,10 +22,12 @@ import { Request } from "./request";
 import { Response } from "./response";
 import { IPathParams } from "./path-params.interface";
 import { Logger } from "../logger";
+import { IMiddleware } from "./decorators/route";
+import { AfterMiddlewareRequestHandler, BeforeMiddlewareHandler } from "./request-handler";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
-    const [route, pathParams] = this.resolveHandler(request.method, request.path);
+    const [route, pathParams, middleware] = this.resolveHandler(request.method, request.path);
     if (route) {
       Logger.log("Route resolved to::", route.path);
       request.pathParams = pathParams;
@@ -37,10 +39,13 @@ class Router {
         }
       }
 
-      const result = await route.handler(request);
+      request = await this.executeMiddlewareBefore(middleware?.before, request);
+      let response = await route.handler(request);
+      response = await this.executeMiddlewareAfter(middleware?.after, response);
+
       // validate response
       if (route.responses[0].body) {
-        const outputValidationResult = Validator.validate(result.getBody(), route.responses[0].body);
+        const outputValidationResult = Validator.validate(response.getBody(), route.responses[0].body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           return new Response(500).setBody({
@@ -50,7 +55,7 @@ class Router {
         }
       }
 
-      return result;
+      return response;
     } else {
       Logger.log("Route not resolved::", JSON.stringify(request));
     }
@@ -61,6 +66,24 @@ class Router {
     return generateDoc(version);
   };
 
+  private executeMiddlewareBefore = async (middlewareHandlers: BeforeMiddlewareHandler[] | undefined, request: Request): Promise<Request> => {
+    if (middlewareHandlers) {
+      for (let handler of middlewareHandlers) {
+        request = await handler(request);
+      }
+    }
+    return request;
+  };
+
+  private executeMiddlewareAfter= async (middlewareHandlers: AfterMiddlewareRequestHandler[] | undefined, response: Response): Promise<Response> => {
+    if (middlewareHandlers) {
+      for (let handler of middlewareHandlers) {
+        response = await handler(response);
+      }
+    }
+    return response;
+  };
+
   private removeTrailingSlash = (requestPath: string): string => {
     if (requestPath.endsWith("/")) {
       requestPath = requestPath.substr(0, requestPath.length - 1);
@@ -68,7 +91,7 @@ class Router {
     return requestPath;
   };
 
-  private resolveHandler = (method: string, path: string): [RouteMetadata | null, IPathParams | null] => {
+  private resolveHandler = (method: string, path: string): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
     const metadata = getMetadataStorage();
@@ -120,7 +143,7 @@ class Router {
       }
     }
 
-    return [routeMeta ?? null, pathParams];
+    return [routeMeta ?? null, pathParams ?? null, routeMeta?.middleware ?? null];
   };
 }
 
