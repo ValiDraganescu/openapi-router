@@ -17,17 +17,17 @@
 
 import { getMetadataStorage } from "../../metadata/metadata-storage";
 import { ObjectType } from "../../object-type";
-import { HttpMethod, RequestHandler } from "../..";
+import { HttpMethod } from "../..";
 import { DocParameter } from "../../doc/model/parameter";
-import {ResponseMetadata} from "../../metadata/response-metadata";
-import {RouteMetadata} from "../../metadata/route-metadata";
-import {MethodMetadata} from "../../metadata/method-metadata";
+import { ResponseMetadata } from "../../metadata/response-metadata";
+import { RouteMetadata } from "../../metadata/route-metadata";
+import { MethodMetadata } from "../../metadata/method-metadata";
 import { Logger } from "../../logger";
-import { AfterMiddlewareRequestHandler, BeforeMiddlewareHandler } from "../request-handler";
+import { AfterMiddlewareHandler, BeforeMiddlewareHandler } from "../request-handler";
 
 export interface IMiddleware {
   before?: BeforeMiddlewareHandler[];
-  after?: AfterMiddlewareRequestHandler[];
+  after?: AfterMiddlewareHandler[];
 }
 
 export interface IRouteProps {

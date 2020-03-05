@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-
 export { RequestHandler } from "./router/request-handler";
+export { BeforeMiddlewareHandler } from "./router/request-handler";
+export { AfterMiddlewareHandler } from "./router/request-handler";
 export { getRouter } from "./router/router";
 export { Request } from "./router/request";
 export { Response } from "./router/response";

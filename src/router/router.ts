@@ -23,7 +23,7 @@ import { Response } from "./response";
 import { IPathParams } from "./path-params.interface";
 import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
-import { AfterMiddlewareRequestHandler, BeforeMiddlewareHandler } from "./request-handler";
+import { AfterMiddlewareHandler, BeforeMiddlewareHandler } from "./request-handler";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -68,16 +68,16 @@ class Router {
 
   private executeMiddlewareBefore = async (middlewareHandlers: BeforeMiddlewareHandler[] | undefined, request: Request): Promise<Request> => {
     if (middlewareHandlers) {
-      for (let handler of middlewareHandlers) {
+      for (const handler of middlewareHandlers) {
         request = await handler(request);
       }
     }
     return request;
   };
 
-  private executeMiddlewareAfter= async (middlewareHandlers: AfterMiddlewareRequestHandler[] | undefined, response: Response): Promise<Response> => {
+  private executeMiddlewareAfter= async (middlewareHandlers: AfterMiddlewareHandler[] | undefined, response: Response): Promise<Response> => {
     if (middlewareHandlers) {
-      for (let handler of middlewareHandlers) {
+      for (const handler of middlewareHandlers) {
         response = await handler(response);
       }
     }
