@@ -62,7 +62,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
             description: routeMetadata.description,
             summary: routeMetadata.summary,
             operationId: `${method}-${path}`,
-            security: routeMetadata.security
+            security: routeMetadata.security ?? metadata.docMetadata?.security
           };
           if (routeMetadata.responses) {
             thisDoc.paths[path][method.toLowerCase()].responses = resolveResponses(routeMetadata);
