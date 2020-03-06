@@ -16,7 +16,7 @@ describe("Test the api doc generation capabilities", () => {
       path: "/api/doc",
       method: HttpMethod.GET
     }));
-    doc = resp.getBody() as DocApi;
+    doc = resp.body?.data as DocApi;
     console.log("Api Doc::", JSON.stringify(doc));
   });
 

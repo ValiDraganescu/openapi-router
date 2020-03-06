@@ -19,6 +19,7 @@ import { ObjectType } from "../object-type";
 import { getMetadataStorage } from "../metadata/metadata-storage";
 import {PropertyMetadata} from "../metadata/property-metadata";
 import { Logger } from "../logger";
+import { ApiError } from "../router/api-error";
 
 type PropType = "undefined" | "object" | "boolean" | "number" | "string" | "function" | "symbol" | "bigint";
 
@@ -106,14 +107,14 @@ const validateMaxSize = <T>(
   return null;
 };
 
-const validateObject = (propMeta: PropertyMetadata, propertyVallue: any): string[] => {
-  const errors: string[] = [];
+const validateObject = (propMeta: PropertyMetadata, propertyVallue: any): ApiError[] => {
+  const errors: ApiError[] = [];
   if (propMeta.objectType) {
     errors.push(...Validator.validate(propertyVallue, propMeta.objectType));
   } else {
     const message = `No entity defined for object ${JSON.stringify(propertyVallue)}`;
     console.error(message);
-    errors.push(message);
+    errors.push({message});
   }
   return errors;
 };
@@ -123,42 +124,44 @@ const validateRequiredProperties = <T>(
   propMeta: PropertyMetadata,
   Model: ObjectType<T>,
   modelKey: string,
-): string[] => {
-  const errors: string[] = [];
+): ApiError[] => {
+  const errors: ApiError[] = [];
   let error: string | null;
 
   const propType = typeof property;
   const typeError = validateIsCorrectType(propType, propMeta, Model, modelKey);
 
   if (typeError) {
-    errors.push(typeError);
+    errors.push({message: typeError});
   }
 
   if (!typeError) {
     error = validateMinSize(propMeta, propType, property, Model, modelKey);
     if (error) {
-      errors.push(error);
+      errors.push({message: error});
     }
 
     error = validateMaxSize(propMeta, propType, property, Model, modelKey);
     if (error) {
-      errors.push(error);
+      errors.push({message: error});
     }
 
     error = validateFormat(propMeta, property, Model, modelKey);
     if (error) {
-      errors.push(error);
+      errors.push({message: error});
     }
   }
   return errors;
 };
 
 export class Validator {
-  static validate = <T>(body: any, Model: ObjectType<T>): string[] => {
+  static validate = <T>(body: any, Model: ObjectType<T>): ApiError[] => {
     Logger.log("Validating", Model.name, JSON.stringify(body));
-    const errors: string[] = [];
+    const errors: ApiError[] = [];
     if (!body) {
-      errors.push(`${Model.name} is required`);
+      errors.push({
+        message: `${Model.name} is required`
+      });
       return errors;
     }
     const metadata = getMetadataStorage();
@@ -167,7 +170,7 @@ export class Validator {
     if (!entityMeta) {
       const message = `Entity ${Model.name} is not registered with the router, did you forget to decorate ${Model.name} with @DocModel()?`;
       console.error(message);
-      errors.push(message);
+      errors.push({message});
     }
 
     const modelKeys = Object.keys(entityMeta);
@@ -186,7 +189,7 @@ export class Validator {
         if (propMeta) {
           const error = validateIsRequired(propMeta, propertyValue, Model, modelKey);
           if (error) {
-            errors.push(error);
+            errors.push({message: error});
           }
 
           if (propertyValue) {

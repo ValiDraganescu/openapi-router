@@ -1,4 +1,4 @@
-import {DocProperty} from "../../../src/doc/decorators/doc";
+import { DocProperty } from "../../../src";
 
 export class AuthResponse {
   @DocProperty({

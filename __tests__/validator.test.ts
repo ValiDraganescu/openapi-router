@@ -20,10 +20,10 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.getBody().errors;
+    const errors = resp.body!.errors!;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
-    expect(errors[0]).toEqual("AuthRequest.email is required");
+    expect(errors[0].message).toEqual("AuthRequest.email is required");
   });
 
   it("should test all missing params in request", async () => {
@@ -41,11 +41,11 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.getBody().errors;
+    const errors = resp.body!.errors!;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
-    expect(errors[0]).toEqual("AuthRequest.email is required");
-    expect(errors[1]).toEqual("AuthRequest.password is required");
+    expect(errors[0].message).toEqual("AuthRequest.email is required");
+    expect(errors[1].message).toEqual("AuthRequest.password is required");
   });
 
   it("should test missing body in request", async () => {
@@ -58,10 +58,10 @@ describe("Test the validation capabilities", () => {
       method: HttpMethod.POST
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.getBody().errors;
+    const errors = resp.body!.errors!;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
-    expect(errors[0]).toEqual("AuthRequest is required");
+    expect(errors[0].message).toEqual("AuthRequest is required");
   });
 
   it("should test wrong type sent to API", async () => {
@@ -82,11 +82,11 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.getBody().errors;
+    const errors = resp.body!.errors!;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
-    expect(errors[0]).toEqual("AuthRequest.password should be of type string");
-    expect(errors[1]).toEqual("UserDetails.lastName should be of type string");
+    expect(errors[0].message).toEqual("AuthRequest.password should be of type string");
+    expect(errors[1].message).toEqual("UserDetails.lastName should be of type string");
   });
 
   it("should test validating object property", async () => {
@@ -103,11 +103,11 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.getBody().errors;
+    const errors = resp.body!.errors!;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
-    expect(errors).toContain("AuthRequest.password should be of type string");
-    expect(errors).toContain("AuthRequest.userDetails is required");
+    expect(errors.map(e => e.message)).toContain("AuthRequest.password should be of type string");
+    expect(errors.map(e => e.message)).toContain("AuthRequest.userDetails is required");
   });
 
   it("should test validating object property properties", async () => {
@@ -127,9 +127,9 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(400);
-    const errors = resp.getBody().errors;
+    const errors = resp.body!.errors!;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
-    expect(errors).toContain("UserDetails.firstName is required");
+    expect(errors.map(e => e.message)).toContain("UserDetails.firstName is required");
   });
 });

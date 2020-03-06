@@ -63,7 +63,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello" });
+    return new Response<HelloResponse>().setData({ message: "hello" });
   };
 
   @Route({
@@ -76,7 +76,7 @@ export class App extends LambdaRouter {
     }]
   })
   async getApiDoc(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody(getRouter().getApiDoc("3.0.0"));
+    return new Response<HelloResponse>().setData(getRouter().getApiDoc("3.0.0"));
   };
 
   @Route({
@@ -90,7 +90,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloWithPostHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello with POST" });
+    return new Response<HelloResponse>().setData({ message: "hello with POST" });
   }
 
   @Route({
@@ -104,7 +104,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloFooHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello foo" });
+    return new Response<HelloResponse>().setData({ message: "hello foo" });
   }
 
   @Route({
@@ -146,7 +146,7 @@ export class App extends LambdaRouter {
     const name = request.pathParams?.name.value;
     const org = request.pathParams?.organization.value;
     const team = request.pathParams?.team.value;
-    return new Response<HelloResponse>().setBody({ message: `hello ${name} from ${team} team of ${org}` });
+    return new Response<HelloResponse>().setData({ message: `hello ${name} from ${team} team of ${org}` });
   }
 
   @Route({
@@ -165,7 +165,7 @@ export class App extends LambdaRouter {
     }]
   })
   async authHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
-    return new Response<AuthResponse>().setBody({
+    return new Response<AuthResponse>().setData({
       message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
     });
   }
@@ -191,7 +191,7 @@ export class App extends LambdaRouter {
     }
   })
   async authBeforeHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
-    return new Response<AuthResponse>().setBody({
+    return new Response<AuthResponse>().setData({
       message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
     });
   }
@@ -217,7 +217,7 @@ export class App extends LambdaRouter {
     }
   })
   async authAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
-    return new Response<AuthResponse>().setBody({
+    return new Response<AuthResponse>().setData({
       message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
     });
   }
@@ -246,7 +246,7 @@ export class App extends LambdaRouter {
     }
   })
   async authBeforeAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
-    return new Response<AuthResponse>().setBody({
+    return new Response<AuthResponse>().setData({
       message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
     });
   }
@@ -294,7 +294,7 @@ export class App extends LambdaRouter {
   })
   async updateUser(request: Request): Promise<Response> {
     console.log("Update user");
-    return new Response(200).setBody(request.body);
+    return new Response(200).setData(request.body);
   }
 
   @Route({
@@ -322,7 +322,7 @@ export class App extends LambdaRouter {
     }]
   })
   async authAdminHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
-    return new Response<AuthResponse>().setBody({
+    return new Response<AuthResponse>().setData({
       message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`
     });
   }

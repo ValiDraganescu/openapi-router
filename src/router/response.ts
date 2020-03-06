@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 import { StatusCode } from "./status-code";
+import { ApiError } from "./api-error";
 
 export class Response<ResponseBody = any> {
   statusCode: StatusCode;
-  body?: string;
+  body?: {
+    data?: ResponseBody;
+    errors?: ApiError[];
+  };
+
   headers: { [key: string]: string } = {
     "Content-Type": "application/json",
     "Cache-Control": "private, max-age=0, no-cache, no-store, must-revalidate'",
     "Expires": "-1",
     "Pragma": "no-cache",
     "Access-Control-Expose-Headers": "X-Api-Version",
-    "Access-Control-Allow-Origin" : "*",
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Credentials": "true"
   };
 
@@ -32,16 +37,20 @@ export class Response<ResponseBody = any> {
     this.statusCode = statusCode ?? StatusCode.okay;
   }
 
-  setBody = (body: ResponseBody): Response<ResponseBody> => {
-    this.body = JSON.stringify(body);
+  setData = (data: ResponseBody): Response => {
+    if (!this.body) {
+      this.body = {};
+    }
+    this.body.data = data;
     return this;
   };
 
-  getBody = (): ResponseBody | null => {
-    if (this.body) {
-      return JSON.parse(this.body);
+  setErrors = (errors: ApiError[]): Response => {
+    if (!this.body) {
+      this.body = {};
     }
-    return null;
+    this.body.errors = errors;
+    return this;
   };
 
   addHeader = (key: string, value: string) => {
@@ -60,6 +69,6 @@ export class Response<ResponseBody = any> {
 
   toJSON() {
     const { statusCode, headers, body } = this;
-    return { statusCode, headers, body };
+    return { statusCode, headers, body: JSON.stringify(body) };
   }
 }

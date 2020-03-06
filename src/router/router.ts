@@ -35,7 +35,7 @@ class Router {
       if (route.requestBody) {
         const inputValidationErrors = Validator.validate(request.body, route.requestBody);
         if (inputValidationErrors && inputValidationErrors.length) {
-          return new Response(400).setBody({ errors: inputValidationErrors });
+          return new Response(400).setErrors(inputValidationErrors);
         }
       }
 
@@ -45,13 +45,10 @@ class Router {
 
       // validate response
       if (route.responses[0].body) {
-        const outputValidationResult = Validator.validate(response.getBody(), route.responses[0].body);
+        const outputValidationResult = Validator.validate(response.body?.data, route.responses[0].body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
-          return new Response(500).setBody({
-            message: "The output model brakes the API contract",
-            info: outputValidationResult
-          });
+          return new Response(500).setErrors(outputValidationResult);
         }
       }
 
