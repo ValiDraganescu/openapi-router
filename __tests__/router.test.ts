@@ -40,7 +40,7 @@ describe("Test the routing capabilities", () => {
       method: HttpMethod.GET
     }));
     expect(resp.statusCode).toEqual(404);
-    expect(resp.body).not.toBeDefined();
+    expect(resp.data).not.toBeDefined();
   });
 
   it("should test say hello foo handler", async () => {

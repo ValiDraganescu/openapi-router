@@ -34,7 +34,17 @@ const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
       responses[String(response.statusCode)].content = {
         "application/json": {
           schema: {
-            $ref: `#/components/schemas/${response.body?.name}`
+            properties:{
+              data: {
+                $ref: `#/components/schemas/${response.body?.name}`
+              },
+              errors: {
+                type: "array",
+                items: {
+                  $ref: `#/components/schemas/ApiError`
+                }
+              }
+            }
           }
         }
       };
@@ -168,6 +178,17 @@ export const generateDoc = (version: string): DocApi => {
       schemas[entityName].required = required;
     }
   }
+
+  schemas.ApiError = {
+    properties: {
+      name: {
+        type: "string"
+      },
+      message: {
+        type: "string"
+      }
+    }
+  };
 
   apiDoc.components = {
     schemas

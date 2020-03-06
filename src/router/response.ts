@@ -22,7 +22,6 @@ export class Response<ResponseBody = any> {
   data?: ResponseBody;
   errors?: ApiError[];
   body?: string;
-
   headers: { [key: string]: string } = {
     "Content-Type": "application/json",
     "Cache-Control": "private, max-age=0, no-cache, no-store, must-revalidate'",
@@ -63,11 +62,13 @@ export class Response<ResponseBody = any> {
 
   toJSON() {
     const { statusCode, headers, errors, data } = this;
+    this.body = JSON.stringify({
+      errors,
+      data
+    });
+
     return {
-      statusCode, headers, body: JSON.stringify({
-        errors,
-        data
-      })
+      statusCode, headers, body: this.body
     };
   }
 }
