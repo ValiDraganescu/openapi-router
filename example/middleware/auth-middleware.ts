@@ -10,8 +10,8 @@ export const beforeAuth: BeforeMiddlewareHandler = async (request: Request<AuthR
 };
 
 export const afterAuth: AfterMiddlewareHandler = async (response: Response<AuthResponse>): Promise<Response> => {
-  if (response.body) {
-    const body = response.body?.data;
+  if (response.data) {
+    const body = response.data;
     if (body) {
       body.message = body.message + " after";
       response.setData(body);
