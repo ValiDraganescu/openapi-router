@@ -26,7 +26,7 @@ export abstract class LambdaRouter {
       try {
         parsedBody = JSON.parse(event.body);
       } catch (e) {
-        return new Response<any>(400).setErrors([{ message: e.message }]);
+        return new Response<any>(400).setBody([{ message: e.message }]);
       }
     }
 
@@ -39,7 +39,7 @@ export abstract class LambdaRouter {
     try {
       return getRouter().handleEvent(request);
     } catch (e) {
-      return new Response<any>(500).setErrors([{ message: e.message }]);
+      return new Response<any>(500).setBody([{ message: e.message }]);
     }
   };
 }
