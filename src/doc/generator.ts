@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
+import { DocApi } from "./model/api";
+import { getMetadataStorage } from "../metadata/metadata-storage";
+import { DocPath } from "./model/paths";
+import { DocResponses } from "./model/doc-responses";
+import { RouteMetadata } from "../metadata/route-metadata";
+import { RouterMetadata } from "../metadata/router-metadata";
+import { PropertyMetadata } from "../metadata/property-metadata";
+import { ResponseMetadata } from "../metadata/response-metadata";
 
-import {DocApi} from "./model/api";
-import {getMetadataStorage} from "../metadata/metadata-storage";
-import {DocPath} from "./model/paths";
-import {DocResponses} from "./model/doc-responses";
-import {RouteMetadata} from "../metadata/route-metadata";
-import {RouterMetadata} from "../metadata/router-metadata";
-import {PropertyMetadata} from "../metadata/property-metadata";
+const getResponseContent = (globalResponse: ResponseMetadata): any => {
+  return {
+    "application/json": {
+      schema: {
+        $ref: `#/components/schemas/${globalResponse.body?.name}`
+      }
+    }
+  };
+};
 
 const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
   const responses: DocResponses = {};
@@ -31,20 +41,14 @@ const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
     };
 
     if (response.body && response.body.name) {
-      responses[String(response.statusCode)].content = {
-        "application/json": {
-          schema: {
-            $ref: `#/components/schemas/${response.body?.name}`
-          }
-        }
-      };
+      responses[String(response.statusCode)].content = getResponseContent(response);
     }
   }
   return responses;
 };
 
 const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
-  const thisDoc = {...apiDoc};
+  const thisDoc = { ...apiDoc };
 
   const paths = metadata.getPaths();
   thisDoc.paths = {};
@@ -54,21 +58,38 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
     }
     const methodMetadata = metadata.paths.get(path);
     if (methodMetadata) {
+
       const methods = Object.keys(methodMetadata);
       for (const method of methods) {
-        if (!thisDoc.paths[path][method]) {
+
+        const loweredMethod = method.toLowerCase();
+        if (!thisDoc.paths[path][loweredMethod]) {
+
           const routeMetadata = methodMetadata[method];
-          thisDoc.paths[path][method.toLowerCase()] = {
+          thisDoc.paths[path][loweredMethod] = {
             description: routeMetadata.description,
             summary: routeMetadata.summary,
             operationId: `${method}-${path}`,
             security: routeMetadata.security ?? metadata.docMetadata?.security
           };
           if (routeMetadata.responses) {
-            thisDoc.paths[path][method.toLowerCase()].responses = resolveResponses(routeMetadata);
+
+            thisDoc.paths[path][loweredMethod].responses = resolveResponses(routeMetadata);
+            if (metadata.docMetadata?.globalResponses) {
+
+              for (const globalResponse of metadata.docMetadata.globalResponses) {
+
+                if (!thisDoc.paths[path][loweredMethod].responses[globalResponse.statusCode]) {
+                  thisDoc.paths[path][loweredMethod].responses[globalResponse.statusCode] = {
+                    description: globalResponse.description,
+                    content : getResponseContent(globalResponse)
+                  };
+                }
+              }
+            }
           }
           if (routeMetadata.requestBody) {
-            thisDoc.paths[path][method.toLowerCase()].requestBody = {
+            thisDoc.paths[path][loweredMethod].requestBody = {
               content: {
                 "application/json": {
                   schema: {
@@ -80,7 +101,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
           }
 
           if (routeMetadata.parameters) {
-            thisDoc.paths[path][method.toLowerCase()].parameters = routeMetadata.parameters;
+            thisDoc.paths[path][loweredMethod].parameters = routeMetadata.parameters;
           }
         }
       }
@@ -147,11 +168,12 @@ export const generateDoc = (version: string): DocApi => {
   let apiDoc = new DocApi();
   apiDoc.openapi = version;
   if (metadata.docMetadata) {
-    const info = {...metadata.docMetadata};
+    const info = { ...metadata.docMetadata };
     delete info.securitySchemes;
     delete info.security;
     delete info.servers;
     delete info.additionalRouters;
+    delete info.globalResponses;
     apiDoc.info = info;
   }
   const schemas: any = {};

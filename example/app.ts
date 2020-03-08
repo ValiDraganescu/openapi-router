@@ -3,6 +3,7 @@ import { HelloResponse } from "./model/response/hello-response";
 import { AuthResponse } from "./model/response/auth-response";
 import { AuthRequest } from "./model/request/auth-request";
 import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
+import { ErrorResponse } from "./model/response/error-response";
 
 @ApiRouter({
   version: "1.0.0",
@@ -47,7 +48,14 @@ import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
     }, {
       url: "https://api.test.com",
       description: "Production"
-    }]
+    }],
+  globalResponses: [
+    {
+      statusCode: 500,
+      description: "Internal server error",
+      body: ErrorResponse
+    }
+  ]
 })
 export class App extends LambdaRouter {
 

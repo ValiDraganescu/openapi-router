@@ -132,7 +132,14 @@ defines the behaviour and documentation for a route.
   }, {
     url: "https://api.test.com",
     description: "Production"
-  }]
+  }],
+  globalResponses: [
+    {
+      statusCode: 500,
+      description: "Internal server error",
+      body: ErrorResponse
+    }
+  ]
 })
 ```
 `Route` example
@@ -153,7 +160,9 @@ defines the behaviour and documentation for a route.
 #### Documentation generator
 The router also defines the method `getApiDoc` which returns an OpenAPI 3 standard
 json documentation based on the `DocMetadata` and `Route`s defined in the API implementation.
-
+The `globalResponses` from the `DocMetadata` can be used to define global responses for all routes.
+Think like 404, 401, 500 etc status messages. This responses will be added to any
+route that does not already define them.
 #### Default headers for all API responses
 
 ```json

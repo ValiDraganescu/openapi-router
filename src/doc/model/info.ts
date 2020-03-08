@@ -21,6 +21,7 @@ import { DocServer } from "./server";
 import { DocSecurity } from "./doc-security";
 import { SecuritySchemes } from "./security-schemes";
 import { ObjectType } from "../../object-type";
+import { ResponseMetadata } from "../../metadata/response-metadata";
 
 export class DocInfo {
   version: string;
@@ -33,4 +34,5 @@ export class DocInfo {
   security?: DocSecurity[];
   servers: DocServer[];
   additionalRouters?: ObjectType<any>[];
+  globalResponses?: ResponseMetadata[];
 }
