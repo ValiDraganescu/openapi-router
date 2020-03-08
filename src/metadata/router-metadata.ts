@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {MethodMetadata} from "./method-metadata";
-import {DocInfo} from "../doc/model/info";
-import {ModelMetadata} from "./model-metadata";
+import { MethodMetadata } from "./method-metadata";
+import { DocInfo } from "..";
+import { ModelMetadata } from "./model-metadata";
 
 
 export class RouterMetadata {

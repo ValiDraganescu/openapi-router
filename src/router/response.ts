@@ -19,7 +19,6 @@ import { ApiError } from "./api-error";
 export class Response<ResponseBody = any> {
   statusCode: StatusCode;
 
-  data?: ResponseBody;
   errors?: ApiError[];
   body?: string;
   headers: { [key: string]: string } = {
@@ -36,14 +35,16 @@ export class Response<ResponseBody = any> {
     this.statusCode = statusCode ?? StatusCode.okay;
   }
 
-  setData = (data: ResponseBody): Response => {
-    this.data = data;
+  setBody = (body: ResponseBody): Response<ResponseBody> => {
+    this.body = JSON.stringify(body);
     return this;
   };
 
-  setErrors = (errors: ApiError[]): Response => {
-    this.errors = errors;
-    return this;
+  getBody = (): ResponseBody | null => {
+    if (this.body) {
+      return JSON.parse(this.body) as ResponseBody;
+    }
+    return null;
   };
 
   addHeader = (key: string, value: string) => {
@@ -61,14 +62,7 @@ export class Response<ResponseBody = any> {
   };
 
   toJSON() {
-    const { statusCode, headers, errors, data } = this;
-    this.body = JSON.stringify({
-      errors,
-      data
-    });
-
-    return {
-      statusCode, headers, body: this.body
-    };
+    const { statusCode, headers, body } = this;
+    return { statusCode, headers, body };
   }
 }

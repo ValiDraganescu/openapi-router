@@ -16,7 +16,7 @@ describe("Test the api doc generation capabilities", () => {
       path: "/api/doc",
       method: HttpMethod.GET
     }));
-    doc = resp.data as DocApi;
+    doc = resp.getBody() as DocApi;
     console.log("Api Doc::", JSON.stringify(doc));
   });
 
@@ -58,7 +58,7 @@ describe("Test the api doc generation capabilities", () => {
     const appJson = okayResponse.content["application/json"];
     expect(appJson).toBeDefined();
     expect(appJson.schema).toBeDefined();
-    expect(appJson.schema.properties.data.$ref).toEqual("#/components/schemas/HelloResponse");
+    expect(appJson.schema.$ref).toEqual("#/components/schemas/HelloResponse");
   });
 
   it("should document one schema", function () {

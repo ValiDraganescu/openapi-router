@@ -34,17 +34,7 @@ const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
       responses[String(response.statusCode)].content = {
         "application/json": {
           schema: {
-            properties:{
-              data: {
-                $ref: `#/components/schemas/${response.body?.name}`
-              },
-              errors: {
-                type: "array",
-                items: {
-                  $ref: `#/components/schemas/ApiError`
-                }
-              }
-            }
+            $ref: `#/components/schemas/${response.body?.name}`
           }
         }
       };
