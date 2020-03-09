@@ -55,7 +55,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(okayResponse).toBeDefined();
     expect(okayResponse.description).toEqual("hello response");
     expect(okayResponse.content).toBeDefined();
-    const appJson = okayResponse.content["application/json"];
+    let appJson = okayResponse.content["application/json"];
     expect(appJson).toBeDefined();
     expect(appJson.schema).toBeDefined();
     expect(appJson.schema.$ref).toEqual("#/components/schemas/HelloResponse");
@@ -64,6 +64,21 @@ describe("Test the api doc generation capabilities", () => {
     expect(internalServerErrorResponse).toBeDefined();
     expect(internalServerErrorResponse.description).toEqual("Internal server error");
     expect(internalServerErrorResponse.content).toBeDefined();
+    appJson = internalServerErrorResponse.content["application/json"];
+    expect(appJson).toBeDefined();
+    expect(appJson.schema).toBeDefined();
+    expect(appJson.schema.$ref).toEqual("#/components/schemas/ErrorResponse");
+
+    const badRequestResponse = helloPath.get.responses["400"];
+    expect(badRequestResponse).toBeDefined();
+    expect(badRequestResponse.description).toEqual("Bad request");
+    expect(badRequestResponse.content).toBeDefined();
+    appJson = badRequestResponse.content["application/json"];
+    expect(appJson).toBeDefined();
+    expect(appJson.schema).toBeDefined();
+    expect(appJson.schema.type).toEqual("array");
+    expect(appJson.schema.items).toBeDefined();
+    expect(appJson.schema.items.$ref).toEqual("#/components/schemas/ErrorResponse");
   });
 
   it("should document one schema", function () {
@@ -81,11 +96,11 @@ describe("Test the api doc generation capabilities", () => {
   it("should document internal server error schema", function () {
     expect(doc.components).toBeDefined();
     expect(doc.components.schemas).toBeDefined();
-    const helloResponseSchema = doc.components.schemas.ErrorResponse;
-    expect(helloResponseSchema).toBeDefined();
-    expect(typeof helloResponseSchema).toBe("object");
-    expect(helloResponseSchema.properties).toBeDefined();
-    const messageProp = helloResponseSchema.properties?.message;
+    const errorResponseSchema = doc.components.schemas.ErrorResponse;
+    expect(errorResponseSchema).toBeDefined();
+    expect(typeof errorResponseSchema).toBe("object");
+    expect(errorResponseSchema.properties).toBeDefined();
+    const messageProp = errorResponseSchema.properties?.message;
     expect(messageProp).toBeDefined();
     expect(messageProp.type).toEqual("string");
   });

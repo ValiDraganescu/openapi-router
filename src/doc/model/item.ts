@@ -18,5 +18,6 @@
 import { PropertyType } from "../property-type";
 
 export class DocItems {
-  type: PropertyType | string;
+  type?: PropertyType | string;
+  $ref?: string;
 }

@@ -1,4 +1,4 @@
-import { ApiRouter, getRouter, HttpMethod, LambdaRouter, Request, Response, Route } from "../src";
+import { ApiRouter, getRouter, HttpMethod, LambdaRouter, Request, Response, Route, StatusCode } from "../src";
 import { HelloResponse } from "./model/response/hello-response";
 import { AuthResponse } from "./model/response/auth-response";
 import { AuthRequest } from "./model/request/auth-request";
@@ -53,6 +53,11 @@ import { ErrorResponse } from "./model/response/error-response";
     {
       statusCode: 500,
       description: "Internal server error",
+      body: ErrorResponse
+    }, {
+      statusCode: StatusCode.badRequest,
+      description: "Bad request",
+      type: "array",
       body: ErrorResponse
     }
   ]

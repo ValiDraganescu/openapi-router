@@ -22,15 +22,30 @@ import { RouteMetadata } from "../metadata/route-metadata";
 import { RouterMetadata } from "../metadata/router-metadata";
 import { PropertyMetadata } from "../metadata/property-metadata";
 import { ResponseMetadata } from "../metadata/response-metadata";
+import { DocContent } from "./model/doc-content";
 
-const getResponseContent = (globalResponse: ResponseMetadata): any => {
-  return {
+const getResponseContent = (response: ResponseMetadata): DocContent => {
+  // object schema
+  let schema: DocContent = {
     "application/json": {
       schema: {
-        $ref: `#/components/schemas/${globalResponse.body?.name}`
+        $ref: `#/components/schemas/${response.body?.name}`
       }
     }
   };
+  if (response.type === "array") {
+    schema = {
+      "application/json": {
+        schema: {
+          type: "array",
+          items: {
+            $ref: `#/components/schemas/${response.body?.name}`
+          }
+        }
+      }
+    }
+  }
+  return schema;
 };
 
 const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
