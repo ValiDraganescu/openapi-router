@@ -42,17 +42,23 @@ class Router {
         request = await this.executeMiddlewareBefore(globalMiddleware?.before, request);
       }
 
-      request = await this.executeMiddlewareBefore(middleware?.before, request);
+      if (middleware && middleware.before) {
+        request = await this.executeMiddlewareBefore(middleware.before, request);
+      }
+
       let response: Response = await route.handler(request);
-      response = await this.executeMiddlewareAfter(middleware?.after, response);
+
+      if (middleware && middleware.after) {
+        response = await this.executeMiddlewareAfter(middleware.after, response);
+      }
 
       if (globalMiddleware && globalMiddleware.after) {
-        response = await this.executeMiddlewareAfter(globalMiddleware?.after, response);
+        response = await this.executeMiddlewareAfter(globalMiddleware.after, response);
       }
 
       // validate response
       if (route.responses[0].body) {
-        const outputValidationResult = Validator.validate(response, route.responses[0].body);
+        const outputValidationResult = Validator.validate(response.getBody(), route.responses[0].body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           return new Response(500).setBody(outputValidationResult);
@@ -71,25 +77,19 @@ class Router {
   };
 
   private executeMiddlewareBefore = async (
-    middlewareHandlers: BeforeMiddlewareHandler[] | undefined,
+    before: BeforeMiddlewareHandler[],
     request: Request
-  ): Promise<Request<any>> => {
-    if (middlewareHandlers) {
-      for (const handler of middlewareHandlers) {
-        request = await handler(request);
-      }
+  ): Promise<Request> => {
+    for (const handler of before) {
+      request = await handler(request);
     }
     return request;
   };
 
   private executeMiddlewareAfter = async (
-    middlewareHandlers: AfterMiddlewareHandler[] | undefined,
-    response: Response
-  ): Promise<Response> => {
-    if (middlewareHandlers) {
-      for (const handler of middlewareHandlers) {
-        response = await handler(response);
-      }
+    after: AfterMiddlewareHandler[], response: Response): Promise<Response> => {
+    for (const handler of after) {
+      response = await handler(response);
     }
     return response;
   };
