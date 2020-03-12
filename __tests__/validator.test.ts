@@ -1,5 +1,5 @@
 import {App} from "../example/app";
-import {Request} from "../src";
+import { Request, StatusCode } from "../src";
 import {HttpMethod} from "../src";
 import { ApiError } from "../src/router/api-error";
 
@@ -132,5 +132,22 @@ describe("Test the validation capabilities", () => {
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
     expect(errors.map((e: ApiError) => e.message)).toContain("UserDetails.firstName is required");
+  });
+
+  it("should test validating an error message", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/error-method",
+      method: HttpMethod.GET
+    }));
+    expect(resp.statusCode).toEqual(StatusCode.notFound);
+    const errors = resp.getBody();
+    expect(errors).toBeDefined();
+    expect(errors.length).toEqual(1);
+    expect(errors.map((e: ApiError) => e.message)).toContain("foo");
+    expect(errors.map((e: ApiError) => e.name)).toContain("bar");
   });
 });

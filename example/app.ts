@@ -4,6 +4,7 @@ import { AuthResponse } from "./model/response/auth-response";
 import { AuthRequest } from "./model/request/auth-request";
 import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
 import { ErrorResponse } from "./model/response/error-response";
+import { ApiError } from "../src/router/api-error";
 
 @ApiRouter({
   version: "1.0.0",
@@ -59,6 +60,11 @@ import { ErrorResponse } from "./model/response/error-response";
       description: "Bad request",
       type: "array",
       body: ErrorResponse
+    }, {
+      statusCode: StatusCode.notFound,
+      description: "Not found",
+      type: "array",
+      body: ApiError
     }
   ]
 })
@@ -308,6 +314,21 @@ export class App extends LambdaRouter {
   async updateUser(request: Request): Promise<Response> {
     console.log("Update user");
     return new Response(200).setBody(request.body);
+  }
+
+  @Route({
+    description: "This method returns an error",
+    method: HttpMethod.GET,
+    path: "/error-method",
+    responses: [{
+      description: "mock",
+      statusCode: StatusCode.okay,
+      type: "array",
+      body: AuthResponse
+    }]
+  })
+  async errorMessageReturned(request: Request): Promise<Response> {
+    return new Response<ApiError[]>(StatusCode.notFound).setBody([{ message: "foo", name: "bar" }]);
   }
 
   @Route({

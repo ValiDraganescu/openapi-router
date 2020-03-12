@@ -26,7 +26,7 @@ const validateIsRequired = <T>(
   propMeta: PropertyMetadata,
   propertyValue: any,
   Model: ObjectType<T>,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.isRequired && !propertyValue) {
     return `${Model.name}.${modelKey} is required`;
@@ -38,11 +38,18 @@ const validateIsCorrectType = <T>(
   propType: PropType,
   propMeta: PropertyMetadata,
   Model: ObjectType<T>,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
-  if (propType !== propMeta.type) {
-    return `${Model.name}.${modelKey} should be of type ${propMeta.type}`;
+  if (propType === "number" || propType === "bigint") {
+    if (propMeta.type !== "number" && propMeta.type !== "integer") {
+      return `${Model.name}.${modelKey} should be of type ${propMeta.type}`;
+    }
+  } else {
+    if (propType !== propMeta.type) {
+      return `${Model.name}.${modelKey} should be of type ${propMeta.type}`;
+    }
   }
+
   return null;
 };
 
@@ -51,7 +58,7 @@ const validateMinSize = <T>(
   propType: PropType,
   property: any,
   Model: ObjectType<T>,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.minSize) {
     if (propType === "string" || (propType === "object" && Array.isArray(property))) {
@@ -72,7 +79,7 @@ const validateFormat = <T>(
   propMeta: PropertyMetadata,
   property: string,
   Model: ObjectType<T>,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.format) {
     const regex = new RegExp(propMeta.format);
@@ -89,7 +96,7 @@ const validateMaxSize = <T>(
   propType: PropType,
   property: any,
   Model: ObjectType<T>,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.maxSize) {
     if (propType === "string" || (propType === "object" && Array.isArray(property))) {
@@ -122,7 +129,7 @@ const validateRequiredProperties = <T>(
   property: any,
   propMeta: PropertyMetadata,
   Model: ObjectType<T>,
-  modelKey: string,
+  modelKey: string
 ): ApiError[] => {
   const errors: ApiError[] = [];
   let error: string | null;
@@ -159,7 +166,7 @@ export class Validator {
     const errors: ApiError[] = [];
     if (!body) {
       errors.push({
-        message: `${Model.name} is required`,
+        message: `${Model.name} is required`
       });
       return errors;
     }
@@ -171,32 +178,38 @@ export class Validator {
       console.error(message);
       errors.push({ message });
     }
+    if (Array.isArray(body)) {
+      for (const item of body) {
+        errors.push(...Validator.validate(item, Model));
+      }
+    } else {
+      const modelKeys = Object.keys(entityMeta);
 
-    const modelKeys = Object.keys(entityMeta);
+      for (const modelKey of modelKeys) {
+        const propMeta = entityMeta[modelKey];
+        const propertyValue = body[modelKey];
 
-    for (const modelKey of modelKeys) {
-      const propMeta = entityMeta[modelKey];
-      const propertyValue = body[modelKey];
+        Logger.log(`Validating ${Model.name}.${modelKey}`);
 
-      Logger.log(`Validating ${Model.name}.${modelKey}`);
+        if (typeof propertyValue === "object") {
+          Logger.log("Property is an object");
+          errors.push(...validateObject(propMeta, propertyValue));
+        } else {
+          Logger.log("Property is a primitive with value", propertyValue);
+          if (propMeta) {
+            const error = validateIsRequired(propMeta, propertyValue, Model, modelKey);
+            if (error) {
+              errors.push({ message: error });
+            }
 
-      if (typeof propertyValue === "object") {
-        Logger.log("Property is an object");
-        errors.push(...validateObject(propMeta, propertyValue));
-      } else {
-        Logger.log("Property is a primitive with value", propertyValue);
-        if (propMeta) {
-          const error = validateIsRequired(propMeta, propertyValue, Model, modelKey);
-          if (error) {
-            errors.push({ message: error });
-          }
-
-          if (propertyValue) {
-            errors.push(...validateRequiredProperties(propertyValue, propMeta, Model, modelKey));
+            if (propertyValue) {
+              errors.push(...validateRequiredProperties(propertyValue, propMeta, Model, modelKey));
+            }
           }
         }
       }
     }
+
     return errors;
   };
 }

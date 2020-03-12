@@ -22,6 +22,7 @@ import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
 import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Request, Response } from "..";
 import { Validator } from "../validator/validator";
+import { ResponseMetadata } from "../metadata/response-metadata";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -57,8 +58,15 @@ class Router {
       }
 
       // validate response
-      if (route.responses[0].body) {
-        const outputValidationResult = Validator.validate(response.getBody(), route.responses[0].body);
+      let responseMeta: ResponseMetadata | undefined = route.responses[response.statusCode];
+      if (!responseMeta) {
+        responseMeta = getMetadataStorage().docMetadata?.globalResponses?.find(r => r.statusCode === response.statusCode);
+      }
+      if (!responseMeta) {
+        throw new Error(`No response defined for status code ${response.statusCode}`);
+      }
+      if (responseMeta.body) {
+        const outputValidationResult = Validator.validate(response.getBody(), responseMeta.body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           return new Response(500).setBody(outputValidationResult);

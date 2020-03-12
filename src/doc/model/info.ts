@@ -36,7 +36,7 @@ export class ApiInfo {
   additionalRouters?: ObjectType<any>[];
   globalResponses?: ResponseMetadata[];
   globalMiddleware?: {
-    before: BeforeMiddlewareHandler[],
-    after: AfterMiddlewareHandler[]
+    before?: BeforeMiddlewareHandler[],
+    after?: AfterMiddlewareHandler[]
   }
 }
