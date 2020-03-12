@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpMethod} from "../doc/http-method";
-import {IPathParams} from "./path-params.interface";
+import { HttpMethod } from "..";
+import { IPathParams } from "./path-params.interface";
 
 export interface IRequestOpts<RequestBody> {
   headers?: { [key: string]: string };

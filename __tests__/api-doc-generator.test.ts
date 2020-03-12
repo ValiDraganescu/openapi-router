@@ -25,7 +25,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(doc.openapi).toEqual("3.0.0");
   });
 
-  it("should document api info", function () {
+  it("should document api info", () => {
     const info = doc.info;
     expect(info.termsOfService).toEqual("https://technoloid.com/terms");
     expect(info.title).toEqual("A test app");
@@ -43,7 +43,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(license?.url).toEqual("https://technoloid.com/license");
   });
 
-  it("should document api paths", function () {
+  it("should document api paths", () => {
     const paths = doc.paths;
     expect(paths).toBeDefined();
     const helloPath = paths["/hello"];
@@ -81,7 +81,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(appJson.schema.items.$ref).toEqual("#/components/schemas/ErrorResponse");
   });
 
-  it("should document one schema", function () {
+  it("should document one schema", () => {
     expect(doc.components).toBeDefined();
     expect(doc.components.schemas).toBeDefined();
     const helloResponseSchema = doc.components.schemas.HelloResponse;
@@ -93,7 +93,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(messageProp.type).toEqual("string");
   });
 
-  it("should document internal server error schema", function () {
+  it("should document internal server error schema", () => {
     expect(doc.components).toBeDefined();
     expect(doc.components.schemas).toBeDefined();
     const errorResponseSchema = doc.components.schemas.ErrorResponse;
@@ -105,18 +105,18 @@ describe("Test the api doc generation capabilities", () => {
     expect(messageProp.type).toEqual("string");
   });
 
-  it("should document all schemas", function () {
+  it("should document all schemas", () => {
     const schemas = Object.values(doc.components.schemas);
     const schemaNames = Object.keys(doc.components.schemas);
     expect(schemaNames).not.toContain("Function");
     const expectedTypes = ["string", "number", "integer", "boolean", "array"];
 
     expect(schemas.length).toBeGreaterThan(1);
-    for (let schema of schemas) {
+    for (const schema of schemas) {
       expect(schema.properties).toBeDefined();
       const propNames = Object.keys(schema.properties!);
       expect(propNames.length).toBeGreaterThan(0);
-      for (let propName of propNames) {
+      for (const propName of propNames) {
         const prop = schema.properties![propName];
         expect(prop).toBeDefined();
         if (prop.type) {
@@ -129,7 +129,7 @@ describe("Test the api doc generation capabilities", () => {
     }
   });
 
-  it("should document hello request body", function () {
+  it("should document hello request body", () => {
     const paths = doc.paths;
     expect(paths).toBeDefined();
     const helloPath = paths["/auth"];
@@ -149,7 +149,7 @@ describe("Test the api doc generation capabilities", () => {
 
   });
 
-  it("should test that an api has the correct parameters", function () {
+  it("should test that an api has the correct parameters", () => {
     const paths = doc.paths;
     expect(paths).toBeDefined();
     const userPath = paths["/users/{id}"];
@@ -168,7 +168,7 @@ describe("Test the api doc generation capabilities", () => {
 
   });
 
-  it("should test that security schemes are included", function () {
+  it("should test that security schemes are included", () => {
     const securitySchemes = doc.components.securitySchemes;
     expect(securitySchemes).toBeDefined();
     expect(securitySchemes!.ApiKeyAuth).toBeDefined();
@@ -189,12 +189,12 @@ describe("Test the api doc generation capabilities", () => {
     expect(bearerAuth.BearerAuth.length).toEqual(0);
   });
 
-  it("should define servers", function () {
+  it("should define servers", () => {
     const servers = doc.servers;
     expect(servers).toBeDefined();
     expect(Array.isArray(servers)).toEqual(true);
     expect(servers.length).toEqual(3);
-    for (let server of servers) {
+    for (const server of servers) {
       expect(typeof server.url).toEqual("string");
       expect(typeof server.description).toEqual("string");
     }

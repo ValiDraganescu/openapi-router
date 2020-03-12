@@ -1,4 +1,4 @@
-import {RouteMetadata} from "./route-metadata";
+import { RouteMetadata } from "./route-metadata";
 
 export class MethodMetadata {
   [key: string]: RouteMetadata;

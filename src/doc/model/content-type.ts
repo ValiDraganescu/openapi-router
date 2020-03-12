@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-
-import {DocSchema} from "./schema";
+import { DocSchema } from "./schema";
 
 export class ContentType {
   schema: DocSchema;

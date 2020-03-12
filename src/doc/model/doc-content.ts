@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-
-import {ContentType} from "./content-type";
+import { ContentType } from "./content-type";
 
 export class DocContent {
   [key: string]: ContentType;
 }
-

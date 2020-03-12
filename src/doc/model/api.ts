@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { DocInfo } from "./info";
+import { ApiInfo } from "./info";
 import { DocServer } from "./server";
 import { DocPath } from "./paths";
 import { DocComponents } from "./compoents";
 
 export class DocApi {
   openapi: string = "3.0.0";
-  info: DocInfo;
+  info: ApiInfo;
   servers: DocServer[];
   paths: { [key: string]: DocPath };
   components: DocComponents;

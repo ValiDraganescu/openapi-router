@@ -15,7 +15,7 @@
  */
 
 export class Logger {
-  static log(arg: any, ...args:any[]) {
+  static log(arg: any, ...args: any[]) {
     if (process.env.ROUTER_LOGS) {
       console.log(arg, ...args);
     }

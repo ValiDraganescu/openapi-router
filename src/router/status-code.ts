@@ -13,5 +13,5 @@ export enum StatusCode {
   forbidden = 403,
   notFound = 404,
   internalServerError = 500,
-  notImplemented = 501
+  notImplemented = 501,
 }

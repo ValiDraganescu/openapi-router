@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { DocSchema } from "./schema";
 
 export class DocParameter {

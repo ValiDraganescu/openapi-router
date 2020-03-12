@@ -15,5 +15,5 @@
  */
 
 export class DocSecurity {
-  [key: string]: any[]
+  [key: string]: any[];
 }

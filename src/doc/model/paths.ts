@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-
 import { DocMethod } from "./method";
-import { Updatable } from "../../updatable";
 
-export class DocPath extends Updatable {
+export class DocPath {
   [key: string]: DocMethod | any;
 }

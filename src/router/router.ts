@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-import { Validator } from "../validator/validator";
 import { getMetadataStorage } from "../metadata/metadata-storage";
 import { generateDoc } from "../doc/generator";
 import { RouteMetadata } from "../metadata/route-metadata";
-import { Request } from "./request";
-import { Response } from "./response";
 import { IPathParams } from "./path-params.interface";
 import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
-import { AfterMiddlewareHandler, BeforeMiddlewareHandler } from "./request-handler";
+import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Request, Response } from "..";
+import { Validator } from "../validator/validator";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -38,10 +36,19 @@ class Router {
           return new Response(400).setBody(inputValidationErrors);
         }
       }
+      const globalMiddleware = getMetadataStorage().docMetadata?.globalMiddleware;
+
+      if (globalMiddleware && globalMiddleware.before) {
+        request = await this.executeMiddlewareBefore(globalMiddleware?.before, request);
+      }
 
       request = await this.executeMiddlewareBefore(middleware?.before, request);
-      let response = await route.handler(request);
+      let response: Response = await route.handler(request);
       response = await this.executeMiddlewareAfter(middleware?.after, response);
+
+      if (globalMiddleware && globalMiddleware.after) {
+        response = await this.executeMiddlewareAfter(globalMiddleware?.after, response);
+      }
 
       // validate response
       if (route.responses[0].body) {
@@ -63,7 +70,10 @@ class Router {
     return generateDoc(version);
   };
 
-  private executeMiddlewareBefore = async (middlewareHandlers: BeforeMiddlewareHandler[] | undefined, request: Request): Promise<Request> => {
+  private executeMiddlewareBefore = async (
+    middlewareHandlers: BeforeMiddlewareHandler[] | undefined,
+    request: Request
+  ): Promise<Request<any>> => {
     if (middlewareHandlers) {
       for (const handler of middlewareHandlers) {
         request = await handler(request);
@@ -72,7 +82,10 @@ class Router {
     return request;
   };
 
-  private executeMiddlewareAfter= async (middlewareHandlers: AfterMiddlewareHandler[] | undefined, response: Response): Promise<Response> => {
+  private executeMiddlewareAfter = async (
+    middlewareHandlers: AfterMiddlewareHandler[] | undefined,
+    response: Response
+  ): Promise<Response> => {
     if (middlewareHandlers) {
       for (const handler of middlewareHandlers) {
         response = await handler(response);
@@ -88,7 +101,10 @@ class Router {
     return requestPath;
   };
 
-  private resolveHandler = (method: string, path: string): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
+  private resolveHandler = (
+    method: string,
+    path: string
+  ): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
     const metadata = getMetadataStorage();

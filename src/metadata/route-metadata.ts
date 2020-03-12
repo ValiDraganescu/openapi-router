@@ -1,8 +1,8 @@
 import { ObjectType } from "../object-type";
 import { DocParameter } from "../doc/model/parameter";
-import { RequestHandler } from "..";
 import { ResponseMetadata } from "./response-metadata";
 import { IMiddleware } from "../router/decorators/route";
+import { RequestHandler } from "..";
 
 export class RouteMetadata {
   handler: RequestHandler;

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { getMetadataStorage } from "../../metadata/metadata-storage";
 import { ObjectType } from "../../object-type";
 import { HttpMethod } from "../..";
@@ -39,7 +38,7 @@ export interface IRouteProps {
   summary?: string;
   parameters?: DocParameter[];
   security?: any[];
-  middleware?: IMiddleware
+  middleware?: IMiddleware;
 }
 
 export const Route = (props: IRouteProps) => {

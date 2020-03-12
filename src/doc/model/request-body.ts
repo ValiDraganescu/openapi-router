@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { DocContact } from "./contact";
 
 export class DocRequestBody {

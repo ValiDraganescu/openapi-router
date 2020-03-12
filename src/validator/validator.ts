@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-
 import { ObjectType } from "../object-type";
 import { getMetadataStorage } from "../metadata/metadata-storage";
-import {PropertyMetadata} from "../metadata/property-metadata";
+import { PropertyMetadata } from "../metadata/property-metadata";
 import { Logger } from "../logger";
 import { ApiError } from "../router/api-error";
 
@@ -114,7 +113,7 @@ const validateObject = (propMeta: PropertyMetadata, propertyVallue: any): ApiErr
   } else {
     const message = `No entity defined for object ${JSON.stringify(propertyVallue)}`;
     console.error(message);
-    errors.push({message});
+    errors.push({ message });
   }
   return errors;
 };
@@ -132,23 +131,23 @@ const validateRequiredProperties = <T>(
   const typeError = validateIsCorrectType(propType, propMeta, Model, modelKey);
 
   if (typeError) {
-    errors.push({message: typeError});
+    errors.push({ message: typeError });
   }
 
   if (!typeError) {
     error = validateMinSize(propMeta, propType, property, Model, modelKey);
     if (error) {
-      errors.push({message: error});
+      errors.push({ message: error });
     }
 
     error = validateMaxSize(propMeta, propType, property, Model, modelKey);
     if (error) {
-      errors.push({message: error});
+      errors.push({ message: error });
     }
 
     error = validateFormat(propMeta, property, Model, modelKey);
     if (error) {
-      errors.push({message: error});
+      errors.push({ message: error });
     }
   }
   return errors;
@@ -160,7 +159,7 @@ export class Validator {
     const errors: ApiError[] = [];
     if (!body) {
       errors.push({
-        message: `${Model.name} is required`
+        message: `${Model.name} is required`,
       });
       return errors;
     }
@@ -170,7 +169,7 @@ export class Validator {
     if (!entityMeta) {
       const message = `Entity ${Model.name} is not registered with the router, did you forget to decorate ${Model.name} with @DocModel()?`;
       console.error(message);
-      errors.push({message});
+      errors.push({ message });
     }
 
     const modelKeys = Object.keys(entityMeta);
@@ -189,7 +188,7 @@ export class Validator {
         if (propMeta) {
           const error = validateIsRequired(propMeta, propertyValue, Model, modelKey);
           if (error) {
-            errors.push({message: error});
+            errors.push({ message: error });
           }
 
           if (propertyValue) {

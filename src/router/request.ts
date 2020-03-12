@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {HttpMethod} from "../doc/http-method";
-import {IPathParams} from "./path-params.interface";
-import {IQueryParams} from "./query-param.interface";
-import {IRequestOpts} from "./request-opts.interface";
+import { HttpMethod } from "..";
+import { IPathParams } from "./path-params.interface";
+import { IQueryParams } from "./query-param.interface";
+import { IRequestOpts } from "./request-opts.interface";
 
 export class Request<RequestBody = any> {
   headers?: { [key: string]: string };

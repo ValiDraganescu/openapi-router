@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { DocContact } from "./contact";
 import { DocLicense } from "./license";
 import { DocServer } from "./server";
@@ -22,8 +21,9 @@ import { DocSecurity } from "./doc-security";
 import { SecuritySchemes } from "./security-schemes";
 import { ObjectType } from "../../object-type";
 import { ResponseMetadata } from "../../metadata/response-metadata";
+import { AfterMiddlewareHandler, BeforeMiddlewareHandler } from "../..";
 
-export class DocInfo {
+export class ApiInfo {
   version: string;
   title?: string;
   description?: string;
@@ -35,4 +35,8 @@ export class DocInfo {
   servers: DocServer[];
   additionalRouters?: ObjectType<any>[];
   globalResponses?: ResponseMetadata[];
+  globalMiddleware?: {
+    before: BeforeMiddlewareHandler[],
+    after: AfterMiddlewareHandler[]
+  }
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 export class DocSecurityScheme {
   type: "http" | "apiKey" | "openIdConnect";
   scheme?: "basic" | "bearer";

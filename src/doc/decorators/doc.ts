@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { getMetadataStorage } from "../../metadata/metadata-storage";
 import { PropertyMetadata } from "../../metadata/property-metadata";
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 export class DocServer {
   url: string;
   description: string;

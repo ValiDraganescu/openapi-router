@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {DocContent} from "./doc-content";
+import { DocContent } from "./doc-content";
 
 export class DocResponse {
   description: string;

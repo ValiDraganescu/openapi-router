@@ -40,6 +40,11 @@ The `@Route` supports the `middleware` property which in turn has the
 `before` and `after` properties (which are arrays of `BeforeMiddlewareHandler`
 and `AfterMiddlewareHandler`)
 
+The `@ApiRouter` supports global middleware. The global before functions will be
+executed before each handler's middleware functions. The global after functions
+will be executed after each handler's middleware functions. It's good for 
+situations where you want to log/persist all the requests and all the responses.  
+
 Example
 ```typescript
 

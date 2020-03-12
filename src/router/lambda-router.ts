@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import { Response } from "./response";
-import { getRouter, HttpMethod, Request } from "..";
 import { APIGatewayEvent } from "aws-lambda";
+import { HttpMethod, Response, Request, getRouter } from "..";
 
 export abstract class LambdaRouter {
-
-  router = async (event: APIGatewayEvent): Promise<Response> => {
+  router = async (event: APIGatewayEvent): Promise<Response<any>> => {
     let parsedBody: any;
     if (event.body) {
       try {
@@ -37,7 +35,7 @@ export abstract class LambdaRouter {
       body: parsedBody
     });
     try {
-      return getRouter().handleEvent(request);
+      return await getRouter().handleEvent(request);
     } catch (e) {
       return new Response<any>(500).setBody([{ message: e.message }]);
     }

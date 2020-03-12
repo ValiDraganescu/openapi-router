@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { PropertyType } from "../property-type";
 import { DocItems } from "./item";
 

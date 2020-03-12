@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { DocContent } from "./doc-content";
 
 export class DocRequest {

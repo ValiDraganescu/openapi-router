@@ -1,5 +1,5 @@
-import {PropertyType} from "../doc/property-type";
-import {ObjectType} from "../object-type";
+import { PropertyType } from "../doc/property-type";
+import { ObjectType } from "../object-type";
 
 export class PropertyMetadata {
   type: PropertyType;

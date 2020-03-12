@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {DocResponse} from "./doc-response";
+import { DocResponse } from "./doc-response";
 
 export class DocResponses {
   [key: string]: DocResponse;

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { PropertyType } from "../property-type";
 
 export class DocItems {

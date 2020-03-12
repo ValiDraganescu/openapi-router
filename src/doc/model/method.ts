@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { DocParameter } from "./parameter";
 import { DocResponses } from "./doc-responses";
 import { DocRequest } from "./request";

@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 import { MethodMetadata } from "./method-metadata";
-import { DocInfo } from "..";
+import { ApiInfo } from "..";
 import { ModelMetadata } from "./model-metadata";
-
 
 export class RouterMetadata {
   paths: Map<string, MethodMetadata> = new Map<string, MethodMetadata>();
   entities: { [key: string]: ModelMetadata } = {};
-  docMetadata?: DocInfo;
+  docMetadata?: ApiInfo;
 
   getPaths = (): string[] => {
     return Array.from(this.paths.keys());
