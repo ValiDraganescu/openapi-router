@@ -58,7 +58,7 @@ class Router {
       }
 
       // validate response
-      let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode = response.statusCode);
+      let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === response.statusCode);
       if (!responseMeta) {
         responseMeta = getMetadataStorage().docMetadata?.globalResponses?.find(r => r.statusCode === response.statusCode);
       }
