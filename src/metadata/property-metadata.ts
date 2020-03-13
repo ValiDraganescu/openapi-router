@@ -10,4 +10,5 @@ export class PropertyMetadata {
   isRequired?: boolean;
   description?: string;
   format?: string;
+  enum?: string[];
 }
