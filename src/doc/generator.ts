@@ -185,6 +185,7 @@ export const generateDoc = (version: string): DocApi => {
     delete info.servers;
     delete info.additionalRouters;
     delete info.globalResponses;
+    delete info.globalMiddleware;
     apiDoc.info = info;
   }
   const schemas: any = {};
