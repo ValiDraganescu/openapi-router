@@ -25,5 +25,6 @@ export { LambdaRouter } from "./router/lambda-router";
 export { Route } from "./router/decorators/route";
 export { ApiRouter } from "./router/decorators/api-router";
 export { DocProperty } from "./doc/decorators/doc";
+export { InheritedDoc } from "./doc/decorators/doc";
 export { ApiInfo } from "./doc/model/info";
 export { StatusCode } from "./router/status-code";
