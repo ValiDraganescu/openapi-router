@@ -97,6 +97,18 @@ describe("Test the api doc generation capabilities", () => {
     expect(baseItemProp.t)
   });
 
+  it("should document fully inherited schema", () => {
+    expect(doc.components).toBeDefined();
+    expect(doc.components.schemas).toBeDefined();
+    const inheritedResponse = doc.components.schemas.InheritedResponse;
+    expect(inheritedResponse).toBeDefined();
+    expect(typeof inheritedResponse).toBe("object");
+    expect(inheritedResponse.properties).toBeDefined();
+    const messageProp = inheritedResponse.properties?.baseItem;
+    expect(messageProp).toBeDefined();
+    expect(messageProp.type).toEqual("string");
+  });
+
   it("should document internal server error schema", () => {
     expect(doc.components).toBeDefined();
     expect(doc.components.schemas).toBeDefined();

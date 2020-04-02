@@ -36,3 +36,19 @@ export const DocProperty = (props: PropertyMetadata) => {
     }
   };
 };
+
+export const InheritedDoc = () => {
+  return (target: any) => {
+    const protoName = Object.getPrototypeOf(target).name;
+
+    if (protoName !== "Object") {
+      const metadata = getMetadataStorage();
+      if (!metadata.entities[target.constructor.name]) {
+        metadata.entities[target.constructor.name] = {};
+      }
+      if (metadata.entities[protoName]) {
+        metadata.entities[target.constructor.name] = { ...metadata.entities[target.constructor.name], ...metadata.entities[protoName] };
+      }
+    }
+  };
+};

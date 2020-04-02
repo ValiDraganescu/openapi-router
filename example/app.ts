@@ -5,6 +5,7 @@ import { AuthRequest } from "./model/request/auth-request";
 import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
 import { ErrorResponse } from "./model/response/error-response";
 import { ApiError } from "../src/router/api-error";
+import { InheritedResponse } from "./model/response/inherited-response";
 
 @ApiRouter({
   version: "1.0.0",
@@ -82,7 +83,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello" });
+    return new Response<HelloResponse>().setBody({ message: "hello", baseItem: "foo" });
   };
 
   @Route({
@@ -109,7 +110,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloWithPostHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello with POST" });
+    return new Response<HelloResponse>().setBody({ message: "hello with POST", baseItem: "foo" });
   }
 
   @Route({
@@ -123,7 +124,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloFooHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello foo" });
+    return new Response<HelloResponse>().setBody({ message: "hello foo", baseItem: "foo" });
   }
 
   @Route({
@@ -165,7 +166,10 @@ export class App extends LambdaRouter {
     const name = request.pathParams?.name.value;
     const org = request.pathParams?.organization.value;
     const team = request.pathParams?.team.value;
-    return new Response<HelloResponse>().setBody({ message: `hello ${name} from ${team} team of ${org}` });
+    return new Response<HelloResponse>().setBody({
+      message: `hello ${name} from ${team} team of ${org}`,
+      baseItem: "foo"
+    });
   }
 
   @Route({
@@ -333,6 +337,22 @@ export class App extends LambdaRouter {
   })
   async errorMessageReturned(request: Request): Promise<Response> {
     return new Response<ApiError[]>(StatusCode.notFound).setBody([{ message: "foo", name: "bar" }]);
+  }
+
+  @Route({
+    description: "This method returns an inherited response",
+    method: HttpMethod.GET,
+    path: "/inherited-response",
+    responses: [{
+      description: "mock",
+      statusCode: StatusCode.okay,
+      body: InheritedResponse
+    }]
+  })
+  async inheritedResponse(request: Request): Promise<Response> {
+    return new Response<InheritedResponse>(StatusCode.notFound).setBody({
+      baseItem: "foo"
+    });
   }
 
   @Route({
