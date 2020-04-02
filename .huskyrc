@@ -1,0 +1,7 @@
+{
+  "hooks": {
+    "pre-commit": "yarn lint && yarn format",
+    "commit-msg": "yarn commitmsg",
+    "pre-push": "yarn test"
+  }
+}

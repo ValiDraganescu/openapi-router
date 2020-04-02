@@ -60,7 +60,9 @@ class Router {
       // validate response
       let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === response.statusCode);
       if (!responseMeta) {
-        responseMeta = getMetadataStorage().docMetadata?.globalResponses?.find(r => r.statusCode === response.statusCode);
+        responseMeta = getMetadataStorage().docMetadata?.globalResponses?.find(
+          r => r.statusCode === response.statusCode,
+        );
       }
       if (!responseMeta) {
         throw new Error(`No response defined for status code ${response.statusCode}`);
@@ -84,18 +86,14 @@ class Router {
     return generateDoc(version);
   };
 
-  private executeMiddlewareBefore = async (
-    before: BeforeMiddlewareHandler[],
-    request: Request
-  ): Promise<Request> => {
+  private executeMiddlewareBefore = async (before: BeforeMiddlewareHandler[], request: Request): Promise<Request> => {
     for (const handler of before) {
       request = await handler(request);
     }
     return request;
   };
 
-  private executeMiddlewareAfter = async (
-    after: AfterMiddlewareHandler[], response: Response): Promise<Response> => {
+  private executeMiddlewareAfter = async (after: AfterMiddlewareHandler[], response: Response): Promise<Response> => {
     for (const handler of after) {
       response = await handler(response);
     }
@@ -111,7 +109,7 @@ class Router {
 
   private resolveHandler = (
     method: string,
-    path: string
+    path: string,
   ): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
@@ -145,7 +143,7 @@ class Router {
                 pathParams[paramName] = {
                   name: paramName,
                   value: basePathComponents[i],
-                  index: i
+                  index: i,
                 };
               } else {
                 isValidRoute = false;

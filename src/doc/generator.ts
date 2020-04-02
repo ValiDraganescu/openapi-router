@@ -131,7 +131,7 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
     nullable: propMeta.nullable,
     description: propMeta.description,
     format: propMeta.format,
-    enum: propMeta.enum
+    enum: propMeta.enum,
   };
   if (propMeta.type === "string") {
     model.minLength = propMeta.minSize;
@@ -195,7 +195,7 @@ export const generateDoc = (version: string): DocApi => {
     const [properties, required] = resolveModelDocumentation(propKeys, metadata, entityName);
 
     schemas[entityName] = {
-      properties
+      properties,
     };
 
     if (required.length) {

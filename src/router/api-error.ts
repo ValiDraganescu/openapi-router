@@ -19,13 +19,13 @@ import { DocProperty } from "..";
 export class ApiError {
   @DocProperty({
     type: "string",
-    isRequired: true
+    isRequired: true,
   })
   name?: string;
 
   @DocProperty({
     type: "string",
-    isRequired: true
+    isRequired: true,
   })
   message?: string;
 }

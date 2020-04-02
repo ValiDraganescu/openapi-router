@@ -40,7 +40,10 @@ export const InheritedDoc = () => {
         metadata.entities[target.constructor.name] = {};
       }
       if (metadata.entities[protoName]) {
-        metadata.entities[target.constructor.name] = { ...metadata.entities[target.constructor.name], ...metadata.entities[protoName] };
+        metadata.entities[target.constructor.name] = {
+          ...metadata.entities[target.constructor.name],
+          ...metadata.entities[protoName],
+        };
       }
     }
   };

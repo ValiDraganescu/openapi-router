@@ -1,6 +1,6 @@
 {
   "name": "typescript-openapi-router",
-  "version": "0.1.45",
+  "version": "0.0.0-development",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
   "author": {
     "name": "Vali Draganescu",
@@ -17,25 +17,31 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ValiDraganescu/openapi-router.git"
+    "url": "https://github.com/ValiDraganescu/openapi-router.git"
   },
   "scripts": {
     "build": "./node_modules/typescript/bin/tsc",
     "test": "jest",
     "prepare": "yarn build",
-    "prepublishOnly": "yarn test && yarn lint",
-    "preversion": "yarn lint",
-    "postversion": "git push && git push --tags",
-    "version": "yarn format && git add -A src",
     "format": "./node_modules/prettier/bin-prettier.js --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "gc": "commit",
+    "commitmsg": "npx commitlint -e $GIT_PARAMS",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "@commitlint/prompt": "^8.3.5",
+    "@commitlint/prompt-cli": "^8.3.5",
     "@types/aws-lambda": "^8.10.46",
     "@types/jest": "^24.9.1",
     "@types/node": "^13.5.0",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "prettier": "^1.19.1",
+    "semantic-release": "^17.0.4",
+    "semantic-release-cli": "^5.2.3",
     "ts-jest": "^25.0.0",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",

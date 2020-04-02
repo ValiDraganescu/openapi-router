@@ -26,7 +26,7 @@ const validateIsRequired = <T>(
   propMeta: PropertyMetadata,
   propertyValue: any,
   Model: ObjectType<T>,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.isRequired && !propertyValue) {
     return `${Model.name}.${modelKey} is required`;
@@ -38,7 +38,7 @@ const validateIsCorrectType = <T>(
   propType: PropType,
   propMeta: PropertyMetadata,
   Model: ObjectType<T>,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propType === "number" || propType === "bigint") {
     if (propMeta.type !== "number" && propMeta.type !== "integer") {
@@ -58,7 +58,7 @@ const validateMinSize = <T>(
   propType: PropType,
   property: any,
   Model: ObjectType<T>,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.minSize) {
     if (propType === "string" || (propType === "object" && Array.isArray(property))) {
@@ -79,7 +79,7 @@ const validateFormat = <T>(
   propMeta: PropertyMetadata,
   property: string,
   Model: ObjectType<T>,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.format) {
     const regex = new RegExp(propMeta.format);
@@ -96,7 +96,7 @@ const validateMaxSize = <T>(
   propType: PropType,
   property: any,
   Model: ObjectType<T>,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.maxSize) {
     if (propType === "string" || (propType === "object" && Array.isArray(property))) {
@@ -129,7 +129,7 @@ const validateRequiredProperties = <T>(
   property: any,
   propMeta: PropertyMetadata,
   Model: ObjectType<T>,
-  modelKey: string
+  modelKey: string,
 ): ApiError[] => {
   const errors: ApiError[] = [];
   let error: string | null;
@@ -166,7 +166,7 @@ export class Validator {
     const errors: ApiError[] = [];
     if (!body) {
       errors.push({
-        message: `${Model.name} is required`
+        message: `${Model.name} is required`,
       });
       return errors;
     }
