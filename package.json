@@ -1,6 +1,6 @@
 {
   "name": "typescript-openapi-router",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
   "author": {
     "name": "Vali Draganescu",
@@ -28,8 +28,7 @@
     "gc": "commit",
     "commitmsg": "npx commitlint -e $GIT_PARAMS",
     "srelease": "npx semantic-release",
-    "travis-deploy-once": "npx travis-deploy-once",
-    "semantic-release": "semantic-release"
+    "travis-deploy-once": "npx travis-deploy-once"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
