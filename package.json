@@ -27,6 +27,8 @@
     "lint": "tslint -p tsconfig.json",
     "gc": "commit",
     "commitmsg": "npx commitlint -e $GIT_PARAMS",
+    "srelease": "npx semantic-release",
+    "travis-deploy-once": "npx travis-deploy-once",
     "semantic-release": "semantic-release"
   },
   "devDependencies": {
