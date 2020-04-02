@@ -1,6 +1,7 @@
 import { DocProperty } from "../../../src";
+import { BaseResponse } from "./base-response";
 
-export class AuthResponse {
+export class AuthResponse extends BaseResponse {
   @DocProperty({
     type: "string"
   })

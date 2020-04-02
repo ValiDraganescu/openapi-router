@@ -1,6 +1,7 @@
-import {DocProperty} from "../../../src/doc/decorators/doc";
+import {DocProperty} from "../../../src";
+import { BaseResponse } from "./base-response";
 
-export class HelloResponse {
+export class HelloResponse extends BaseResponse {
   @DocProperty({
     type: "string"
   })

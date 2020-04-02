@@ -27,5 +27,12 @@ export const DocProperty = (props: PropertyMetadata) => {
     if (props) {
       metadata.entities[target.constructor.name][propertyKey] = props;
     }
+
+    const protoName = Object.getPrototypeOf(target).constructor.name;
+    if (protoName !== "Object") {
+      if (metadata.entities[protoName]) {
+        metadata.entities[target.constructor.name] = { ...metadata.entities[target.constructor.name], ...metadata.entities[protoName] };
+      }
+    }
   };
 };

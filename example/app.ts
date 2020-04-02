@@ -185,7 +185,8 @@ export class App extends LambdaRouter {
   })
   async authHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      baseItem: "foo"
     });
   }
 
@@ -211,7 +212,8 @@ export class App extends LambdaRouter {
   })
   async authBeforeHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      baseItem: "foo"
     });
   }
 
@@ -237,7 +239,8 @@ export class App extends LambdaRouter {
   })
   async authAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      baseItem: "foo"
     });
   }
 
@@ -266,7 +269,8 @@ export class App extends LambdaRouter {
   })
   async authBeforeAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      baseItem: "foo"
     });
   }
 
@@ -357,7 +361,8 @@ export class App extends LambdaRouter {
   })
   async authAdminHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`
+      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`,
+      baseItem: "foo"
     });
   }
 

@@ -91,6 +91,10 @@ describe("Test the api doc generation capabilities", () => {
     const messageProp = helloResponseSchema.properties?.message;
     expect(messageProp).toBeDefined();
     expect(messageProp.type).toEqual("string");
+
+    const baseItemProp = helloResponseSchema.properties?.baseItem;
+    expect(baseItemProp).toBeDefined();
+    expect(baseItemProp.t)
   });
 
   it("should document internal server error schema", () => {
