@@ -36,12 +36,12 @@ export const InheritedDoc = () => {
 
     if (protoName !== "Object") {
       const metadata = getMetadataStorage();
-      if (!metadata.entities[target.constructor.name]) {
-        metadata.entities[target.constructor.name] = {};
+      if (!metadata.entities[target.name]) {
+        metadata.entities[target.name] = {};
       }
       if (metadata.entities[protoName]) {
-        metadata.entities[target.constructor.name] = {
-          ...metadata.entities[target.constructor.name],
+        metadata.entities[target.name] = {
+          ...metadata.entities[target.name],
           ...metadata.entities[protoName],
         };
       }
