@@ -191,7 +191,7 @@ export class Validator {
 
         Logger.log(`Validating ${Model.name}.${modelKey}`);
 
-        if (typeof propertyValue === "object") {
+        if (typeof propertyValue === "object" && propertyValue !== null) {
           Logger.log("Property is an object");
           errors.push(...validateObject(propMeta, propertyValue));
         } else {
