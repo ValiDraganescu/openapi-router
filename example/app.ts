@@ -338,6 +338,7 @@ export class App extends LambdaRouter {
   })
   async errorMessageReturned(_request: Request): Promise<Response> {
     return new Response<ApiError[]>(StatusCode.notFound).setBody([{ message: "foo", name: "bar" }]);
+
   }
 
   @Route({
