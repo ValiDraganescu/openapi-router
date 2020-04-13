@@ -26,56 +26,66 @@ import { ResponseMetadata } from "../metadata/response-metadata";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
-    const [route, pathParams, middleware] = this.resolveHandler(request.method, request.path);
+    let resp: Response | null = null;
+    let req: Request | null = request;
+
+    const [route, pathParams, middleware] = this.resolveHandler(req.method, req.path);
     if (route) {
       Logger.log("Route resolved to::", route.path);
-      request.pathParams = pathParams;
+      req.pathParams = pathParams;
       // validate request;
       if (route.requestBody) {
-        const inputValidationErrors = Validator.validate(request.body, route.requestBody);
+        const inputValidationErrors = Validator.validate(req.body, route.requestBody);
         if (inputValidationErrors && inputValidationErrors.length) {
           return new Response(400).setBody(inputValidationErrors);
         }
       }
+
       const globalMiddleware = getMetadataStorage().docMetadata?.globalMiddleware;
 
       if (globalMiddleware && globalMiddleware.before) {
-        request = await this.executeMiddlewareBefore(globalMiddleware?.before, request);
+        [req, resp] = await this.executeMiddlewareBefore(globalMiddleware?.before, req);
+        if (resp) {
+          return resp;
+        }
       }
 
       if (middleware && middleware.before) {
-        request = await this.executeMiddlewareBefore(middleware.before, request);
+        [req, resp] = await this.executeMiddlewareBefore(middleware.before, req!);
+        if (resp) {
+          return resp;
+        }
       }
 
-      let response: Response = await route.handler(request);
+      resp = await route.handler(req!);
 
       if (middleware && middleware.after) {
-        response = await this.executeMiddlewareAfter(middleware.after, response);
+        resp = await this.executeMiddlewareAfter(middleware.after, resp!);
       }
 
       if (globalMiddleware && globalMiddleware.after) {
-        response = await this.executeMiddlewareAfter(globalMiddleware.after, response);
+        resp = await this.executeMiddlewareAfter(globalMiddleware.after, resp!);
       }
 
       // validate response
-      let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === response.statusCode);
+      let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === resp!.statusCode);
       if (!responseMeta) {
         responseMeta = getMetadataStorage().docMetadata?.globalResponses?.find(
-          r => r.statusCode === response.statusCode,
+          r => r.statusCode === resp!.statusCode,
         );
       }
       if (!responseMeta) {
-        throw new Error(`No response defined for status code ${response.statusCode}`);
+        throw new Error(`No response defined for status code ${resp!.statusCode}`);
       }
       if (responseMeta.body) {
-        const outputValidationResult = Validator.validate(response.getBody(), responseMeta.body);
+        const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           return new Response(500).setBody(outputValidationResult);
         }
       }
 
-      return response;
+      return resp!;
     } else {
       Logger.log("Route not resolved::", JSON.stringify(request));
     }
@@ -86,11 +96,16 @@ class Router {
     return generateDoc(version);
   };
 
-  private executeMiddlewareBefore = async (before: BeforeMiddlewareHandler[], request: Request): Promise<Request> => {
+  private executeMiddlewareBefore = async (before: BeforeMiddlewareHandler[], request: Request): Promise<[Request | null, Response | null]> => {
+    let response: Response | null = null;
     for (const handler of before) {
-      request = await handler(request);
+      [request, response] = await handler(request);
+      if (response) {
+        return [null, response]
+      }
+
     }
-    return request;
+    return [request, null];
   };
 
   private executeMiddlewareAfter = async (after: AfterMiddlewareHandler[], response: Response): Promise<Response> => {

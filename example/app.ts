@@ -6,6 +6,7 @@ import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
 import { ErrorResponse } from "./model/response/error-response";
 import { ApiError } from "../src/router/api-error";
 import { InheritedResponse } from "./model/response/inherited-response";
+import { responseMiddleware } from "./middleware/throw-middleware";
 
 @ApiRouter({
   version: "1.0.0",
@@ -335,7 +336,7 @@ export class App extends LambdaRouter {
       body: AuthResponse
     }]
   })
-  async errorMessageReturned(request: Request): Promise<Response> {
+  async errorMessageReturned(_request: Request): Promise<Response> {
     return new Response<ApiError[]>(StatusCode.notFound).setBody([{ message: "foo", name: "bar" }]);
   }
 
@@ -349,7 +350,7 @@ export class App extends LambdaRouter {
       body: InheritedResponse
     }]
   })
-  async inheritedResponse(request: Request): Promise<Response> {
+  async inheritedResponse(_request: Request): Promise<Response> {
     return new Response<InheritedResponse>(StatusCode.notFound).setBody({
       baseItem: "foo"
     });
@@ -385,6 +386,42 @@ export class App extends LambdaRouter {
       baseItem: "foo"
     });
   }
+
+  @Route({
+    description: "returns the doc for this API",
+    method: HttpMethod.GET,
+    path: "/api/response-middleware",
+    responses: [{
+      description: "Empty response with 200 status",
+      statusCode: 200
+    }],
+    middleware: {
+      before: [
+        responseMiddleware
+      ]
+    }
+  })
+  async withResponseMiddleware(_request: Request): Promise<Response<HelloResponse>> {
+    return new Response();
+  };
+
+  @Route({
+    description: "returns the doc for this API",
+    method: HttpMethod.POST,
+    path: "/api/response-middleware",
+    responses: [{
+      description: "Empty response with 200 status",
+      statusCode: 200
+    }],
+    middleware: {
+      before: [
+        responseMiddleware
+      ]
+    }
+  })
+  async withResponseMiddleware2(_request: Request): Promise<Response<HelloResponse>> {
+    return new Response();
+  };
 
   consumeEvent = async (event: Request): Promise<Response<any>> => {
     return getRouter().handleEvent(event);

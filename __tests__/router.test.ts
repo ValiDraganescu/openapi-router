@@ -1,5 +1,5 @@
 import {App} from "../example/app";
-import {Request} from "../src";
+import { Request, StatusCode } from "../src";
 import {HttpMethod} from "../src";
 
 describe("Test the routing capabilities", () => {
@@ -196,5 +196,29 @@ describe("Test the routing capabilities", () => {
     }));
     expect(resp.statusCode).toEqual(200);
     expect(resp.getBody().message).toEqual("Auth email address is before-test@test.test and password is very_secret after");
+  });
+
+  it("should correctly execute before middleware that returns a response", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/api/response-middleware",
+      method: HttpMethod.GET
+    }));
+    expect(resp.statusCode).toEqual(StatusCode.unauthorized);
+  });
+
+  it("should correctly execute before middleware that returns a response for a method that should not return a response from middleware", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/api/response-middleware",
+      method: HttpMethod.POST
+    }));
+    expect(resp.statusCode).toEqual(StatusCode.okay);
   });
 });
