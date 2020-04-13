@@ -26,6 +26,7 @@ export class Request<RequestBody = any> {
   body?: RequestBody;
   pathParams?: IPathParams | null;
   queryParams?: IQueryParams | null;
+  extra?: { [key: string]: any };
 
   constructor(opts: IRequestOpts<RequestBody>) {
     this.headers = opts.headers;
