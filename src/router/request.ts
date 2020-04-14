@@ -26,7 +26,7 @@ export class Request<RequestBody = any> {
   body?: RequestBody;
   pathParams?: IPathParams | null;
   queryParams?: IQueryParams | null;
-  extra?: { [key: string]: any };
+  extra: { [key: string]: any };
 
   constructor(opts: IRequestOpts<RequestBody>) {
     this.headers = opts.headers;
@@ -34,6 +34,7 @@ export class Request<RequestBody = any> {
     this.method = opts.method;
     this.body = opts.body;
     this.queryParams = this.getQueryParams();
+    this.extra = {};
   }
 
   private getQueryParams(): IQueryParams | null {
