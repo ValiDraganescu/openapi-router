@@ -231,7 +231,6 @@ describe("Test the routing capabilities", () => {
       path: "/api/response-middleware/not-found",
       method: HttpMethod.PUT
     }));
-    console.log(resp.statusCode, resp.getBody());
     expect(resp.statusCode).toEqual(StatusCode.notFound);
   });
 });

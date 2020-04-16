@@ -81,7 +81,10 @@ export class App extends LambdaRouter {
       statusCode: 200,
       description: "hello response",
       body: HelloResponse
-    }]
+    }],
+    tags: [
+      "hello"
+    ]
   })
   async sayHelloHandler(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody({ message: "hello", baseItem: "foo" });
@@ -94,7 +97,10 @@ export class App extends LambdaRouter {
     responses: [{
       description: "Returns the OpenApi json for this API",
       statusCode: 200
-    }]
+    }],
+    tags: [
+      "doc"
+    ]
   })
   async getApiDoc(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody(getRouter().getApiDoc("3.0.0"));
@@ -108,7 +114,10 @@ export class App extends LambdaRouter {
       description: "mock",
       statusCode: 200,
       body: HelloResponse
-    }]
+    }],
+    tags: [
+      "hello"
+    ]
   })
   async sayHelloWithPostHandler(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody({ message: "hello with POST", baseItem: "foo" });
@@ -421,7 +430,7 @@ export class App extends LambdaRouter {
     }
   })
   async notFoundResult(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response(StatusCode.notFound).setBody([{name: "error", message: "foo"}]);
+    return new Response(StatusCode.notFound).setBody([{ name: "error", message: "foo" }]);
   };
 
   @Route({

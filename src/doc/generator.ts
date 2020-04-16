@@ -80,6 +80,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
         if (!thisDoc.paths[path][loweredMethod]) {
           const routeMetadata = methodMetadata[method];
           thisDoc.paths[path][loweredMethod] = {
+            tags: routeMetadata.tags,
             description: routeMetadata.description,
             summary: routeMetadata.summary,
             operationId: `${method}-${path}`,

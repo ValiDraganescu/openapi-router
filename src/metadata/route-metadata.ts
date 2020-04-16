@@ -14,6 +14,7 @@ export class RouteMetadata {
   parameters?: DocParameter[];
   security?: any[];
   middleware?: IMiddleware;
+  tags?: string[];
 
   constructor(handler: RequestHandler) {
     this.handler = handler;

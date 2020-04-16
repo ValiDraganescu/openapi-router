@@ -39,6 +39,7 @@ export interface IRouteProps {
   parameters?: DocParameter[];
   security?: any[];
   middleware?: IMiddleware;
+  tags?: string[];
 }
 
 export const Route = (props: IRouteProps) => {
@@ -57,6 +58,7 @@ export const Route = (props: IRouteProps) => {
     routeMeta.parameters = props.parameters;
     routeMeta.security = props.security;
     routeMeta.middleware = props.middleware;
+    routeMeta.tags = props.tags;
 
     let methodMetadata;
 
