@@ -407,6 +407,24 @@ export class App extends LambdaRouter {
   };
 
   @Route({
+    description: "returns not found",
+    method: HttpMethod.PUT,
+    path: "/api/response-middleware/not-found",
+    responses: [{
+      description: "Empty response with 200 status",
+      statusCode: 200
+    }],
+    middleware: {
+      before: [
+        responseMiddleware
+      ]
+    }
+  })
+  async notFoundResult(_request: Request): Promise<Response<HelloResponse>> {
+    return new Response(StatusCode.notFound).setBody([{name: "error", message: "foo"}]);
+  };
+
+  @Route({
     description: "returns the doc for this API",
     method: HttpMethod.POST,
     path: "/api/response-middleware",

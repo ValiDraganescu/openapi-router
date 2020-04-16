@@ -221,4 +221,17 @@ describe("Test the routing capabilities", () => {
     }));
     expect(resp.statusCode).toEqual(StatusCode.okay);
   });
+
+  it("should return 404 if the handler returns 404 and has before and after middleware", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/api/response-middleware/not-found",
+      method: HttpMethod.PUT
+    }));
+    console.log(resp.statusCode, resp.getBody());
+    expect(resp.statusCode).toEqual(StatusCode.notFound);
+  });
 });

@@ -69,11 +69,13 @@ class Router {
 
       // validate response
       let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === resp!.statusCode);
+      Logger.log("Route responses::", route.responses);
       if (!responseMeta) {
-        responseMeta = getMetadataStorage().docMetadata?.globalResponses?.find(
-          r => r.statusCode === resp!.statusCode,
-        );
+        const globalResponses = getMetadataStorage().docMetadata?.globalResponses;
+        Logger.log("Global responses::", globalResponses);
+        responseMeta = globalResponses?.find(r => r.statusCode === resp!.statusCode);
       }
+
       if (!responseMeta) {
         throw new Error(`No response defined for status code ${resp!.statusCode}`);
       }
@@ -81,6 +83,7 @@ class Router {
         const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
+          console.log(outputValidationResult);
           return new Response(500).setBody(outputValidationResult);
         }
       }
@@ -101,7 +104,7 @@ class Router {
     for (const handler of before) {
       [request, response] = await handler(request);
       if (response) {
-        return [null, response]
+        return [null, response];
       }
 
     }
@@ -124,7 +127,7 @@ class Router {
 
   private resolveHandler = (
     method: string,
-    path: string,
+    path: string
   ): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
@@ -158,7 +161,7 @@ class Router {
                 pathParams[paramName] = {
                   name: paramName,
                   value: basePathComponents[i],
-                  index: i,
+                  index: i
                 };
               } else {
                 isValidRoute = false;
