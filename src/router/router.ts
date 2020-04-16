@@ -66,6 +66,7 @@ class Router {
       if (globalMiddleware && globalMiddleware.after) {
         resp = await this.executeMiddlewareAfter(globalMiddleware.after, resp!);
       }
+      
 
       // validate response
       let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === resp!.statusCode);
