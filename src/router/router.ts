@@ -20,7 +20,7 @@ import { RouteMetadata } from "../metadata/route-metadata";
 import { IPathParams } from "./path-params.interface";
 import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
-import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Request, Response, StatusCode } from "..";
+import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Envelope, Request, Response, StatusCode } from "..";
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
 import { BaseResponse } from "../../example/model/response/base-response";
@@ -98,7 +98,7 @@ class Router {
     } else {
       Logger.log("Route not resolved::", JSON.stringify(request));
     }
-    return new Response<BaseResponse>(StatusCode.notFound).setBody({
+    return new Response<Envelope>(StatusCode.notFound).setBody({
       errors: [{
         code: "User error",
         message: "404 Not found"
