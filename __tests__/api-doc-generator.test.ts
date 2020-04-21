@@ -1,7 +1,6 @@
-import {App} from "../example/app";
-import {DocApi} from "../src/doc/model/api";
-import {HttpMethod} from "../src";
-import {Request} from "../src";
+import { App } from "../example/app";
+import { DocApi } from "../src/doc/model/api";
+import { HttpMethod, Request } from "../src";
 
 describe("Test the api doc generation capabilities", () => {
 
@@ -67,7 +66,7 @@ describe("Test the api doc generation capabilities", () => {
     appJson = internalServerErrorResponse.content["application/json"];
     expect(appJson).toBeDefined();
     expect(appJson.schema).toBeDefined();
-    expect(appJson.schema.$ref).toEqual("#/components/schemas/ErrorResponse");
+    expect(appJson.schema.items.$ref).toEqual("#/components/schemas/BaseResponse");
 
     const badRequestResponse = helloPath.get.responses["400"];
     expect(badRequestResponse).toBeDefined();
@@ -78,7 +77,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(appJson.schema).toBeDefined();
     expect(appJson.schema.type).toEqual("array");
     expect(appJson.schema.items).toBeDefined();
-    expect(appJson.schema.items.$ref).toEqual("#/components/schemas/ErrorResponse");
+    expect(appJson.schema.items.$ref).toEqual("#/components/schemas/BaseResponse");
   });
 
   it("should document one schema", () => {
@@ -88,13 +87,7 @@ describe("Test the api doc generation capabilities", () => {
     expect(helloResponseSchema).toBeDefined();
     expect(typeof helloResponseSchema).toBe("object");
     expect(helloResponseSchema.properties).toBeDefined();
-    const messageProp = helloResponseSchema.properties?.message;
-    expect(messageProp).toBeDefined();
-    expect(messageProp.type).toEqual("string");
-
-    const baseItemProp = helloResponseSchema.properties?.baseItem;
-    expect(baseItemProp).toBeDefined();
-    expect(baseItemProp.t)
+    expect(helloResponseSchema.properties!.data.$ref).toEqual("#/components/schemas/HelloData");
   });
 
   it("should document fully inherited schema", () => {
@@ -104,21 +97,23 @@ describe("Test the api doc generation capabilities", () => {
     expect(inheritedResponse).toBeDefined();
     expect(typeof inheritedResponse).toBe("object");
     expect(inheritedResponse.properties).toBeDefined();
-    const messageProp = inheritedResponse.properties?.baseItem;
-    expect(messageProp).toBeDefined();
-    expect(messageProp.type).toEqual("string");
+    const errors = inheritedResponse.properties?.errors;
+    expect(errors).toBeDefined();
+    expect(errors.type).toEqual("array");
+    expect(errors.items).toBeDefined();
   });
 
   it("should document internal server error schema", () => {
     expect(doc.components).toBeDefined();
     expect(doc.components.schemas).toBeDefined();
-    const errorResponseSchema = doc.components.schemas.ErrorResponse;
+    const errorResponseSchema = doc.components.schemas.BaseResponse;
     expect(errorResponseSchema).toBeDefined();
     expect(typeof errorResponseSchema).toBe("object");
     expect(errorResponseSchema.properties).toBeDefined();
-    const messageProp = errorResponseSchema.properties?.message;
-    expect(messageProp).toBeDefined();
-    expect(messageProp.type).toEqual("string");
+    const errors = errorResponseSchema.properties?.errors;
+    expect(errors).toBeDefined();
+    expect(errors.type).toEqual("array");
+    expect(errors.items.$ref).toEqual("#/components/schemas/ApiError");
   });
 
   it("should document all schemas", () => {

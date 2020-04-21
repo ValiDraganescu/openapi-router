@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "./node_modules/typescript/bin/tsc",
-    "test": "jest",
+    "test": "jest --runInBand",
     "prepare": "yarn build",
     "format": "./node_modules/prettier/bin-prettier.js --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",

@@ -29,9 +29,9 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
   let schema: DocContent = {
     "application/json": {
       schema: {
-        $ref: `#/components/schemas/${response.body?.name}`,
-      },
-    },
+        $ref: `#/components/schemas/${response.body?.name}`
+      }
+    }
   };
   // array schema
   if (response.type === "array") {
@@ -40,10 +40,10 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
         schema: {
           type: "array",
           items: {
-            $ref: `#/components/schemas/${response.body?.name}`,
-          },
-        },
-      },
+            $ref: `#/components/schemas/${response.body?.name}`
+          }
+        }
+      }
     };
   }
   return schema;
@@ -53,7 +53,7 @@ const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
   const responses: DocResponses = {};
   for (const response of routeMetadata.responses) {
     responses[String(response.statusCode)] = {
-      description: response.description,
+      description: response.description
     };
 
     if (response.body && response.body.name) {
@@ -84,7 +84,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
             description: routeMetadata.description,
             summary: routeMetadata.summary,
             operationId: `${method}-${path}`,
-            security: routeMetadata.security ?? metadata.docMetadata?.security,
+            security: routeMetadata.security ?? metadata.docMetadata?.security
           };
           if (routeMetadata.responses) {
             thisDoc.paths[path][loweredMethod].responses = resolveResponses(routeMetadata);
@@ -93,7 +93,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
                 if (!thisDoc.paths[path][loweredMethod].responses[globalResponse.statusCode]) {
                   thisDoc.paths[path][loweredMethod].responses[globalResponse.statusCode] = {
                     description: globalResponse.description,
-                    content: getResponseContent(globalResponse),
+                    content: getResponseContent(globalResponse)
                   };
                 }
               }
@@ -104,10 +104,10 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
               content: {
                 "application/json": {
                   schema: {
-                    $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`,
-                  },
-                },
-              },
+                    $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`
+                  }
+                }
+              }
             };
           }
 
@@ -124,7 +124,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
 const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
   if (propMeta.type === "object") {
     return {
-      $ref: `#/components/schemas/${propMeta.objectType?.name}`,
+      $ref: `#/components/schemas/${propMeta.objectType}`
     };
   }
   const model: { [key: string]: any } = {
@@ -132,7 +132,7 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
     nullable: propMeta.nullable,
     description: propMeta.description,
     format: propMeta.format,
-    enum: propMeta.enum,
+    enum: propMeta.enum
   };
   if (propMeta.type === "string") {
     model.minLength = propMeta.minSize;
@@ -145,6 +145,9 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
   if (propMeta.type === "array") {
     model.minItems = propMeta.minSize;
     model.maxItems = propMeta.maxSize;
+    model.items = {
+      $ref: `#/components/schemas/${propMeta.objectType}`
+    }
   }
 
   return model;
@@ -153,7 +156,7 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
 const resolveModelDocumentation = (
   propKeys: string[],
   metadata: RouterMetadata,
-  entityName: string,
+  entityName: string
 ): [any, string[]] => {
   const properties: any = {};
   const required: string[] = [];
@@ -196,7 +199,7 @@ export const generateDoc = (version: string): DocApi => {
     const [properties, required] = resolveModelDocumentation(propKeys, metadata, entityName);
 
     schemas[entityName] = {
-      properties,
+      properties
     };
 
     if (required.length) {
@@ -204,19 +207,8 @@ export const generateDoc = (version: string): DocApi => {
     }
   }
 
-  schemas.ApiError = {
-    properties: {
-      name: {
-        type: "string",
-      },
-      message: {
-        type: "string",
-      },
-    },
-  };
-
   apiDoc.components = {
-    schemas,
+    schemas
   };
 
   if (metadata.docMetadata?.securitySchemes) {

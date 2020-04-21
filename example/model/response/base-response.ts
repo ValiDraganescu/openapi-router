@@ -1,8 +1,12 @@
 import { DocProperty } from "../../../src";
+import { Envelope } from "../../../src/response/envelope";
+import { ApiError } from "../../../src/router/api-error";
 
-export class BaseResponse {
+export class BaseResponse implements Envelope {
   @DocProperty({
-    type: "string"
+    type: "array",
+    objectType: ApiError.name,
+    isRequired: false
   })
-  baseItem: string;
+  errors?: ApiError[];
 }

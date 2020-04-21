@@ -20,9 +20,10 @@ import { RouteMetadata } from "../metadata/route-metadata";
 import { IPathParams } from "./path-params.interface";
 import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
-import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Request, Response } from "..";
+import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Request, Response, StatusCode } from "..";
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
+import { BaseResponse } from "../../example/model/response/base-response";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -35,9 +36,11 @@ class Router {
       req.pathParams = pathParams;
       // validate request;
       if (route.requestBody) {
-        const inputValidationErrors = Validator.validate(req.body, route.requestBody);
+        const inputValidationErrors = Validator.validate(req.body, route.requestBody.name);
         if (inputValidationErrors && inputValidationErrors.length) {
-          return new Response(400).setBody(inputValidationErrors);
+          return new Response(StatusCode.badRequest).setBody({
+            errors: inputValidationErrors
+          });
         }
       }
 
@@ -81,11 +84,13 @@ class Router {
         throw new Error(`No response defined for status code ${resp!.statusCode}`);
       }
       if (responseMeta.body) {
-        const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body);
+        const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body.name);
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           console.log(outputValidationResult);
-          return new Response(500).setBody(outputValidationResult);
+          return new Response(StatusCode.internalServerError).setBody({
+            errors: outputValidationResult
+          });
         }
       }
 
@@ -93,7 +98,12 @@ class Router {
     } else {
       Logger.log("Route not resolved::", JSON.stringify(request));
     }
-    return new Response(404);
+    return new Response<BaseResponse>(StatusCode.notFound).setBody({
+      errors: [{
+        code: "User error",
+        message: "404 Not found"
+      }]
+    });
   };
 
   getApiDoc = (version: string): any => {

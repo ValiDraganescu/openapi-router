@@ -21,7 +21,7 @@ export class AuthRequest {
 
   @DocProperty({
     type: "object",
-    objectType: UserDetails,
+    objectType: UserDetails.name,
     isRequired: true
   })
   userDetails: UserDetails;

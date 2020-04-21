@@ -3,10 +3,9 @@ import { HelloResponse } from "./model/response/hello-response";
 import { AuthResponse } from "./model/response/auth-response";
 import { AuthRequest } from "./model/request/auth-request";
 import { afterAuth, beforeAuth } from "./middleware/auth-middleware";
-import { ErrorResponse } from "./model/response/error-response";
-import { ApiError } from "../src/router/api-error";
 import { InheritedResponse } from "./model/response/inherited-response";
 import { responseMiddleware } from "./middleware/throw-middleware";
+import { BaseResponse } from "./model/response/base-response";
 
 @ApiRouter({
   version: "1.0.0",
@@ -56,17 +55,18 @@ import { responseMiddleware } from "./middleware/throw-middleware";
     {
       statusCode: 500,
       description: "Internal server error",
-      body: ErrorResponse
+      type: "array",
+      body: BaseResponse
     }, {
       statusCode: StatusCode.badRequest,
       description: "Bad request",
       type: "array",
-      body: ErrorResponse
+      body: BaseResponse
     }, {
       statusCode: StatusCode.notFound,
       description: "Not found",
       type: "array",
-      body: ApiError
+      body: BaseResponse
     }
   ]
 })
@@ -87,7 +87,7 @@ export class App extends LambdaRouter {
     ]
   })
   async sayHelloHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello", baseItem: "foo" });
+    return new Response<HelloResponse>().setBody({ data: { message: "hello" } });
   };
 
   @Route({
@@ -120,7 +120,7 @@ export class App extends LambdaRouter {
     ]
   })
   async sayHelloWithPostHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello with POST", baseItem: "foo" });
+    return new Response<HelloResponse>().setBody({ data: { message: "hello with POST" } });
   }
 
   @Route({
@@ -134,7 +134,7 @@ export class App extends LambdaRouter {
     }]
   })
   async sayHelloFooHandler(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response<HelloResponse>().setBody({ message: "hello foo", baseItem: "foo" });
+    return new Response<HelloResponse>().setBody({ data: { message: "hello foo" } });
   }
 
   @Route({
@@ -177,8 +177,9 @@ export class App extends LambdaRouter {
     const org = request.pathParams?.organization.value;
     const team = request.pathParams?.team.value;
     return new Response<HelloResponse>().setBody({
-      message: `hello ${name} from ${team} team of ${org}`,
-      baseItem: "foo"
+      data: {
+        message: `hello ${name} from ${team} team of ${org}`
+      }
     });
   }
 
@@ -199,8 +200,9 @@ export class App extends LambdaRouter {
   })
   async authHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
-      baseItem: "foo"
+      data: {
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      }
     });
   }
 
@@ -226,8 +228,9 @@ export class App extends LambdaRouter {
   })
   async authBeforeHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
-      baseItem: "foo"
+      data: {
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      }
     });
   }
 
@@ -253,8 +256,9 @@ export class App extends LambdaRouter {
   })
   async authAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
-      baseItem: "foo"
+      data: {
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      }
     });
   }
 
@@ -283,8 +287,9 @@ export class App extends LambdaRouter {
   })
   async authBeforeAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
-      baseItem: "foo"
+      data: {
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+      }
     });
   }
 
@@ -345,8 +350,8 @@ export class App extends LambdaRouter {
       body: AuthResponse
     }]
   })
-  async errorMessageReturned(_request: Request): Promise<Response> {
-    return new Response<ApiError[]>(StatusCode.notFound).setBody([{ message: "foo", name: "bar" }]);
+  async errorMessageReturned(_request: Request): Promise<Response<BaseResponse>> {
+    return new Response<BaseResponse>(StatusCode.notFound).setBody({ errors: [{ message: "foo", code: "bar" }] });
 
   }
 
@@ -361,9 +366,7 @@ export class App extends LambdaRouter {
     }]
   })
   async inheritedResponse(_request: Request): Promise<Response> {
-    return new Response<InheritedResponse>(StatusCode.notFound).setBody({
-      baseItem: "foo"
-    });
+    return new Response<InheritedResponse>(StatusCode.notFound);
   }
 
   @Route({
@@ -392,8 +395,9 @@ export class App extends LambdaRouter {
   })
   async authAdminHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
-      message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`,
-      baseItem: "foo"
+      data: {
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`
+      }
     });
   }
 
@@ -430,7 +434,7 @@ export class App extends LambdaRouter {
     }
   })
   async notFoundResult(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response(StatusCode.notFound).setBody([{ name: "error", message: "foo" }]);
+    return new Response(StatusCode.notFound).setBody({ errors: [{ code: "error", message: "foo" }] });
   };
 
   @Route({

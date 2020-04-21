@@ -15,8 +15,9 @@
  */
 import { StatusCode } from "./status-code";
 import { ApiError } from "./api-error";
+import { Envelope } from "../response/envelope";
 
-export class Response<ResponseBody = any> {
+export class Response<ResponseBody extends Envelope = Envelope> {
   statusCode: StatusCode;
 
   errors?: ApiError[];

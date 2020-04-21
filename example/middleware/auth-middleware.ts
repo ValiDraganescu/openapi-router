@@ -13,7 +13,7 @@ export const afterAuth: AfterMiddlewareHandler = async (response: Response<AuthR
   if (response) {
     const body = response.getBody();
     if (body) {
-      body.message = body.message + " after";
+      body.data.message = body.data.message + " after";
       response.setBody(body);
     }
   }

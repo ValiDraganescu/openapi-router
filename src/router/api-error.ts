@@ -21,7 +21,7 @@ export class ApiError {
     type: "string",
     isRequired: true,
   })
-  name?: string;
+  code?: string;
 
   @DocProperty({
     type: "string",
