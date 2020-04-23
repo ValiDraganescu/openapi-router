@@ -34,7 +34,7 @@ export class Request<RequestBody = any> {
     this.path = opts.path;
     this.method = opts.method;
     this.body = opts.body;
-    this.queryParams = this.getQueryParams();
+    this.queryParams = opts.queryParams ?? this.getQueryParams();
     this.extra = {};
   }
 

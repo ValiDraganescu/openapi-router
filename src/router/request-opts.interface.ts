@@ -23,4 +23,5 @@ export interface IRequestOpts<RequestBody> {
   method: HttpMethod;
   body?: RequestBody;
   pathParams?: IPathParams;
+  queryParams?: {[key: string]: string} | null;
 }

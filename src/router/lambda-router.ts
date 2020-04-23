@@ -33,6 +33,7 @@ export abstract class LambdaRouter {
       path: event.path,
       method: event.httpMethod as HttpMethod,
       body: parsedBody,
+      queryParams: event.queryStringParameters
     });
     try {
       return await getRouter().handleEvent(request);
