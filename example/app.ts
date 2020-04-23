@@ -200,15 +200,7 @@ export class App extends LambdaRouter {
       schema: {
         type: "string"
       }
-    }, {
-      description: "The user team",
-      in: "path",
-      name: "team",
-      required: true,
-      schema: {
-        type: "string"
-      }
-    }, {
+    },{
       description: "The user name",
       in: "path",
       name: "name",
@@ -216,13 +208,25 @@ export class App extends LambdaRouter {
       schema: {
         type: "string"
       }
+    }, {
+      description: "The team member size",
+      in: "query",
+      name: "teamSize",
+      required: true,
+      schema: {
+        type: "integer"
+      }
     }]
   })
-  async sayHelloFooNameSimilarHandler(_: Request): Promise<Response<HelloResponse>> {
+  async sayHelloFooNameSimilarHandler(r: Request): Promise<Response<HelloResponse>> {
+    console.log("Query params::", r.queryParams);
+    const data = {
+      message: `cascade team`,
+      teamSize: Number(r.queryParams?.teamSize)
+    };
+    console.log("Response data::", data);
     return new Response<HelloResponse>().setBody({
-      data: {
-        message: `cascade team`
-      }
+      data
     });
   }
 

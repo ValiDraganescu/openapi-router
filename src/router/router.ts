@@ -158,7 +158,7 @@ class Router {
         return a.split("{").length - b.split("{").length;
       });
       pathParams = {};
-      console.warn("Route keys::", JSON.stringify(routeKeys));
+      Logger.log("Route keys::", JSON.stringify(routeKeys));
       for (const routeKey of routeKeys) {
         const routeComponents = routeKey.split("/");
 
