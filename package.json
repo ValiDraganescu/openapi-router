@@ -1,6 +1,6 @@
 {
   "name": "typescript-openapi-router",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
   "author": {
     "name": "Vali Draganescu",

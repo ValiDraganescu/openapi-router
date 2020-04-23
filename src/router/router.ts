@@ -23,7 +23,6 @@ import { IMiddleware } from "./decorators/route";
 import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Envelope, Request, Response, StatusCode } from "..";
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
-import { BaseResponse } from "../../example/model/response/base-response";
 
 class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -155,8 +154,11 @@ class Router {
     if (!routeMeta) {
       const basePath = path.split("?")[0];
       const basePathComponents = basePath.split("/");
-      const routeKeys = metadata.getPaths();
+      const routeKeys = metadata.getPaths().sort((a, b) => {
+        return a.split("{").length - b.split("{").length;
+      });
       pathParams = {};
+      console.warn("Route keys::", JSON.stringify(routeKeys));
       for (const routeKey of routeKeys) {
         const routeComponents = routeKey.split("/");
 

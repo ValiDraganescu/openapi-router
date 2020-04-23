@@ -184,6 +184,49 @@ export class App extends LambdaRouter {
   }
 
   @Route({
+    description: "Basically a complicated form of hello, this time with some parameters",
+    method: HttpMethod.GET,
+    path: "/hello/{organization}/cascade/{name}",
+    responses: [{
+      description: "mock",
+      statusCode: 200,
+      body: HelloResponse
+    }],
+    parameters: [{
+      description: "The user organization",
+      in: "path",
+      name: "organization",
+      required: true,
+      schema: {
+        type: "string"
+      }
+    }, {
+      description: "The user team",
+      in: "path",
+      name: "team",
+      required: true,
+      schema: {
+        type: "string"
+      }
+    }, {
+      description: "The user name",
+      in: "path",
+      name: "name",
+      required: true,
+      schema: {
+        type: "string"
+      }
+    }]
+  })
+  async sayHelloFooNameSimilarHandler(_: Request): Promise<Response<HelloResponse>> {
+    return new Response<HelloResponse>().setBody({
+      data: {
+        message: `cascade team`
+      }
+    });
+  }
+
+  @Route({
     description: "Post method with body",
     summary: "A POST method with request and response bodies",
     method: HttpMethod.POST,

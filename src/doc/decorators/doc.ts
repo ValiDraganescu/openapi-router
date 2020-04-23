@@ -33,8 +33,6 @@ export const DocProperty = (props: PropertyMetadata) => {
 export const InheritedDoc = () => {
   return (target: any) => {
     const protoName = Object.getPrototypeOf(target).name;
-    console.log("Inherited doc for::", protoName);
-
     if (protoName !== "Object") {
       const metadata = getMetadataStorage();
       if (!metadata.entities[target.name]) {

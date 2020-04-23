@@ -70,6 +70,20 @@ describe("Test the routing capabilities", () => {
     expect(resp.getBody().data.message).toEqual("hello james from rocket team of pokemon");
   });
 
+  it("should test path matching with predefined param", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<any>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/hello/pokemon/cascade/james",
+      method: HttpMethod.GET
+
+    }));
+    expect(resp.statusCode).toEqual(200);
+    expect(resp.getBody().data.message).toEqual("cascade team");
+  });
+
   it("should test handler with body", async () => {
     const app = new App();
     const resp = await app.consumeEvent(new Request<any>({
