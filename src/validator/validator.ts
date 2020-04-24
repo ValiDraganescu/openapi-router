@@ -27,7 +27,7 @@ const validateIsRequired = (
   modelName: string,
   modelKey: string
 ): string | null => {
-  if (propMeta.isRequired && !propertyValue) {
+  if (propMeta.isRequired && (propertyValue === undefined || propertyValue === null)) {
     return `${modelName}.${modelKey} is required`;
   }
   return null;
