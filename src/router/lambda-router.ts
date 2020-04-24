@@ -15,7 +15,7 @@
  */
 
 import { APIGatewayEvent } from "aws-lambda";
-import { getRouter, HttpMethod, Request, Response, StatusCode } from "..";
+import { Envelope, getRouter, HttpMethod, Request, Response, StatusCode } from "..";
 
 export abstract class LambdaRouter {
   router = async (event: APIGatewayEvent): Promise<Response<any>> => {
@@ -24,7 +24,7 @@ export abstract class LambdaRouter {
       try {
         parsedBody = JSON.parse(event.body);
       } catch (e) {
-        return new Response<any>(StatusCode.badRequest).setBody([{ message: e.message }]);
+        return new Response<Envelope>(StatusCode.badRequest).setBody({ errors: [{ message: e.message }] });
       }
     }
 
@@ -38,7 +38,7 @@ export abstract class LambdaRouter {
     try {
       return await getRouter().handleEvent(request);
     } catch (e) {
-      return new Response<any>(StatusCode.internalServerError).setBody([{ message: e.message }]);
+      return new Response<Envelope>(StatusCode.internalServerError).setBody({ errors: [{ message: e.message }] });
     }
   };
 

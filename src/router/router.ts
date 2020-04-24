@@ -37,7 +37,7 @@ class Router {
       if (route.requestBody) {
         const inputValidationErrors = Validator.validate(req.body, route.requestBody.name);
         if (inputValidationErrors && inputValidationErrors.length) {
-          return new Response(StatusCode.badRequest).setBody({
+          return new Response<Envelope>(StatusCode.badRequest).setBody({
             errors: inputValidationErrors
           });
         }
@@ -87,7 +87,7 @@ class Router {
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           console.log(outputValidationResult);
-          return new Response(StatusCode.internalServerError).setBody({
+          return new Response<Envelope>(StatusCode.internalServerError).setBody({
             errors: outputValidationResult
           });
         }
