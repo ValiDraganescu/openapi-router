@@ -121,6 +121,13 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
   return thisDoc;
 };
 
+const primitiveTypes = [
+  "string",
+  "number",
+  "integer",
+  "boolean"
+];
+
 const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
   if (propMeta.type === "object") {
     return {
@@ -145,8 +152,16 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
   if (propMeta.type === "array") {
     model.minItems = propMeta.minSize;
     model.maxItems = propMeta.maxSize;
-    model.items = {
-      $ref: `#/components/schemas/${propMeta.objectType}`
+    if (propMeta.objectType) {
+      if (primitiveTypes.includes(propMeta.objectType)) {
+        model.items = {
+          type: propMeta.objectType
+        };
+      } else {
+        model.items = {
+          $ref: `#/components/schemas/${propMeta.objectType}`
+        };
+      }
     }
   }
 
