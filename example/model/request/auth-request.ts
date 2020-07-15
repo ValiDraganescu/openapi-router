@@ -25,4 +25,11 @@ export class AuthRequest {
     isRequired: true
   })
   userDetails: UserDetails;
+
+  @DocProperty({
+    type: "array",
+    objectType: "string",
+    isRequired: true
+  })
+  items: string[]
 }

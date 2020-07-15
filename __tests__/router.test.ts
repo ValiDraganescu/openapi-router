@@ -98,7 +98,11 @@ describe("Test the routing capabilities", () => {
         password: "very_secret",
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(200);
@@ -118,7 +122,11 @@ describe("Test the routing capabilities", () => {
         password: "very_secret",
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(200);
@@ -166,7 +174,11 @@ describe("Test the routing capabilities", () => {
         password: "very_secret",
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(200);
@@ -186,7 +198,11 @@ describe("Test the routing capabilities", () => {
         password: "very_secret",
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(200);
@@ -206,7 +222,11 @@ describe("Test the routing capabilities", () => {
         password: "very_secret",
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(200);

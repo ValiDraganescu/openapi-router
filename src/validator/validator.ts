@@ -184,31 +184,34 @@ export class Validator {
         errors.push(...Validator.validate(item, modelName));
       }
     } else {
-      const modelKeys = Object.keys(entityMeta);
+      if (typeof body === "object") {
+        const modelKeys = Object.keys(entityMeta);
 
-      for (const modelKey of modelKeys) {
-        const propMeta = entityMeta[modelKey];
-        const propertyValue = body[modelKey];
+        for (const modelKey of modelKeys) {
+          const propMeta = entityMeta[modelKey];
+          const propertyValue = body[modelKey];
 
-        Logger.log(`Validating ${modelName}.${modelKey}`);
+          Logger.log(`Validating ${modelName}.${modelKey}`);
 
-        if (typeof propertyValue === "object" && propertyValue !== null) {
-          Logger.log("Property is an object");
-          errors.push(...validateObject(propMeta, propertyValue));
-        } else {
-          Logger.log("Property is a primitive with value", propertyValue);
-          if (propMeta) {
-            const error = validateIsRequired(propMeta, propertyValue, modelName, modelKey);
-            if (error) {
-              errors.push({ message: error });
-            }
+          if (typeof propertyValue === "object" && propertyValue !== null) {
+            Logger.log("Property is an object");
+            errors.push(...validateObject(propMeta, propertyValue));
+          } else {
+            Logger.log("Property is a primitive with value", propertyValue);
+            if (propMeta) {
+              const error = validateIsRequired(propMeta, propertyValue, modelName, modelKey);
+              if (error) {
+                errors.push({ message: error });
+              }
 
-            if (propertyValue) {
-              errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
+              if (propertyValue) {
+                errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
+              }
             }
           }
         }
       }
+
     }
 
     return errors;

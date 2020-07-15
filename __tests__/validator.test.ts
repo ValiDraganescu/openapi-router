@@ -17,7 +17,11 @@ describe("Test the validation capabilities", () => {
         password: "very_secret",
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(400);
@@ -38,7 +42,11 @@ describe("Test the validation capabilities", () => {
       body: {
         userDetails: {
           firstName: "John"
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(400);
@@ -79,7 +87,11 @@ describe("Test the validation capabilities", () => {
         userDetails: {
           firstName: "John",
           lastName: 12121
-        }
+        },
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(400);
@@ -100,7 +112,11 @@ describe("Test the validation capabilities", () => {
       method: HttpMethod.POST,
       body: {
         email: "sasas@sdsasd.com",
-        password: 1234
+        password: 1234,
+        items: [
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(400);
@@ -124,7 +140,11 @@ describe("Test the validation capabilities", () => {
         password: "password",
         userDetails: {
           lastName: "John"
-        }
+        },
+        items:[
+          "foo",
+          "bar"
+        ]
       }
     }));
     expect(resp.statusCode).toEqual(400);
