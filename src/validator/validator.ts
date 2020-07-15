@@ -159,6 +159,8 @@ const validateRequiredProperties = (
   return errors;
 };
 
+const baseTypes = ["string", "number"];
+
 export class Validator {
   static validate = (body: any, modelName: string): ApiError[] => {
     Logger.log("Validating", modelName, JSON.stringify(body));
@@ -172,8 +174,8 @@ export class Validator {
     const metadata = getMetadataStorage();
     const entityMeta = metadata.entities[modelName];
 
-    if (!entityMeta) {
-      const message = `Entity ${modelName} is not registered with the router, did you forget to decorate ${modelName} with @DocModel()?`;
+    if (!entityMeta && !baseTypes.includes(modelName)) {
+      const message = `Entity ${modelName} is not registered with the router`;
       console.error(message);
       errors.push({ message });
     }
