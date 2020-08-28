@@ -25,6 +25,7 @@ export class Request<RequestBody = any> {
   path: string;
   method: HttpMethod;
   body?: RequestBody;
+  rawBody?: string | null;
   pathParams?: IPathParams | null;
   queryParams?: IQueryParams | null;
   extra: { [key: string]: any };
