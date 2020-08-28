@@ -18,7 +18,7 @@ import { APIGatewayEvent } from "aws-lambda";
 import { Envelope, getRouter, HttpMethod, Request, Response, StatusCode } from "..";
 
 export abstract class LambdaRouter {
-  
+
   router = async (event: APIGatewayEvent): Promise<Response<any>> => {
     let parsedBody: any;
     if (event.body) {
