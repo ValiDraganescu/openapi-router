@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { APIGatewayEvent } from "aws-lambda";
+import { APIGatewayEvent, APIGatewayEventDefaultAuthorizerContext, APIGatewayProxyEventBase } from "aws-lambda";
 import { Envelope, getRouter, HttpMethod, Request, Response, StatusCode } from "..";
 
 export abstract class LambdaRouter {
@@ -29,7 +29,16 @@ export abstract class LambdaRouter {
       }
     }
 
-    const request = new Request({
+    const request = this.getRequestFromEvent(event, parsedBody);
+    try {
+      return await getRouter().handleEvent(request);
+    } catch (e) {
+      return new Response<Envelope>(StatusCode.internalServerError).setBody({ errors: [{ message: e.message }] });
+    }
+  };
+
+  getRequestFromEvent = (event: APIGatewayProxyEventBase<APIGatewayEventDefaultAuthorizerContext>, parsedBody: any): Request => {
+    return new Request({
       headers: event.headers,
       path: event.path,
       method: event.httpMethod as HttpMethod,
@@ -37,11 +46,6 @@ export abstract class LambdaRouter {
       rawBody: event.body,
       queryParams: event.queryStringParameters
     });
-    try {
-      return await getRouter().handleEvent(request);
-    } catch (e) {
-      return new Response<Envelope>(StatusCode.internalServerError).setBody({ errors: [{ message: e.message }] });
-    }
   };
 
   consumeEvent = async (event: Request): Promise<Response<any>> => {
