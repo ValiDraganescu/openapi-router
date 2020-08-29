@@ -1,8 +1,62 @@
-import {App} from "../example/app";
-import { Request, StatusCode } from "../src";
-import {HttpMethod} from "../src";
+import { App } from "../example/app";
+import { HttpMethod, Request, StatusCode } from "../src";
 
 describe("Test the routing capabilities", () => {
+
+  it("should test getRouter", async () => {
+    const app = new App();
+    const request = await app.getRequestFromEvent({
+      multiValueQueryStringParameters: null,
+      pathParameters: null,
+      queryStringParameters: null,
+      stageVariables: null,
+      requestContext: {
+        accountId: "test",
+        apiId: "sasas",
+        authorizer: {},
+        protocol: "https",
+        httpMethod: "post",
+        identity: {
+          accessKey: null,
+          accountId: null,
+          apiKey: null,
+          apiKeyId: null,
+          caller: null,
+          cognitoAuthenticationProvider: null,
+          cognitoAuthenticationType: null,
+          cognitoIdentityId: null,
+          cognitoIdentityPoolId: null,
+          principalOrgId: null,
+          sourceIp: "121.121.121.121",
+          user: null,
+          userAgent: null,
+          userArn: null
+        },
+        messageId: "string | null",
+        path: "string",
+        stage: "dev",
+        requestId: "string",
+        requestTimeEpoch: 1212121,
+        resourceId: "string",
+        resourcePath: "string"
+      },
+      body: "{'foo': 'bar'}",
+      headers: {
+        foo: "bar",
+        bim: "baz"
+      },
+      httpMethod: "POST",
+      isBase64Encoded: false,
+      multiValueHeaders: {},
+      path: "/hello",
+      resource: "users"
+    }, JSON.parse('{"foo": "bar"}'));
+
+    console.log("Request", request);
+    expect(request.body).toBeDefined();
+    expect(request.rawBody).toBeDefined();
+    expect(request.rawBody).toEqual("{'foo': 'bar'}");
+  });
 
   it("should test say hello handler", async () => {
     const app = new App();
@@ -82,7 +136,7 @@ describe("Test the routing capabilities", () => {
     }));
     expect(resp.statusCode).toEqual(200);
     expect(resp.getBody().data.message).toEqual("cascade team");
-    expect(resp.getBody().data.teamSize).toEqual(4)
+    expect(resp.getBody().data.teamSize).toEqual(4);
   });
 
   it("should test handler with body", async () => {
