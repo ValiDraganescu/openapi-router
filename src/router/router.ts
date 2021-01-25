@@ -24,7 +24,7 @@ import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Envelope, Request, Res
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
 
-class Router {
+export class Router {
   handleEvent = async (request: Request): Promise<Response> => {
     let resp: Response | null = null;
     let req: Request | null = request;

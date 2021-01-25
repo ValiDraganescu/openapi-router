@@ -29,4 +29,5 @@ export { InheritedDoc } from "./doc/decorators/doc";
 export { ApiInfo } from "./doc/model/info";
 export { StatusCode } from "./router/status-code";
 export { Envelope } from "./response/envelope";
-export {IMiddleware} from "./router/decorators/route"
+export { IMiddleware } from "./router/decorators/route";
+export { Router } from "./router/router";
