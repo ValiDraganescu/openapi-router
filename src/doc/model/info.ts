@@ -32,7 +32,7 @@ export class ApiInfo {
   license?: DocLicense;
   securitySchemes?: SecuritySchemes;
   security?: DocSecurity[];
-  servers: DocServer[];
+  servers?: DocServer[];
   additionalRouters?: ObjectType<any>[];
   globalResponses?: ResponseMetadata[];
   globalMiddleware?: {
