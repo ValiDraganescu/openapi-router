@@ -1,6 +1,6 @@
 {
   "name": "typescript-openapi-router",
-  "version": "2.5.2",
+  "version": "2.5.5",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
   "author": {
     "name": "Vali Draganescu",
@@ -26,7 +26,7 @@
     "format": "./node_modules/prettier/bin-prettier.js --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "gc": "commit",
-    "srelease": "npx semantic-release"
+    "release": "npx semantic-release"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",

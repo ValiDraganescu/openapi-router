@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-export interface IQueryParams {
-  [key: string]: any;
+import { IPathParam } from "./path-param";
+
+export class IPathParams {
+  [key: string]: IPathParam;
 }

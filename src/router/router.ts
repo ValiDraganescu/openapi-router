@@ -17,12 +17,13 @@
 import { getMetadataStorage } from "../metadata/metadata-storage";
 import { generateDoc } from "../doc/generator";
 import { RouteMetadata } from "../metadata/route-metadata";
-import { IPathParams } from "./path-params.interface";
+import { IPathParams } from "./path-params";
 import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
 import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Envelope, Request, Response, StatusCode } from "..";
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
+import { IPathParam } from "./path-param";
 
 export class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -175,7 +176,7 @@ export class Router {
                   name: paramName,
                   value: basePathComponents[i],
                   index: i
-                };
+                } as IPathParam;
               } else {
                 isValidRoute = false;
               }

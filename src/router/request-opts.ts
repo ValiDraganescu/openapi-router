@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-import { IPathParam } from "./path-param.interface";
+import { HttpMethod } from "..";
+import { IPathParams } from "./path-params";
 
-export interface IPathParams {
-  [key: string]: IPathParam;
+export class IRequestOpts<RequestBody> {
+  headers?: { [key: string]: string };
+  path: string;
+  method: HttpMethod;
+  body?: RequestBody;
+  rawBody?: string | null;
+  pathParams?: IPathParams;
+  queryParams?: {[key: string]: string} | null;
 }
