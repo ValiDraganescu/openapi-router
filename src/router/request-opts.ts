@@ -24,5 +24,5 @@ export class IRequestOpts<RequestBody> {
   body?: RequestBody;
   rawBody?: string | null;
   pathParams?: IPathParams;
-  queryParams?: {[key: string]: string} | null;
+  queryParams?: { [key: string]: string } | null;
 }

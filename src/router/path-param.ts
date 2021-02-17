@@ -25,5 +25,5 @@ export class IPathParam {
 
   asNumber = (): number => {
     return Number(this.value);
-  }
+  };
 }

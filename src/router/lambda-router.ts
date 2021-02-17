@@ -18,7 +18,6 @@ import { APIGatewayEvent, APIGatewayEventDefaultAuthorizerContext, APIGatewayPro
 import { Envelope, getRouter, HttpMethod, Request, Response, StatusCode } from "..";
 
 export abstract class LambdaRouter {
-
   router = async (event: APIGatewayEvent): Promise<Response<any>> => {
     let parsedBody: any;
     if (event.body) {
@@ -37,14 +36,17 @@ export abstract class LambdaRouter {
     }
   };
 
-  getRequestFromEvent = (event: APIGatewayProxyEventBase<APIGatewayEventDefaultAuthorizerContext>, parsedBody: any): Request => {
+  getRequestFromEvent = (
+    event: APIGatewayProxyEventBase<APIGatewayEventDefaultAuthorizerContext>,
+    parsedBody: any,
+  ): Request => {
     return new Request({
       headers: event.headers,
       path: event.path,
       method: event.httpMethod as HttpMethod,
       body: parsedBody,
       rawBody: event.body,
-      queryParams: event.queryStringParameters
+      queryParams: event.queryStringParameters,
     });
   };
 
