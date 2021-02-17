@@ -17,7 +17,7 @@
 import { RouterMetadata } from "./router-metadata";
 
 const getGlobal = (): any => {
-  return global;
+  return global || {};
 };
 
 export const getMetadataStorage = (): RouterMetadata => {
