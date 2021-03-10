@@ -1,4 +1,4 @@
-import {DocProperty} from "../../../src/doc/decorators/doc";
+import {DocProperty} from "../../../src";
 import {UserDetails} from "../user-details";
 
 export class AuthRequest {
@@ -29,7 +29,9 @@ export class AuthRequest {
   @DocProperty({
     type: "array",
     objectType: "string",
-    isRequired: true
+    isRequired: true,
+    minSize: 1,
+    maxSize: 3
   })
   items: string[]
 }

@@ -16,11 +16,9 @@ describe("Test the api doc generation capabilities", () => {
       method: HttpMethod.GET
     }));
     doc = resp.getBody() as DocApi;
-    console.log("Api Doc::", JSON.stringify(doc));
   });
 
   it("should document api metadata", async () => {
-    console.log(JSON.stringify(doc));
     expect(doc.openapi).toEqual("3.0.0");
   });
 

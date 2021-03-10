@@ -122,6 +122,7 @@ describe("Test the validation capabilities", () => {
     expect(resp.statusCode).toEqual(400);
     const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
+    console.log(errors);
     expect(errors.length).toEqual(2);
     expect(errors.map((e: ApiError) => e.message)).toContain("AuthRequest.password should be of type string");
     expect(errors.map((e: ApiError) => e.message)).toContain("AuthRequest.userDetails is required");

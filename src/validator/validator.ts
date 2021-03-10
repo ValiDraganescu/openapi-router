@@ -19,7 +19,7 @@ import { PropertyMetadata } from "../metadata/property-metadata";
 import { Logger } from "../logger";
 import { ApiError } from "../router/api-error";
 
-type PropType = "undefined" | "object" | "boolean" | "number" | "string" | "function" | "symbol" | "bigint";
+type PropType = "undefined" | "object" | "array" | "boolean" | "number" | "string" | "function" | "symbol" | "bigint";
 
 const validateIsRequired = (
   propMeta: PropertyMetadata,
@@ -59,8 +59,10 @@ const validateMinSize = (
   modelName: string,
   modelKey: string
 ): string | null => {
+  console.log(`validating minSize ${propMeta.minSize} for propType ${propType}`);
   if (propMeta.minSize) {
-    if (propType === "string" || (propType === "object" && Array.isArray(property))) {
+    if (propType === "string" || propType === "object" || propType === "array") {
+      console.log(`Length is ${property.length}`);
       if (property.length < propMeta.minSize) {
         return `${modelName}.${modelKey} should have a minimum size of ${propMeta.minSize}`;
       }
@@ -98,14 +100,14 @@ const validateMaxSize = (
   modelKey: string
 ): string | null => {
   if (propMeta.maxSize) {
-    if (propType === "string" || (propType === "object" && Array.isArray(property))) {
+    if (propType === "string" || propType === "object" || propType === "array") {
       if (property.length > propMeta.maxSize) {
-        return `${modelName}.${modelKey} should have a maximum size of ${propMeta.minSize}`;
+        return `${modelName}.${modelKey} should have a maximum size of ${propMeta.maxSize}`;
       }
     }
     if (propType === "number" || propType === "bigint") {
       if (property > propMeta.maxSize) {
-        return `${modelName}.${modelKey} should be at most ${propMeta.minSize}`;
+        return `${modelName}.${modelKey} should be at most ${propMeta.maxSize}`;
       }
     }
   }
@@ -133,7 +135,10 @@ const validateRequiredProperties = (
   const errors: ApiError[] = [];
   let error: string | null;
 
-  const propType = typeof property;
+  let propType: PropType = typeof property;
+  if (propType === "object" && Array.isArray(property)) {
+    propType = "array";
+  }
   const typeError = validateIsCorrectType(propType, propMeta, modelName, modelKey);
 
   if (typeError) {
@@ -195,6 +200,7 @@ export class Validator {
 
           if (typeof propertyValue === "object" && propertyValue !== null) {
             Logger.log("Property is an object");
+            errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
             errors.push(...validateObject(propMeta, propertyValue));
           } else {
             Logger.log("Property is a primitive with value", propertyValue);
