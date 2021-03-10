@@ -16,14 +16,12 @@
 
 import { RouterMetadata } from "./router-metadata";
 
-const getGlobal = (): any => {
-  return global;
-};
+const _global: any = {};
 
 export const getMetadataStorage = (): RouterMetadata => {
-  const global = getGlobal();
-  if (!global.routerMetadata) {
-    global.routerMetadata = new RouterMetadata();
+
+  if (!_global.routerMetadata) {
+    _global.routerMetadata = new RouterMetadata();
   }
-  return global.routerMetadata;
+  return _global.routerMetadata;
 };

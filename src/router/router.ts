@@ -17,12 +17,13 @@
 import { getMetadataStorage } from "../metadata/metadata-storage";
 import { generateDoc } from "../doc/generator";
 import { RouteMetadata } from "../metadata/route-metadata";
-import { IPathParams } from "./path-params.interface";
+import { IPathParams } from "./path-params";
 import { Logger } from "../logger";
 import { IMiddleware } from "./decorators/route";
 import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Envelope, Request, Response, StatusCode } from "..";
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
+import { IPathParam } from "./path-param";
 
 export class Router {
   handleEvent = async (request: Request): Promise<Response> => {
@@ -38,7 +39,7 @@ export class Router {
         const inputValidationErrors = Validator.validate(req.body, route.requestBody.name);
         if (inputValidationErrors && inputValidationErrors.length) {
           return new Response<Envelope>(StatusCode.badRequest).setBody({
-            errors: inputValidationErrors
+            errors: inputValidationErrors,
           });
         }
       }
@@ -69,7 +70,6 @@ export class Router {
         resp = await this.executeMiddlewareAfter(globalMiddleware.after, resp!);
       }
 
-
       // validate response
       let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === resp!.statusCode);
       Logger.log("Route responses::", route.responses);
@@ -88,7 +88,7 @@ export class Router {
           // the API broke the contract with the client, fail the request
           console.log(outputValidationResult);
           return new Response<Envelope>(StatusCode.internalServerError).setBody({
-            errors: outputValidationResult
+            errors: outputValidationResult,
           });
         }
       }
@@ -98,10 +98,12 @@ export class Router {
       Logger.log("Route not resolved::", JSON.stringify(request));
     }
     return new Response<Envelope>(StatusCode.notFound).setBody({
-      errors: [{
-        code: "User error",
-        message: "404 Not found"
-      }]
+      errors: [
+        {
+          code: "User error",
+          message: "404 Not found",
+        },
+      ],
     });
   };
 
@@ -109,14 +111,16 @@ export class Router {
     return generateDoc(version);
   };
 
-  private executeMiddlewareBefore = async (before: BeforeMiddlewareHandler[], request: Request): Promise<[Request | null, Response | null]> => {
+  private executeMiddlewareBefore = async (
+    before: BeforeMiddlewareHandler[],
+    request: Request,
+  ): Promise<[Request | null, Response | null]> => {
     let response: Response | null = null;
     for (const handler of before) {
       [request, response] = await handler(request);
       if (response) {
         return [null, response];
       }
-
     }
     return [request, null];
   };
@@ -137,7 +141,7 @@ export class Router {
 
   private resolveHandler = (
     method: string,
-    path: string
+    path: string,
   ): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
@@ -174,8 +178,8 @@ export class Router {
                 pathParams[paramName] = {
                   name: paramName,
                   value: basePathComponents[i],
-                  index: i
-                };
+                  index: i,
+                } as IPathParam;
               } else {
                 isValidRoute = false;
               }

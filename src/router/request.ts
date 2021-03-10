@@ -15,9 +15,9 @@
  */
 
 import { HttpMethod } from "..";
-import { IPathParams } from "./path-params.interface";
-import { IQueryParams } from "./query-param.interface";
-import { IRequestOpts } from "./request-opts.interface";
+import { IPathParams } from "./path-params";
+import { IQueryParams } from "./query-param";
+import { IRequestOpts } from "./request-opts";
 import { Logger } from "../logger";
 
 export class Request<RequestBody = any> {

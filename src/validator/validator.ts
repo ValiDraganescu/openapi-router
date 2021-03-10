@@ -25,7 +25,7 @@ const validateIsRequired = (
   propMeta: PropertyMetadata,
   propertyValue: any,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.isRequired && (propertyValue === undefined || propertyValue === null)) {
     return `${modelName}.${modelKey} is required`;
@@ -37,7 +37,7 @@ const validateIsCorrectType = (
   propType: PropType,
   propMeta: PropertyMetadata,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propType === "number" || propType === "bigint") {
     if (propMeta.type !== "number" && propMeta.type !== "integer") {
@@ -57,7 +57,7 @@ const validateMinSize = (
   propType: PropType,
   property: any,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   console.log(`validating minSize ${propMeta.minSize} for propType ${propType}`);
   if (propMeta.minSize) {
@@ -80,7 +80,7 @@ const validateFormat = (
   propMeta: PropertyMetadata,
   property: string,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.format) {
     const regex = new RegExp(propMeta.format);
@@ -97,7 +97,7 @@ const validateMaxSize = (
   propType: PropType,
   property: any,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.maxSize) {
     if (propType === "string" || propType === "object" || propType === "array") {
@@ -130,7 +130,7 @@ const validateRequiredProperties = (
   property: any,
   propMeta: PropertyMetadata,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): ApiError[] => {
   const errors: ApiError[] = [];
   let error: string | null;
@@ -172,7 +172,7 @@ export class Validator {
     const errors: ApiError[] = [];
     if (!body) {
       errors.push({
-        message: `${modelName} is required`
+        message: `${modelName} is required`,
       });
       return errors;
     }
@@ -217,7 +217,6 @@ export class Validator {
           }
         }
       }
-
     }
 
     return errors;

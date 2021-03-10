@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { IPathParam } from "./path-param.interface";
+import { IPathParam } from "./path-param";
 
-export interface IPathParams {
+export class IPathParams {
   [key: string]: IPathParam;
 }
