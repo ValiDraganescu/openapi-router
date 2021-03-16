@@ -59,10 +59,10 @@ const validateMinSize = (
   modelName: string,
   modelKey: string,
 ): string | null => {
-  console.log(`validating minSize ${propMeta.minSize} for propType ${propType}`);
+  Logger.log(`validating minSize ${propMeta.minSize} for propType ${propType}`);
   if (propMeta.minSize) {
     if (propType === "string" || propType === "object" || propType === "array") {
-      console.log(`Length is ${property.length}`);
+      Logger.log(`Length is ${property.length}`);
       if (property.length < propMeta.minSize) {
         return `${modelName}.${modelKey} should have a minimum size of ${propMeta.minSize}`;
       }
