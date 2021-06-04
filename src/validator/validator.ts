@@ -25,7 +25,7 @@ const validateIsRequired = (
   propMeta: PropertyMetadata,
   propertyValue: any,
   modelName: string,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.isRequired && (propertyValue === undefined || propertyValue === null)) {
     return `${modelName}.${modelKey} is required`;
@@ -37,17 +37,21 @@ const validateIsCorrectType = (
   propType: PropType,
   propMeta: PropertyMetadata,
   modelName: string,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
+  Logger.log("Validating type", propType, propMeta, modelName, modelKey);
   if (propType === "number" || propType === "bigint") {
     if (propMeta.type !== "number" && propMeta.type !== "integer") {
       return `${modelName}.${modelKey} should be of type ${propMeta.type}`;
     }
-  } else {
+  }
+  /*else if (propType === 'object' && Array.isArray(propMeta.objectType)) {
+
+  }
     if (propType !== propMeta.type) {
       return `${modelName}.${modelKey} should be of type ${propMeta.type}`;
-    }
-  }
+    }*/
+
 
   return null;
 };
@@ -57,7 +61,7 @@ const validateMinSize = (
   propType: PropType,
   property: any,
   modelName: string,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   Logger.log(`validating minSize ${propMeta.minSize} for propType ${propType}`);
   if (propMeta.minSize) {
@@ -80,7 +84,7 @@ const validateFormat = (
   propMeta: PropertyMetadata,
   property: string,
   modelName: string,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.format) {
     const regex = new RegExp(propMeta.format);
@@ -97,7 +101,7 @@ const validateMaxSize = (
   propType: PropType,
   property: any,
   modelName: string,
-  modelKey: string,
+  modelKey: string
 ): string | null => {
   if (propMeta.maxSize) {
     if (propType === "string" || propType === "object" || propType === "array") {
@@ -130,7 +134,7 @@ const validateRequiredProperties = (
   property: any,
   propMeta: PropertyMetadata,
   modelName: string,
-  modelKey: string,
+  modelKey: string
 ): ApiError[] => {
   const errors: ApiError[] = [];
   let error: string | null;
@@ -167,53 +171,69 @@ const validateRequiredProperties = (
 const baseTypes = ["string", "number"];
 
 export class Validator {
-  static validate = (body: any, modelName: string): ApiError[] => {
-    Logger.log("Validating", modelName, JSON.stringify(body));
-    const errors: ApiError[] = [];
-    if (!body) {
-      errors.push({
-        message: `${modelName} is required`,
-      });
-      return errors;
-    }
-    const metadata = getMetadataStorage();
-    const entityMeta = metadata.entities[modelName];
+  static validate = (body: any, objectType: string | string[]): ApiError[] => {
 
-    if (!entityMeta && !baseTypes.includes(modelName)) {
-      const message = `Entity ${modelName} is not registered with the router`;
-      console.error(message);
-      errors.push({ message });
-    }
-    if (Array.isArray(body)) {
-      for (const item of body) {
-        errors.push(...Validator.validate(item, modelName));
-      }
+    let modelNames: string[];
+    if (Array.isArray(objectType)) {
+      modelNames = objectType;
     } else {
-      if (typeof body === "object") {
-        const modelKeys = Object.keys(entityMeta);
+      modelNames = [objectType];
+    }
 
-        for (const modelKey of modelKeys) {
-          const propMeta = entityMeta[modelKey];
-          const propertyValue = body[modelKey];
+    const errors: ApiError[] = [];
 
-          Logger.log(`Validating ${modelName}.${modelKey}`);
+    for (const modelName of modelNames) {
+      Logger.log("Validating", modelName, JSON.stringify(body));
+      if (!body) {
+        errors.push({
+          message: `${modelName} is required`
+        });
+        return errors;
+      }
+      const metadata = getMetadataStorage();
+      const entityMeta = metadata.entities[modelName];
 
-          if (typeof propertyValue === "object" && propertyValue !== null) {
-            Logger.log("Property is an object");
-            errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
-            errors.push(...validateObject(propMeta, propertyValue));
-          } else {
-            Logger.log("Property is a primitive with value", propertyValue);
-            if (propMeta) {
-              const error = validateIsRequired(propMeta, propertyValue, modelName, modelKey);
-              if (error) {
-                errors.push({ message: error });
-              }
+      if (!entityMeta && !baseTypes.includes(modelName)) {
+        const message = `Entity ${modelName} is not registered with the router`;
+        console.error(message);
+        errors.push({ message });
+      }
+      if (Array.isArray(body)) {
+        for (const item of body) {
+          errors.push(...Validator.validate(item, modelName));
+        }
+      } else {
+        if (typeof body === "object" && entityMeta !== undefined) {
+          try {
+            const modelKeys = Object.keys(entityMeta);
 
-              if (propertyValue) {
+            for (const modelKey of modelKeys) {
+              const propMeta = entityMeta[modelKey];
+              const propertyValue = body[modelKey];
+
+              Logger.log(`Validating ${modelName}.${modelKey}`);
+
+              if (typeof propertyValue === "object" && propertyValue !== null) {
+                Logger.log("Property is an object");
                 errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
+                errors.push(...validateObject(propMeta, propertyValue));
+              } else {
+                Logger.log("Property is a primitive with value", propertyValue);
+                if (propMeta) {
+                  const error = validateIsRequired(propMeta, propertyValue, modelName, modelKey);
+                  if (error) {
+                    errors.push({ message: error });
+                  }
+
+                  if (propertyValue) {
+                    errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
+                  }
+                }
               }
             }
+          } catch (err) {
+            Logger.log("validation failed", err);
+            Logger.log("body", body, objectType, entityMeta, modelName);
           }
         }
       }

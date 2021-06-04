@@ -276,7 +276,10 @@ export class App extends LambdaRouter {
   async authBeforeHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       data: {
-        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+        multiType: {
+          message: 'test'
+        }
       }
     });
   }

@@ -118,7 +118,7 @@ describe("Test the api doc generation capabilities", () => {
     const schemas = Object.values(doc.components.schemas);
     const schemaNames = Object.keys(doc.components.schemas);
     expect(schemaNames).not.toContain("Function");
-    const expectedTypes = ["string", "number", "integer", "boolean", "array"];
+    const expectedTypes = ["string", "number", "integer", "boolean", "array", "complex"];
 
     expect(schemas.length).toBeGreaterThan(1);
     for (const schema of schemas) {
@@ -130,6 +130,17 @@ describe("Test the api doc generation capabilities", () => {
         expect(prop).toBeDefined();
         if (prop.type) {
           expect(expectedTypes).toContain(prop.type);
+        } else if (prop.oneOf) {
+          expect(Array.isArray(prop.oneOf)).toEqual(true);
+          expect(prop.oneOf.length).toBeGreaterThan(1);
+          for (const item of prop.oneOf) {
+            if (item.type) {
+              expect(expectedTypes).toContain(item.type);
+            } else {
+              expect(item.$ref).toBeDefined();
+              expect(typeof item.$ref).toEqual("string");
+            }
+          }
         } else {
           expect(prop.$ref).toBeDefined();
           expect(typeof prop.$ref).toEqual("string");
