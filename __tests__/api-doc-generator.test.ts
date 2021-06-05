@@ -20,7 +20,7 @@ describe("Test the api doc generation capabilities", () => {
 
   it("should document api metadata", async () => {
     expect(doc.openapi).toEqual("3.0.0");
-    
+
   });
 
   it("should document api info", () => {
