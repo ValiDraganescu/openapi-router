@@ -124,11 +124,8 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
 const primitiveTypes = ["string", "number", "integer", "boolean"];
 
 const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
-  if (propMeta.type === "object" || propMeta.type === "complex") {
+  if (propMeta.type === "object") {
     if (Array.isArray(propMeta.objectType)) {
-      if (propMeta.type === "complex") {
-        console.log("Complex type", propMeta);
-      }
       const objectModel: any = {
         oneOf: []
       };
@@ -170,15 +167,19 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
     model.maxItems = propMeta.maxSize;
     if (propMeta.objectType) {
       if (Array.isArray(propMeta.objectType)) {
+        if (!model.items) {
+          model.items = {};
+        }
         model.items.oneOf = [];
         for (const type of propMeta.objectType) {
+          console.log('generating for type', type);
           if (primitiveTypes.includes(type)) {
             model.items.oneOf.push({
               type
             });
           } else {
             model.items.oneOf.push({
-              $ref: `#/components/schemas/${propMeta.objectType}`
+              $ref: `#/components/schemas/${type}`
             });
           }
         }

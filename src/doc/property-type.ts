@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export type PropertyType = "string" | "number" | "integer" | "boolean" | "array" | "object" | "complex";
+export type PropertyType = "string" | "number" | "integer" | "boolean" | "array" | "object";

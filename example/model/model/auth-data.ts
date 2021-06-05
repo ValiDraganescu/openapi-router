@@ -8,12 +8,12 @@ export class AuthData {
   message: string;
 
   @DocProperty({
-    type: "complex",
+    type: "array",
     objectType: [
       "string",
       HelloData.name
     ],
     isRequired: false
   })
-  multiType?: string | HelloData;
+  multiType?: HelloData[] | string[];
 }
