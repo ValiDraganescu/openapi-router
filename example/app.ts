@@ -200,7 +200,7 @@ export class App extends LambdaRouter {
       schema: {
         type: "string"
       }
-    },{
+    }, {
       description: "The user name",
       in: "path",
       name: "name",
@@ -277,9 +277,9 @@ export class App extends LambdaRouter {
     return new Response<AuthResponse>().setBody({
       data: {
         message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
-        multiType: {
-          message: 'test'
-        }
+        multiType: [{
+          message: "test"
+        }]
       }
     });
   }
@@ -351,15 +351,26 @@ export class App extends LambdaRouter {
       description: "mock",
       statusCode: 204
     }],
-    parameters: [{
-      description: "The user id",
-      in: "path",
-      name: "id",
-      required: true,
-      schema: {
-        type: "number"
+    parameters: [
+      {
+        description: "The user id",
+        in: "path",
+        name: "id",
+        required: true,
+        schema: {
+          type: "number"
+        }
+      },
+      {
+        description: "content language",
+        in: "header",
+        name: "Content-Language",
+        required: false,
+        schema: {
+          type: "string"
+        }
       }
-    }]
+    ]
   })
   async deleteUser(_request: Request): Promise<Response> {
     console.log("Delete user");
