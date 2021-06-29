@@ -18,7 +18,7 @@ import { DocSchema } from "./schema";
 
 export class DocParameter {
   name: string;
-  in: "query" | "path" | "body" | "cookie";
+  in: "query" | "path" | "body" | "cookie" | "header";
   description: string;
   required: boolean;
   schema: DocSchema;
