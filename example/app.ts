@@ -14,61 +14,61 @@ import { BaseResponse } from "./model/response/base-response";
   contact: {
     name: "Vali Draganescu",
     email: "vali.draganescu88@gmail.com",
-    url: "https://technoloid.com"
+    url: "https://technoloid.com",
   },
   termsOfService: "https://technoloid.com/terms",
   license: {
     name: "DWETFYW | Do what ever the fuck you want",
-    url: "https://technoloid.com/license"
+    url: "https://technoloid.com/license",
   },
   securitySchemes: {
     ApiKeyAuth: {
       type: "apiKey",
       in: "header",
-      name: "X-API-Key"
+      name: "X-API-Key",
     },
     BearerAuth: {
       type: "http",
-      scheme: "bearer"
-    }
+      scheme: "bearer",
+    },
   },
   security: [
     {
-      ApiKeyAuth: []
+      ApiKeyAuth: [],
     },
     {
-      BearerAuth: []
-    }
+      BearerAuth: [],
+    },
   ],
   servers: [
     {
       url: "localhost:8080",
-      description: "localhost"
+      description: "localhost",
     }, {
       url: "https://dev-api.test.com",
-      description: "Development"
+      description: "Development",
     }, {
       url: "https://api.test.com",
-      description: "Production"
+      description: "Production",
     }],
   globalResponses: [
     {
       statusCode: 500,
       description: "Internal server error",
       type: "array",
-      body: BaseResponse
+      body: BaseResponse,
     }, {
       statusCode: StatusCode.badRequest,
       description: "Bad request",
       type: "array",
-      body: BaseResponse
+      body: BaseResponse,
     }, {
       statusCode: StatusCode.notFound,
       description: "Not found",
       type: "array",
-      body: BaseResponse
-    }
-  ]
+      body: BaseResponse,
+    },
+  ],
 })
 export class App extends LambdaRouter {
 
@@ -80,11 +80,11 @@ export class App extends LambdaRouter {
     responses: [{
       statusCode: 200,
       description: "hello response",
-      body: HelloResponse
+      body: HelloResponse,
     }],
     tags: [
-      "hello"
-    ]
+      "hello",
+    ],
   })
   async sayHelloHandler(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody({ data: { message: "hello" } });
@@ -96,11 +96,11 @@ export class App extends LambdaRouter {
     path: "/api/doc",
     responses: [{
       description: "Returns the OpenApi json for this API",
-      statusCode: 200
+      statusCode: 200,
     }],
     tags: [
-      "doc"
-    ]
+      "doc",
+    ],
   })
   async getApiDoc(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody(getRouter().getApiDoc("3.0.0"));
@@ -113,11 +113,11 @@ export class App extends LambdaRouter {
     responses: [{
       description: "mock",
       statusCode: 200,
-      body: HelloResponse
+      body: HelloResponse,
     }],
     tags: [
-      "hello"
-    ]
+      "hello",
+    ],
   })
   async sayHelloWithPostHandler(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody({ data: { message: "hello with POST" } });
@@ -130,8 +130,8 @@ export class App extends LambdaRouter {
     responses: [{
       description: "mock",
       statusCode: 200,
-      body: HelloResponse
-    }]
+      body: HelloResponse,
+    }],
   })
   async sayHelloFooHandler(_request: Request): Promise<Response<HelloResponse>> {
     return new Response<HelloResponse>().setBody({ data: { message: "hello foo" } });
@@ -144,7 +144,7 @@ export class App extends LambdaRouter {
     responses: [{
       description: "mock",
       statusCode: 200,
-      body: HelloResponse
+      body: HelloResponse,
     }],
     parameters: [{
       description: "The user organization",
@@ -152,25 +152,25 @@ export class App extends LambdaRouter {
       name: "organization",
       required: true,
       schema: {
-        type: "string"
-      }
+        type: "string",
+      },
     }, {
       description: "The user team",
       in: "path",
       name: "team",
       required: true,
       schema: {
-        type: "string"
-      }
+        type: "string",
+      },
     }, {
       description: "The user name",
       in: "path",
       name: "name",
       required: true,
       schema: {
-        type: "string"
-      }
-    }]
+        type: "string",
+      },
+    }],
   })
   async sayHelloFooNameHandler(request: Request): Promise<Response<HelloResponse>> {
     const name = request.pathParams?.name.value;
@@ -178,8 +178,8 @@ export class App extends LambdaRouter {
     const team = request.pathParams?.team.value;
     return new Response<HelloResponse>().setBody({
       data: {
-        message: `hello ${name} from ${team} team of ${org}`
-      }
+        message: `hello ${name} from ${team} team of ${org}`,
+      },
     });
   }
 
@@ -190,7 +190,7 @@ export class App extends LambdaRouter {
     responses: [{
       description: "mock",
       statusCode: 200,
-      body: HelloResponse
+      body: HelloResponse,
     }],
     parameters: [{
       description: "The user organization",
@@ -198,35 +198,35 @@ export class App extends LambdaRouter {
       name: "organization",
       required: true,
       schema: {
-        type: "string"
-      }
+        type: "string",
+      },
     }, {
       description: "The user name",
       in: "path",
       name: "name",
       required: true,
       schema: {
-        type: "string"
-      }
+        type: "string",
+      },
     }, {
       description: "The team member size",
       in: "query",
       name: "teamSize",
       required: true,
       schema: {
-        type: "integer"
-      }
-    }]
+        type: "integer",
+      },
+    }],
   })
   async sayHelloFooNameSimilarHandler(r: Request): Promise<Response<HelloResponse>> {
     console.log("Query params::", r.queryParams);
     const data = {
       message: `cascade team`,
-      teamSize: Number(r.queryParams?.teamSize)
+      teamSize: Number(r.queryParams?.teamSize),
     };
     console.log("Response data::", data);
     return new Response<HelloResponse>().setBody({
-      data
+      data,
     });
   }
 
@@ -239,17 +239,17 @@ export class App extends LambdaRouter {
     responses: [{
       statusCode: 200,
       description: "mock",
-      body: AuthResponse
+      body: AuthResponse,
     }],
     security: [{
-      ApiKeyAuth: []
-    }]
+      ApiKeyAuth: [],
+    }],
   })
   async authHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       data: {
-        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
-      }
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      },
     });
   }
 
@@ -262,25 +262,27 @@ export class App extends LambdaRouter {
     responses: [{
       statusCode: 200,
       description: "mock",
-      body: AuthResponse
+      body: AuthResponse,
     }],
     security: [{
-      ApiKeyAuth: []
+      ApiKeyAuth: [],
     }],
     middleware: {
       before: [
-        beforeAuth
-      ]
-    }
+        beforeAuth,
+      ],
+    },
   })
   async authBeforeHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       data: {
         message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
-        multiType: [{
-          message: "test"
-        }]
-      }
+        multiType: [
+          {
+            message: "test",
+          },
+        ],
+      },
     });
   }
 
@@ -293,22 +295,22 @@ export class App extends LambdaRouter {
     responses: [{
       statusCode: 200,
       description: "mock",
-      body: AuthResponse
+      body: AuthResponse,
     }],
     security: [{
-      ApiKeyAuth: []
+      ApiKeyAuth: [],
     }],
     middleware: {
       after: [
-        afterAuth
-      ]
-    }
+        afterAuth,
+      ],
+    },
   })
   async authAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       data: {
-        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
-      }
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      },
     });
   }
 
@@ -321,25 +323,25 @@ export class App extends LambdaRouter {
     responses: [{
       statusCode: 200,
       description: "mock",
-      body: AuthResponse
+      body: AuthResponse,
     }],
     security: [{
-      ApiKeyAuth: []
+      ApiKeyAuth: [],
     }],
     middleware: {
       before: [
-        beforeAuth
+        beforeAuth,
       ],
       after: [
-        afterAuth
-      ]
-    }
+        afterAuth,
+      ],
+    },
   })
   async authBeforeAfterHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       data: {
-        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`
-      }
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}`,
+      },
     });
   }
 
@@ -349,7 +351,7 @@ export class App extends LambdaRouter {
     path: "/users/{id}",
     responses: [{
       description: "mock",
-      statusCode: 204
+      statusCode: 204,
     }],
     parameters: [
       {
@@ -358,8 +360,8 @@ export class App extends LambdaRouter {
         name: "id",
         required: true,
         schema: {
-          type: "number"
-        }
+          type: "number",
+        },
       },
       {
         description: "content language",
@@ -370,7 +372,7 @@ export class App extends LambdaRouter {
           type: "string"
         }
       }
-    ]
+    ],
   })
   async deleteUser(_request: Request): Promise<Response> {
     console.log("Delete user");
@@ -383,7 +385,7 @@ export class App extends LambdaRouter {
     path: "/users/{id}",
     responses: [{
       description: "mock",
-      statusCode: 200
+      statusCode: 200,
     }],
     parameters: [{
       description: "The user id",
@@ -391,9 +393,9 @@ export class App extends LambdaRouter {
       name: "id",
       required: true,
       schema: {
-        type: "number"
-      }
-    }]
+        type: "number",
+      },
+    }],
   })
   async updateUser(request: Request): Promise<Response> {
     console.log("Update user");
@@ -408,8 +410,8 @@ export class App extends LambdaRouter {
       description: "mock",
       statusCode: StatusCode.okay,
       type: "array",
-      body: AuthResponse
-    }]
+      body: AuthResponse,
+    }],
   })
   async errorMessageReturned(_request: Request): Promise<Response<BaseResponse>> {
     return new Response<BaseResponse>(StatusCode.notFound).setBody({ errors: [{ message: "foo", code: "bar" }] });
@@ -423,8 +425,8 @@ export class App extends LambdaRouter {
     responses: [{
       description: "mock",
       statusCode: StatusCode.okay,
-      body: InheritedResponse
-    }]
+      body: InheritedResponse,
+    }],
   })
   async inheritedResponse(_request: Request): Promise<Response> {
     return new Response<InheritedResponse>(StatusCode.notFound);
@@ -438,7 +440,7 @@ export class App extends LambdaRouter {
     responses: [{
       statusCode: 200,
       description: "mock",
-      body: AuthResponse
+      body: AuthResponse,
     }],
     parameters: [{
       description: "The user type",
@@ -449,16 +451,16 @@ export class App extends LambdaRouter {
         type: "string",
         enum: [
           "admin",
-          "user"
-        ]
-      }
-    }]
+          "user",
+        ],
+      },
+    }],
   })
   async authAdminHandler(request: Request<AuthRequest>): Promise<Response<AuthResponse>> {
     return new Response<AuthResponse>().setBody({
       data: {
-        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`
-      }
+        message: `Auth email address is ${request.body?.email} and password is ${request.body?.password}, logging in as ${request.pathParams?.userType.value}`,
+      },
     });
   }
 
@@ -468,13 +470,13 @@ export class App extends LambdaRouter {
     path: "/api/response-middleware",
     responses: [{
       description: "Empty response with 200 status",
-      statusCode: 200
+      statusCode: 200,
     }],
     middleware: {
       before: [
-        responseMiddleware
-      ]
-    }
+        responseMiddleware,
+      ],
+    },
   })
   async withResponseMiddleware(_request: Request): Promise<Response<HelloResponse>> {
     return new Response();
@@ -486,13 +488,13 @@ export class App extends LambdaRouter {
     path: "/api/response-middleware/not-found",
     responses: [{
       description: "Empty response with 200 status",
-      statusCode: 200
+      statusCode: 200,
     }],
     middleware: {
       before: [
-        responseMiddleware
-      ]
-    }
+        responseMiddleware,
+      ],
+    },
   })
   async notFoundResult(_request: Request): Promise<Response<HelloResponse>> {
     return new Response(StatusCode.notFound).setBody({ errors: [{ code: "error", message: "foo" }] });
@@ -504,13 +506,13 @@ export class App extends LambdaRouter {
     path: "/api/response-middleware",
     responses: [{
       description: "Empty response with 200 status",
-      statusCode: 200
+      statusCode: 200,
     }],
     middleware: {
       before: [
-        responseMiddleware
-      ]
-    }
+        responseMiddleware,
+      ],
+    },
   })
   async withResponseMiddleware2(_request: Request): Promise<Response<HelloResponse>> {
     return new Response();

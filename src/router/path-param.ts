@@ -15,15 +15,7 @@
  */
 
 export class IPathParam {
-  name: string;
-  value: string | number;
-  index: number;
-
-  asString = (): string => {
-    return String(this.value);
-  };
-
-  asNumber = (): number => {
-    return Number(this.value);
-  };
+  name?: string;
+  value?: string | number;
+  index?: number;
 }
