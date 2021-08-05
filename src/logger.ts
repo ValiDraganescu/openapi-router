@@ -20,4 +20,16 @@ export class Logger {
       console.log(arg, ...args);
     }
   }
+
+  static time(arg: string) {
+    if (process.env.TIMER_LOGS) {
+      console.time(arg);
+    }
+  }
+
+  static timeEnd(arg: string) {
+    if (process.env.TIMER_LOGS) {
+      console.timeEnd(arg);
+    }
+  }
 }

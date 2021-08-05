@@ -27,28 +27,34 @@ import { IPathParam } from "./path-param";
 
 export class Router {
   handleEvent = async (request: Request): Promise<Response> => {
+    Logger.time("Router");
     let resp: Response | null = null;
     let req: Request | null = request;
-
+    Logger.time("Router handler resolver");
     const [route, pathParams, middleware] = this.resolveHandler(req.method, req.path);
+    Logger.timeEnd("Router handler resolve");
     if (route) {
       Logger.log("Route resolved to::", route.path);
       req.pathParams = pathParams;
       // validate request;
       if (route.requestBody) {
+        Logger.time("Router validate request");
         const inputValidationErrors = Validator.validate(req.body, route.requestBody.name);
         if (inputValidationErrors && inputValidationErrors.length) {
+          Logger.time("Router");
           return new Response<Envelope>(StatusCode.badRequest).setBody({
             errors: inputValidationErrors,
           });
         }
+        Logger.timeEnd("Router validate request");
       }
-
+      Logger.time("Router middleware before");
       const globalMiddleware = getMetadataStorage().docMetadata?.globalMiddleware;
 
       if (globalMiddleware && globalMiddleware.before) {
         [req, resp] = await this.executeMiddlewareBefore(globalMiddleware?.before, req);
         if (resp) {
+          Logger.time("Router");
           return resp;
         }
       }
@@ -56,12 +62,17 @@ export class Router {
       if (middleware && middleware.before) {
         [req, resp] = await this.executeMiddlewareBefore(middleware.before, req!);
         if (resp) {
+          Logger.time("Router");
           return resp;
         }
       }
+      Logger.timeEnd("Router middleware before");
 
+      Logger.time("Router handler");
       resp = await route.handler(req!);
+      Logger.timeEnd("Router handler");
 
+      Logger.time("Router middleware after");
       if (middleware && middleware.after) {
         resp = await this.executeMiddlewareAfter(middleware.after, resp!);
       }
@@ -69,8 +80,10 @@ export class Router {
       if (globalMiddleware && globalMiddleware.after) {
         resp = await this.executeMiddlewareAfter(globalMiddleware.after, resp!);
       }
+      Logger.time("Router middleware after");
 
       // validate response
+      Logger.time("Router validate response");
       let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === resp!.statusCode);
       Logger.log("Route responses::", route.responses);
       if (!responseMeta) {
@@ -82,21 +95,26 @@ export class Router {
       if (!responseMeta) {
         throw new Error(`No response defined for status code ${resp!.statusCode}`);
       }
+
       if (responseMeta.body) {
         const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body.name);
+        Logger.timeEnd("Router validate response");
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           console.log(outputValidationResult);
+          Logger.time("Router");
           return new Response<Envelope>(StatusCode.internalServerError).setBody({
             errors: outputValidationResult,
           });
         }
       }
 
+      Logger.time("Router");
       return resp!;
     } else {
       Logger.log("Route not resolved::", JSON.stringify(request));
     }
+    Logger.time("Router");
     return new Response<Envelope>(StatusCode.notFound).setBody({
       errors: [
         {
