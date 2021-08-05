@@ -100,7 +100,7 @@ export class Router {
     return new Response<Envelope>(StatusCode.notFound).setBody({
       errors: [
         {
-          code: "User error",
+          code: "not-found",
           message: "404 Not found",
         },
       ],

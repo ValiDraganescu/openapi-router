@@ -28,7 +28,8 @@ const validateIsRequired = (
   modelKey: string
 ): string | null => {
   if (propMeta.isRequired && (propertyValue === undefined || propertyValue === null)) {
-    return `${modelName}.${modelKey} is required`;
+    // return `${modelName}.${modelKey} is required`;
+    return `${modelKey} is required`;
   }
   return null;
 };
@@ -42,7 +43,8 @@ const validateIsCorrectType = (
   Logger.log("Validating type", propType, propMeta, modelName, modelKey);
   if (propType === "number" || propType === "bigint") {
     if (propMeta.type !== "number" && propMeta.type !== "integer") {
-      return `${modelName}.${modelKey} should be of type ${propMeta.type}`;
+      // return `${modelName}.${modelKey} should be of type ${propMeta.type}`;
+      return `${modelKey} should be of type ${propMeta.type}`;
     }
   }
   /*else if (propType === 'object' && Array.isArray(propMeta.objectType)) {
@@ -68,12 +70,14 @@ const validateMinSize = (
     if (propType === "string" || propType === "object" || propType === "array") {
       Logger.log(`Length is ${property.length}`);
       if (property.length < propMeta.minSize) {
-        return `${modelName}.${modelKey} should have a minimum size of ${propMeta.minSize}`;
+        // return `${modelName}.${modelKey} should have a minimum size of ${propMeta.minSize}`;
+        return `${modelKey} should have a minimum size of ${propMeta.minSize}`;
       }
     }
     if (propType === "number" || propType === "bigint") {
       if (property < propMeta.minSize) {
-        return `${modelName}.${modelKey} should be at least ${propMeta.minSize}`;
+        // return `${modelName}.${modelKey} should be at least ${propMeta.minSize}`;
+        return `${modelKey} should be at least ${propMeta.minSize}`;
       }
     }
   }
@@ -90,7 +94,8 @@ const validateFormat = (
     const regex = new RegExp(propMeta.format);
     const isCorrectFormat = regex.test(property);
     if (!isCorrectFormat) {
-      return `${modelName}.${modelKey} should have the format ${propMeta.format}`;
+      // return `${modelName}.${modelKey} should have the format ${propMeta.format}`;
+      return `${modelKey} should have the format ${propMeta.format}`;
     }
   }
   return null;
@@ -106,12 +111,14 @@ const validateMaxSize = (
   if (propMeta.maxSize) {
     if (propType === "string" || propType === "object" || propType === "array") {
       if (property.length > propMeta.maxSize) {
-        return `${modelName}.${modelKey} should have a maximum size of ${propMeta.maxSize}`;
+        // return `${modelName}.${modelKey} should have a maximum size of ${propMeta.maxSize}`;
+        return `${modelKey} should have a maximum size of ${propMeta.maxSize}`;
       }
     }
     if (propType === "number" || propType === "bigint") {
       if (property > propMeta.maxSize) {
-        return `${modelName}.${modelKey} should be at most ${propMeta.maxSize}`;
+        // return `${modelName}.${modelKey} should be at most ${propMeta.maxSize}`;
+        return `${modelKey} should be at most ${propMeta.maxSize}`;
       }
     }
   }
@@ -219,13 +226,14 @@ export class Validator {
                 errors.push(...validateObject(propMeta, propertyValue));
               } else {
                 Logger.log("Property is a primitive with value", propertyValue);
+                Logger.log("Validating with propMeta", propMeta);
                 if (propMeta) {
                   const error = validateIsRequired(propMeta, propertyValue, modelName, modelKey);
                   if (error) {
                     errors.push({ message: error });
                   }
 
-                  if (propertyValue) {
+                  if (propertyValue !== undefined && propertyValue !== null) {
                     errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
                   }
                 }
