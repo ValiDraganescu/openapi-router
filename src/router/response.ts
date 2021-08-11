@@ -17,7 +17,7 @@ import { StatusCode } from "./status-code";
 import { ApiError } from "./api-error";
 import { Envelope } from "../response/envelope";
 
-export class Response<ResponseBody extends Envelope = Envelope> {
+export class Response<ResponseBody extends Envelope = Envelope | any> {
   statusCode: StatusCode;
 
   errors?: ApiError[];
@@ -29,7 +29,7 @@ export class Response<ResponseBody extends Envelope = Envelope> {
     Pragma: "no-cache",
     "Access-Control-Expose-Headers": "X-Api-Version",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Credentials": "true"
   };
 
   constructor(statusCode?: StatusCode) {
