@@ -31,3 +31,4 @@ export { StatusCode } from "./router/status-code";
 export { Envelope } from "./response/envelope";
 export { IMiddleware } from "./router/decorators/route";
 export { Router } from "./router/router";
+export { DevServer } from "./router/dev-server";
