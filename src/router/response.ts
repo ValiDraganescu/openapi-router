@@ -16,8 +16,9 @@
 import { StatusCode } from "./status-code";
 import { ApiError } from "./api-error";
 import { Envelope } from "../response/envelope";
+import { Logger } from "../logger";
 
-export class Response<ResponseBody extends Envelope = Envelope | any> {
+export class Response<ResponseBody extends Envelope = Envelope> {
   statusCode: StatusCode;
 
   errors?: ApiError[];
@@ -36,30 +37,52 @@ export class Response<ResponseBody extends Envelope = Envelope | any> {
     this.statusCode = statusCode ?? StatusCode.okay;
   }
 
-  setBody = (body: ResponseBody): Response<ResponseBody> => {
-    this.body = JSON.stringify(body);
+  setBody = (body: ResponseBody | string): Response<ResponseBody> => {
+    if (typeof body === "object") {
+      this.body = JSON.stringify(body);
+    } else {
+      this.body = body;
+    }
     return this;
   };
 
   getBody = (): ResponseBody | null => {
     if (this.body) {
-      return JSON.parse(this.body) as ResponseBody;
+      // this is such a bad thing to do
+      try {
+        return JSON.parse(this.body) as ResponseBody;
+      } catch (err) {
+        Logger.log('Body is not an object, returning null (use .getRawBody instead)');
+        return null;
+      }
     }
     return null;
   };
 
-  addHeader = (key: string, value: string) => {
+  getRawBody = (): string | null => {
+    return this.body ?? null;
+  }
+
+  addHeader = (key: string, value: string): Response<ResponseBody> => {
     this.headers[key] = value;
+    return this;
   };
 
-  addHeaders = (headers: { [key: string]: string }) => {
+  addHeaders = (headers: { [key: string]: string }): Response<ResponseBody> => {
     for (const [key, value] of Object.entries(headers)) {
       this.addHeader(key, value);
     }
+    return this;
   };
 
-  setHeaders = (headers: { [key: string]: string }) => {
+  setHeader = (key: string, value: string): Response<ResponseBody> => {
+    this.headers[key] = value;
+    return this;
+  }
+
+  setHeaders = (headers: { [key: string]: string }): Response<ResponseBody> => {
     this.headers = headers;
+    return this;
   };
 
   toJSON() {

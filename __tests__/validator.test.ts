@@ -28,7 +28,7 @@ describe("Test the validation capabilities", () => {
     const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
-    expect(errors[0].message).toEqual("AuthRequest.email is required");
+    expect(errors[0].message).toEqual("email is required");
   });
 
   it("should test all missing params in request", async () => {
@@ -53,8 +53,8 @@ describe("Test the validation capabilities", () => {
     const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
-    expect(errors[0].message).toEqual("AuthRequest.email is required");
-    expect(errors[1].message).toEqual("AuthRequest.password is required");
+    expect(errors[0].message).toEqual("email is required");
+    expect(errors[1].message).toEqual("password is required");
   });
 
   it("should test missing body in request", async () => {
@@ -98,8 +98,8 @@ describe("Test the validation capabilities", () => {
     const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(2);
-    expect(errors[0].message).toEqual("AuthRequest.password should be of type string");
-    expect(errors[1].message).toEqual("UserDetails.lastName should be of type string");
+    expect(errors[0].message).toEqual("password should be of type string");
+    expect(errors[1].message).toEqual("lastName should be of type string");
   });
 
   it("should test validating object property", async () => {
@@ -124,8 +124,8 @@ describe("Test the validation capabilities", () => {
     expect(errors).toBeDefined();
     console.log(errors);
     expect(errors.length).toEqual(2);
-    expect(errors.map((e: ApiError) => e.message)).toContain("AuthRequest.password should be of type string");
-    expect(errors.map((e: ApiError) => e.message)).toContain("AuthRequest.userDetails is required");
+    expect(errors.map((e: ApiError) => e.message)).toContain("password should be of type string");
+    expect(errors.map((e: ApiError) => e.message)).toContain("userDetails is required");
   });
 
   it("should test validating object property properties", async () => {
@@ -152,7 +152,7 @@ describe("Test the validation capabilities", () => {
     const errors = resp.getBody().errors;
     expect(errors).toBeDefined();
     expect(errors.length).toEqual(1);
-    expect(errors.map((e: ApiError) => e.message)).toContain("UserDetails.firstName is required");
+    expect(errors.map((e: ApiError) => e.message)).toContain("firstName is required");
   });
 
   it("should test validating an error message", async () => {
