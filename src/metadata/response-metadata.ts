@@ -5,4 +5,5 @@ export class ResponseMetadata {
   description: string;
   type?: "object" | "array";
   body?: ObjectType<any>;
+  example?: Record<string, unknown>;
 }

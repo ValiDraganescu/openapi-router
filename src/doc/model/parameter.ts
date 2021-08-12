@@ -23,6 +23,7 @@ export class DocParameter {
   required: boolean;
   schema: DocSchema;
   default?: string | number | boolean;
+  example?: string | number | boolean
   style?: "form";
   deprecated?: boolean;
 }

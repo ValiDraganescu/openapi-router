@@ -18,4 +18,5 @@ import { DocSchema } from "./schema";
 
 export class ContentType {
   schema: DocSchema;
+  example?: Record<string, unknown>;
 }

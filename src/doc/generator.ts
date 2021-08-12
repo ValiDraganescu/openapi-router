@@ -30,7 +30,8 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
     "application/json": {
       schema: {
         $ref: `#/components/schemas/${response.body?.name}`
-      }
+      },
+      example: response.example
     }
   };
   // array schema
@@ -42,7 +43,8 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
           items: {
             $ref: `#/components/schemas/${response.body?.name}`
           }
-        }
+        },
+        example: response.example
       }
     };
   }
