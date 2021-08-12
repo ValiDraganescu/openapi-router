@@ -152,7 +152,8 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
     nullable: propMeta.nullable,
     description: propMeta.description,
     format: propMeta.format,
-    enum: propMeta.enum
+    enum: propMeta.enum,
+    default: propMeta.default
   };
   if (propMeta.type === "string") {
     model.minLength = propMeta.minSize;

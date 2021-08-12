@@ -180,6 +180,7 @@ const baseTypes = ["string", "number"];
 export class Validator {
   static validate = (body: any, objectType: string | string[]): ApiError[] => {
 
+
     let modelNames: string[];
     if (Array.isArray(objectType)) {
       modelNames = objectType;
@@ -191,12 +192,6 @@ export class Validator {
 
     for (const modelName of modelNames) {
       Logger.log("Validating", modelName, JSON.stringify(body));
-      if (!body) {
-        errors.push({
-          message: `${modelName} is required`
-        });
-        return errors;
-      }
       const metadata = getMetadataStorage();
       const entityMeta = metadata.entities[modelName];
 
@@ -205,6 +200,18 @@ export class Validator {
         console.error(message);
         errors.push({ message });
       }
+
+      if (entityMeta && (body === null || body === undefined)) {
+        if (entityMeta) {
+          Logger.log('entity metadata', JSON.stringify(entityMeta));
+          errors.push({
+            message: `${modelName} is required`
+          });
+          return errors;
+        }
+      }
+
+
       if (Array.isArray(body)) {
         for (const item of body) {
           errors.push(...Validator.validate(item, modelName));

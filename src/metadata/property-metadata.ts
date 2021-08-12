@@ -8,6 +8,7 @@ export class PropertyMetadata {
   maxSize?: number;
   isRequired?: boolean;
   description?: string;
+  default?: string | number | boolean;
   format?: string;
   enum?: string[];
 }

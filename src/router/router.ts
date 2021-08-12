@@ -26,9 +26,10 @@ import { ResponseMetadata } from "../metadata/response-metadata";
 import { IPathParam } from "./path-param";
 
 export class Router {
-  handleEvent = async (request: Request): Promise<Response> => {
+  handleEvent = async (request: Request): Promise<Response<any>> => {
     Logger.time("[TIMING] Router");
-    let resp: Response | null = null;
+
+    let resp: Response<any> | null = null;
     let req: Request | null = request;
     Logger.time("[TIMING] Router handler resolver");
     const [route, pathParams, middleware] = this.resolveHandler(req.method, req.path);
@@ -39,11 +40,12 @@ export class Router {
       // validate request;
       if (route.requestBody) {
         Logger.time("[TIMING] Router validate request");
+        Logger.log("Validating input");
         const inputValidationErrors = Validator.validate(req.body, route.requestBody.name);
         if (inputValidationErrors && inputValidationErrors.length) {
           Logger.timeEnd("[TIMING] Router");
           return new Response<Envelope>(StatusCode.badRequest).setBody({
-            errors: inputValidationErrors,
+            errors: inputValidationErrors
           });
         }
         Logger.timeEnd("[TIMING] Router validate request");
@@ -97,6 +99,9 @@ export class Router {
       }
 
       if (responseMeta.body) {
+        Logger.log("Validating output");
+        const body = resp!.getBody();
+
         const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body.name);
         Logger.timeEnd("[TIMING] Router validate response");
         if (outputValidationResult && outputValidationResult.length) {
@@ -104,7 +109,7 @@ export class Router {
           console.log(outputValidationResult);
           Logger.timeEnd("[TIMING] Router");
           return new Response<Envelope>(StatusCode.internalServerError).setBody({
-            errors: outputValidationResult,
+            errors: outputValidationResult
           });
         }
       }
@@ -119,9 +124,9 @@ export class Router {
       errors: [
         {
           code: "not-found",
-          message: "404 Not found",
-        },
-      ],
+          message: "404 Not found"
+        }
+      ]
     });
   };
 
@@ -131,9 +136,9 @@ export class Router {
 
   private executeMiddlewareBefore = async (
     before: BeforeMiddlewareHandler[],
-    request: Request,
-  ): Promise<[Request | null, Response | null]> => {
-    let response: Response | null = null;
+    request: Request
+  ): Promise<[Request | null, Response<any> | null]> => {
+    let response: Response<any> | null = null;
     for (const handler of before) {
       [request, response] = await handler(request);
       if (response) {
@@ -143,7 +148,7 @@ export class Router {
     return [request, null];
   };
 
-  private executeMiddlewareAfter = async (after: AfterMiddlewareHandler[], response: Response): Promise<Response> => {
+  private executeMiddlewareAfter = async (after: AfterMiddlewareHandler[], response: Response<Envelope | string | Buffer>): Promise<Response<Envelope | string | Buffer>> => {
     for (const handler of after) {
       response = await handler(response);
     }
@@ -159,7 +164,7 @@ export class Router {
 
   private resolveHandler = (
     method: string,
-    path: string,
+    path: string
   ): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
@@ -196,7 +201,7 @@ export class Router {
                 pathParams[paramName] = {
                   name: paramName,
                   value: basePathComponents[i],
-                  index: i,
+                  index: i
                 } as IPathParam;
               } else {
                 isValidRoute = false;

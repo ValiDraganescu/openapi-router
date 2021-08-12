@@ -1,5 +1,5 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from "http";
-import { HttpMethod, Router } from "..";
+import { HttpMethod, Router, StatusCode } from "..";
 import { Request } from "./request";
 
 const paramsToObject = (params: URLSearchParams) => {
@@ -66,6 +66,21 @@ export class DevServer {
       }
 
       const routerRequest = getRequestFromEvent(request, parsedBody, data);
+      if (request.method?.toUpperCase() === HttpMethod.OPTIONS) {
+        response.setHeader('Access-Control-Expose-Headers', '*');
+        response.setHeader('Access-Control-Allow-Credentials', 'true');
+        response.setHeader('Access-Control-Max-Age', '3600');
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.setHeader('Access-Control-Allow-Headers', '*');
+        response.setHeader('Access-Control-Allow-Methods', '*');
+        response.setHeader('Connection', 'keep-alive');
+        response.setHeader('Access-Control-Request-Method', 'POST');
+        response.setHeader('Allow', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
+        response.setHeader('Allowed', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
+        response.writeHead(200);
+        return response.end();
+      }
+
       try {
         const result = await this.router.handleEvent(routerRequest);
         response.writeHead(result.statusCode, result.headers);
@@ -81,6 +96,7 @@ export class DevServer {
           ]
         });
       }
+      return;
     });
   };
 

@@ -2,6 +2,7 @@ import {App} from "../example/app";
 import { Request, StatusCode } from "../src";
 import {HttpMethod} from "../src";
 import { ApiError } from "../src/router/api-error";
+import { AuthRequest } from "../example/model/request/auth-request";
 
 describe("Test the validation capabilities", () => {
 
@@ -170,5 +171,29 @@ describe("Test the validation capabilities", () => {
     expect(errors.length).toEqual(1);
     expect(errors.map((e: ApiError) => e.message)).toContain("foo");
     expect(errors.map((e: ApiError) => e.code)).toContain("bar");
+  });
+
+  it("should correctly return a raw response (image/png)", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<AuthRequest>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/api/raw-response",
+      method: HttpMethod.POST,
+      body: {
+        email: 'foo@bar.com',
+        password: 'somepassword',
+        userDetails: {
+          firstName: 'foo',
+          lastName: 'bar'
+        },
+        items: [
+          'one',
+          'two'
+        ]
+      }
+    }));
+    expect(resp.statusCode).toEqual(StatusCode.okay);
   });
 });

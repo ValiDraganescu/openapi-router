@@ -15,14 +15,13 @@
  */
 import { StatusCode } from "./status-code";
 import { ApiError } from "./api-error";
-import { Envelope } from "../response/envelope";
 import { Logger } from "../logger";
 
-export class Response<ResponseBody extends Envelope = Envelope> {
+export class Response<ResponseBody> {
   statusCode: StatusCode;
 
   errors?: ApiError[];
-  body?: string;
+  body?: any;
   headers: { [key: string]: string } = {
     "Content-Type": "application/json",
     "Cache-Control": "private, max-age=0, no-cache, no-store, must-revalidate'",
@@ -37,31 +36,30 @@ export class Response<ResponseBody extends Envelope = Envelope> {
     this.statusCode = statusCode ?? StatusCode.okay;
   }
 
-  setBody = (body: ResponseBody | string): Response<ResponseBody> => {
+  setBody = (body: ResponseBody): Response<ResponseBody> => {
     if (typeof body === "object") {
-      this.body = JSON.stringify(body);
+      if (body instanceof Buffer) {
+        this.body = body;
+      } else {
+        this.body = JSON.stringify(body);
+      }
     } else {
       this.body = body;
     }
     return this;
   };
 
-  getBody = (): ResponseBody | null => {
+  getBody = (): ResponseBody | string | Buffer => {
     if (this.body) {
       // this is such a bad thing to do
       try {
         return JSON.parse(this.body) as ResponseBody;
       } catch (err) {
-        Logger.log('Body is not an object, returning null (use .getRawBody instead)');
-        return null;
+        Logger.log("Body is not an object, returning null (use .getRawBody instead)");
       }
     }
-    return null;
+    return this.body;
   };
-
-  getRawBody = (): string | null => {
-    return this.body ?? null;
-  }
 
   addHeader = (key: string, value: string): Response<ResponseBody> => {
     this.headers[key] = value;
@@ -78,7 +76,7 @@ export class Response<ResponseBody extends Envelope = Envelope> {
   setHeader = (key: string, value: string): Response<ResponseBody> => {
     this.headers[key] = value;
     return this;
-  }
+  };
 
   setHeaders = (headers: { [key: string]: string }): Response<ResponseBody> => {
     this.headers = headers;
