@@ -35,6 +35,7 @@ export interface IRouteProps {
   description: string;
   responses: ResponseMetadata[];
   requestBody?: ObjectType<any>;
+  example?: Record<string, unknown>;
   summary?: string;
   parameters?: DocParameter[];
   security?: any[];
@@ -59,6 +60,7 @@ export const Route = (props: IRouteProps) => {
     routeMeta.security = props.security;
     routeMeta.middleware = props.middleware;
     routeMeta.tags = props.tags;
+    routeMeta.example = props.example;
 
     let methodMetadata;
 
