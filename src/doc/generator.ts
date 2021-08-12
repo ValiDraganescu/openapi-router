@@ -107,7 +107,8 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
                 "application/json": {
                   schema: {
                     $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`
-                  }
+                  },
+                  example: routeMetadata.example
                 }
               }
             };

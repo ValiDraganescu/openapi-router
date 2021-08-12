@@ -11,6 +11,7 @@ export class RouteMetadata {
   description?: string;
   summary?: string;
   requestBody?: ObjectType<any>;
+  example?: Record<string, unknown>;
   parameters?: DocParameter[];
   security?: any[];
   middleware?: IMiddleware;
