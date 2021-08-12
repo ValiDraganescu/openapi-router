@@ -22,6 +22,7 @@ export class DocParameter {
   description: string;
   required: boolean;
   schema: DocSchema;
+  default?: string | number | boolean;
   style?: "form";
   deprecated?: boolean;
 }
