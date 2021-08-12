@@ -374,7 +374,7 @@ export class App extends LambdaRouter {
       }
     ]
   })
-  async deleteUser(_request: Request): Promise<Response> {
+  async deleteUser(_request: Request): Promise<Response<any>> {
     console.log("Delete user");
     return new Response(204);
   }
@@ -397,7 +397,7 @@ export class App extends LambdaRouter {
       }
     }]
   })
-  async updateUser(request: Request): Promise<Response> {
+  async updateUser(request: Request): Promise<Response<any>> {
     console.log("Update user");
     return new Response(200).setBody(request.body);
   }
@@ -428,7 +428,7 @@ export class App extends LambdaRouter {
       body: InheritedResponse
     }]
   })
-  async inheritedResponse(_request: Request): Promise<Response> {
+  async inheritedResponse(_request: Request): Promise<Response<any>> {
     return new Response<InheritedResponse>(StatusCode.notFound);
   }
 
@@ -497,7 +497,7 @@ export class App extends LambdaRouter {
     }
   })
   async notFoundResult(_request: Request): Promise<Response<HelloResponse>> {
-    return new Response(StatusCode.notFound).setBody({ errors: [{ code: "error", message: "foo" }] });
+    return new Response<HelloResponse>(StatusCode.notFound).setBody({ errors: [{ code: "error", message: "foo" }] });
   };
 
   @Route({
@@ -534,8 +534,8 @@ export class App extends LambdaRouter {
       "API Documentation"
     ]
   })
-  async getImage(request: Request<AuthRequest>): Promise<Response> {
-    return new Response().setBody("raw response").setHeader("Content-Type", "image/png");
+  async getImage(request: Request<AuthRequest>): Promise<Response<string>> {
+    return new Response<string>().setBody("raw response").setHeader("Content-Type", "image/png");
   }
 
   consumeEvent = async (event: Request): Promise<Response<any>> => {
