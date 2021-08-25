@@ -55,7 +55,7 @@ export class Response<ResponseBody> {
       try {
         return JSON.parse(this.body) as ResponseBody;
       } catch (err) {
-        Logger.log("Body is not an object, returning null (use .getRawBody instead)");
+        Logger.log("Body is not an object, returning null");
       }
     }
     return this.body;

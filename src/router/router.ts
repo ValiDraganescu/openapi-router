@@ -50,10 +50,17 @@ export class Router {
         }
         Logger.timeEnd("[TIMING] Router validate request");
       }
+      if (request.queryParams) {
+        for (const queryParam of Object.keys(request.queryParams)) {
+          request.queryParams[queryParam] = decodeURIComponent(request.queryParams[queryParam]);
+        }
+      }
+
       Logger.time("[TIMING] Router middleware before");
       const globalMiddleware = getMetadataStorage().docMetadata?.globalMiddleware;
 
       if (globalMiddleware && globalMiddleware.before) {
+        Logger.log("Executing global middleware before");
         [req, resp] = await this.executeMiddlewareBefore(globalMiddleware?.before, req);
         if (resp) {
           Logger.timeEnd("[TIMING] Router");
@@ -62,6 +69,7 @@ export class Router {
       }
 
       if (middleware && middleware.before) {
+        Logger.log("Executing middleware before");
         [req, resp] = await this.executeMiddlewareBefore(middleware.before, req!);
         if (resp) {
           Logger.timeEnd("[TIMING] Router");
@@ -70,22 +78,26 @@ export class Router {
       }
       Logger.timeEnd("[TIMING] Router middleware before");
 
+      Logger.log("Executing handler");
       Logger.time("[TIMING] Router handler");
       resp = await route.handler(req!);
       Logger.timeEnd("[TIMING] Router handler");
 
       Logger.time("[TIMING] Router middleware after");
       if (middleware && middleware.after) {
+        Logger.log("Executing middleware after");
         resp = await this.executeMiddlewareAfter(middleware.after, resp!);
       }
 
       if (globalMiddleware && globalMiddleware.after) {
+        Logger.log("Executing global middleware after");
         resp = await this.executeMiddlewareAfter(globalMiddleware.after, resp!);
       }
       Logger.time("[TIMING] Router middleware after");
 
       // validate response
       Logger.time("[TIMING] Router validate response");
+      Logger.log("Validating response");
       let responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === resp!.statusCode);
       Logger.log("Route responses::", route.responses);
       if (!responseMeta) {
@@ -200,7 +212,7 @@ export class Router {
                 const paramName = routeComponent.slice(1, routeComponent.length - 1);
                 pathParams[paramName] = {
                   name: paramName,
-                  value: basePathComponents[i],
+                  value: decodeURIComponent(basePathComponents[i]),
                   index: i
                 } as IPathParam;
               } else {
