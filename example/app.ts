@@ -56,7 +56,7 @@ import { BaseResponse } from "./model/response/base-response";
       statusCode: 500,
       description: "Internal server error",
       type: "array",
-      body: BaseResponse
+      body: BaseResponse,
     }, {
       statusCode: StatusCode.badRequest,
       description: "Bad request",

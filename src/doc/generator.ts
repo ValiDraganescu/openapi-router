@@ -26,8 +26,9 @@ import { DocContent } from "./model/doc-content";
 
 const getResponseContent = (response: ResponseMetadata): DocContent => {
   // object schema
+  const contentType = response.contentType ?? 'application/json';
   let schema: DocContent = {
-    "application/json": {
+    [contentType]: {
       schema: {
         $ref: `#/components/schemas/${response.body?.name}`
       },
@@ -37,7 +38,7 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
   // array schema
   if (response.type === "array") {
     schema = {
-      "application/json": {
+      [contentType]: {
         schema: {
           type: "array",
           items: {
