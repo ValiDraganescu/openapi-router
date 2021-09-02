@@ -20,6 +20,14 @@ export class AuthRequest {
   password: string;
 
   @DocProperty({
+    description: 'the type of the user',
+    type: "string",
+    isRequired: true,
+    enum: ['user', 'admin']
+  })
+  type: string;
+
+  @DocProperty({
     type: "object",
     objectType: UserDetails.name,
     isRequired: true

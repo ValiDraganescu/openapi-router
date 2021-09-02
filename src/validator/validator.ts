@@ -243,6 +243,12 @@ export class Validator {
                   if (propertyValue !== undefined && propertyValue !== null) {
                     errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
                   }
+
+                  if (propMeta.enum && !propMeta.enum.includes(propertyValue)) {
+                    errors.push({
+                      message: `The property ${modelKey} value must be one of [${propMeta.enum.join(',')}], ${propertyValue} was provided instead`
+                    })
+                  }
                 }
               }
             }

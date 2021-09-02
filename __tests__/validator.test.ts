@@ -184,6 +184,7 @@ describe("Test the validation capabilities", () => {
       body: {
         email: 'foo@bar.com',
         password: 'somepassword',
+        type: 'user',
         userDetails: {
           firstName: 'foo',
           lastName: 'bar'
@@ -195,5 +196,30 @@ describe("Test the validation capabilities", () => {
       }
     }));
     expect(resp.statusCode).toEqual(StatusCode.okay);
+  });
+
+  it("should validate enum types", async () => {
+    const app = new App();
+    const resp = await app.consumeEvent(new Request<AuthRequest>({
+      headers: {
+        "accept": "application/json"
+      },
+      path: "/api/raw-response",
+      method: HttpMethod.POST,
+      body: {
+        email: 'foo@bar.com',
+        password: 'somepassword',
+        type: 'notype',
+        userDetails: {
+          firstName: 'foo',
+          lastName: 'bar'
+        },
+        items: [
+          'one',
+          'two'
+        ]
+      }
+    }));
+    expect(resp.statusCode).toEqual(StatusCode.badRequest);
   });
 });
