@@ -56,7 +56,7 @@ import { BaseResponse } from "./model/response/base-response";
       statusCode: 500,
       description: "Internal server error",
       type: "array",
-      body: BaseResponse,
+      body: BaseResponse
     }, {
       statusCode: StatusCode.badRequest,
       description: "Bad request",
@@ -526,7 +526,12 @@ export class App extends LambdaRouter {
     responses: [
       {
         description: "Returns an image",
-        statusCode: 200
+        statusCode: 200,
+        contentType: "image/png",
+        schema: {
+          type: "string",
+          format: "binary"
+        }
       }
     ],
     security: [],

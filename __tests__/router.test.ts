@@ -150,6 +150,7 @@ describe("Test the routing capabilities", () => {
       body: {
         email: "test@test.test",
         password: "very_secret",
+        type: 'user',
         userDetails: {
           firstName: "John"
         },
@@ -174,6 +175,7 @@ describe("Test the routing capabilities", () => {
       body: {
         email: "test@test.test",
         password: "very_secret",
+        type: 'user',
         userDetails: {
           firstName: "John"
         },
@@ -226,6 +228,7 @@ describe("Test the routing capabilities", () => {
       body: {
         email: "test@test.test",
         password: "very_secret",
+        type: 'user',
         userDetails: {
           firstName: "John"
         },
@@ -250,6 +253,7 @@ describe("Test the routing capabilities", () => {
       body: {
         email: "test@test.test",
         password: "very_secret",
+        type: 'user',
         userDetails: {
           firstName: "John"
         },
@@ -274,6 +278,7 @@ describe("Test the routing capabilities", () => {
       body: {
         email: "test@test.test",
         password: "very_secret",
+        type: 'user',
         userDetails: {
           firstName: "John"
         },

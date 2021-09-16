@@ -20,7 +20,6 @@ describe("Test the api doc generation capabilities", () => {
 
   it("should document api metadata", async () => {
     expect(doc.openapi).toEqual("3.0.0");
-
   });
 
   it("should document api info", () => {
@@ -100,6 +99,18 @@ describe("Test the api doc generation capabilities", () => {
     expect(errors).toBeDefined();
     expect(errors.type).toEqual("array");
     expect(errors.items).toBeDefined();
+  });
+
+  it("should document the correct content type", () => {
+    const paths = doc.paths;
+    const imagePath = paths["/api/raw-response"];
+    const responses = imagePath.post.responses;
+    const resp200 = responses["200"];
+    expect(resp200.description).toEqual('Returns an image');
+    const content = resp200.content;
+    expect(content).toBeDefined();
+    const contentType = content['image/png'];
+    expect(contentType).toBeDefined();
   });
 
   it("should document internal server error schema", () => {

@@ -7,4 +7,8 @@ export class ResponseMetadata {
   type?: "object" | "array";
   body?: ObjectType<any>;
   example?: Record<string, unknown>;
+  schema?: {
+    type: 'string',
+    format: 'binary'
+  }
 }

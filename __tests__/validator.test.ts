@@ -16,6 +16,7 @@ describe("Test the validation capabilities", () => {
       method: HttpMethod.POST,
       body: {
         password: "very_secret",
+        type: 'user',
         userDetails: {
           firstName: "John"
         },
@@ -44,6 +45,7 @@ describe("Test the validation capabilities", () => {
         userDetails: {
           firstName: "John"
         },
+        type: 'user',
         items: [
           "foo",
           "bar"
@@ -85,6 +87,7 @@ describe("Test the validation capabilities", () => {
       body: {
         email: "sasas@sdsasd.com",
         password: 1234,
+        type: 'user',
         userDetails: {
           firstName: "John",
           lastName: 12121
@@ -114,6 +117,7 @@ describe("Test the validation capabilities", () => {
       body: {
         email: "sasas@sdsasd.com",
         password: 1234,
+        type: 'user',
         items: [
           "foo",
           "bar"
@@ -140,6 +144,7 @@ describe("Test the validation capabilities", () => {
       body: {
         email: "sasas@sdsasd.com",
         password: "password",
+        type: 'user',
         userDetails: {
           lastName: "John"
         },

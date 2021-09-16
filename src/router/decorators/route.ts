@@ -47,6 +47,7 @@ export const Route = (props: IRouteProps) => {
   return (target: any, propertyKey: string) => {
     Logger.log("Adding route target::", target.constructor.name);
     Logger.log("Adding route prop key::", propertyKey);
+    Logger.log("Adding route props::", props);
 
     const metadata = getMetadataStorage();
     const routeMeta = new RouteMetadata(target[propertyKey])

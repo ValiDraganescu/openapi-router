@@ -23,11 +23,13 @@ import { RouterMetadata } from "../metadata/router-metadata";
 import { PropertyMetadata } from "../metadata/property-metadata";
 import { ResponseMetadata } from "../metadata/response-metadata";
 import { DocContent } from "./model/doc-content";
+import { Logger } from "../logger";
 
 const getResponseContent = (response: ResponseMetadata): DocContent => {
+  Logger.log("resolving response content for", response.description);
   // object schema
-  const contentType = response.contentType ?? 'application/json';
-  let schema: DocContent = {
+  const contentType = response.contentType ?? "application/json";
+  let docContent: DocContent = {
     [contentType]: {
       schema: {
         $ref: `#/components/schemas/${response.body?.name}`
@@ -35,9 +37,14 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
       example: response.example
     }
   };
+
+  if (response.schema) {
+    docContent[contentType].schema = response.schema;
+  }
+
   // array schema
   if (response.type === "array") {
-    schema = {
+    docContent = {
       [contentType]: {
         schema: {
           type: "array",
@@ -48,8 +55,11 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
         example: response.example
       }
     };
+    if (response.schema) {
+      docContent[contentType].schema = response.schema;
+    }
   }
-  return schema;
+  return docContent;
 };
 
 const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
@@ -59,9 +69,7 @@ const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
       description: response.description
     };
 
-    if (response.body && response.body.name) {
-      responses[String(response.statusCode)].content = getResponseContent(response);
-    }
+    responses[String(response.statusCode)].content = getResponseContent(response);
   }
   return responses;
 };
@@ -103,10 +111,10 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
             }
           }
           if (routeMetadata.requestBody) {
-            const contentTypeHeader = routeMetadata.parameters?.filter(param => param.in === 'header' && param.name.toLowerCase() === 'content-type');
+            const contentTypeHeader = routeMetadata.parameters?.filter(param => param.in === "header" && param.name.toLowerCase() === "content-type");
             thisDoc.paths[path][loweredMethod].requestBody = {
               content: {
-                [(contentTypeHeader  && contentTypeHeader.length) ? contentTypeHeader[0].default as any : "application/json"]: {
+                [(contentTypeHeader && contentTypeHeader.length) ? contentTypeHeader[0].default as any : "application/json"]: {
                   schema: {
                     $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`
                   },
@@ -178,7 +186,7 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
         }
         model.items.oneOf = [];
         for (const type of propMeta.objectType) {
-          console.log('generating for type', type);
+          console.log("generating for type", type);
           if (primitiveTypes.includes(type)) {
             model.items.oneOf.push({
               type

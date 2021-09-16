@@ -3,6 +3,7 @@ import { DocParameter } from "../doc/model/parameter";
 import { ResponseMetadata } from "./response-metadata";
 import { IMiddleware } from "../router/decorators/route";
 import { RequestHandler } from "..";
+import { Logger } from "../logger";
 
 export class RouteMetadata {
   handler: RequestHandler;
@@ -29,6 +30,7 @@ export class RouteMetadata {
   };
 
   setResponses = (responses: ResponseMetadata[]): RouteMetadata => {
+    Logger.log('setResponses', responses);
     this.responses = responses;
     return this;
   };
