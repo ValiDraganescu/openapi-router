@@ -244,7 +244,7 @@ export class Validator {
                     errors.push(...validateRequiredProperties(propertyValue, propMeta, modelName, modelKey));
                   }
 
-                  if (propMeta.enum && !propMeta.enum.includes(propertyValue) && propMeta.isRequired) {
+                  if (propMeta.enum && propMeta.isRequired && !propMeta.enum.includes(propertyValue)) {
                     errors.push({
                       message: `The property ${modelKey} value must be one of [${propMeta.enum.join(',')}], ${propertyValue} was provided instead`
                     })

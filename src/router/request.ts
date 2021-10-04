@@ -42,18 +42,20 @@ export class Request<RequestBody = any> {
 
   private getQueryParams(): IQueryParams | null {
     Logger.log("Getting query params from", this.path);
-    const paramPath = this.path.split("?")[1];
-    if (paramPath) {
-      Logger.log("Got param path::", paramPath);
-      const params: IQueryParams = {};
-      const paramPairs = paramPath.split("&");
-      Logger.log(`There are ${paramPairs.length} params`);
-      for (const paramPair of paramPairs) {
-        const paramPairComponents = paramPair.split("=");
-        params[paramPairComponents[0]] = paramPairComponents[1];
+    if (this.path) {
+      const paramPath = this.path.split("?")[1];
+      if (paramPath) {
+        Logger.log("Got param path::", paramPath);
+        const params: IQueryParams = {};
+        const paramPairs = paramPath.split("&");
+        Logger.log(`There are ${paramPairs.length} params`);
+        for (const paramPair of paramPairs) {
+          const paramPairComponents = paramPair.split("=");
+          params[paramPairComponents[0]] = paramPairComponents[1];
+        }
+        Logger.log("Got query params::", params);
+        return params;
       }
-      Logger.log("Got query params::", params);
-      return params;
     }
     return null;
   }
