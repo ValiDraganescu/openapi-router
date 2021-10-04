@@ -1,6 +1,7 @@
 import { App } from "../example/app";
 import { DocApi } from "../src/doc/model/api";
 import { HttpMethod, Request } from "../src";
+import exp = require("constants");
 
 describe("Test the api doc generation capabilities", () => {
 
@@ -111,6 +112,10 @@ describe("Test the api doc generation capabilities", () => {
     expect(content).toBeDefined();
     const contentType = content['image/png'];
     expect(contentType).toBeDefined();
+    const schema = contentType.schema;
+    expect(schema).toBeDefined();
+    expect(schema.type).toEqual("string");
+    expect(schema.format).toEqual('binary');
   });
 
   it("should document internal server error schema", () => {
