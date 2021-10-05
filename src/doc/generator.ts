@@ -29,14 +29,15 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
   Logger.log("resolving response content for", response.description);
   // object schema
   const contentType = response.contentType ?? "application/json";
-  let docContent: DocContent = {
-    [contentType]: {
+  let docContent: DocContent = {};
+  if (response.body?.name) {
+    docContent[contentType] = {
       schema: {
         $ref: `#/components/schemas/${response.body?.name}`
       },
       example: response.example
     }
-  };
+  }
 
   if (response.schema) {
     docContent[contentType].schema = response.schema;
