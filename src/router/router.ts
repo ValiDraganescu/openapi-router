@@ -24,8 +24,65 @@ import { AfterMiddlewareHandler, BeforeMiddlewareHandler, Envelope, Request, Res
 import { Validator } from "../validator/validator";
 import { ResponseMetadata } from "../metadata/response-metadata";
 import { IPathParam } from "./path-param";
+import { PropertyMetadata } from "../metadata/property-metadata";
+import { getDefaultRandomInteger, getDefaultRandomString, getRandomBoolean } from "./mock/get-random";
 
 export class Router {
+
+  private getRandomValue(keyMetadata: PropertyMetadata) {
+    switch (keyMetadata.type) {
+      case "string": {
+        return getDefaultRandomString();
+      }
+      case "boolean": {
+        return getRandomBoolean();
+      }
+      default: {
+        return getDefaultRandomInteger();
+      }
+    }
+  }
+
+  mockResponse(request: Request, statusCode: StatusCode) {
+    const [route] = this.resolveHandler(request.method, request.path);
+    if (!route) {
+      throw new Error(`The route ${request.method}:${request.path} is not defined`);
+    }
+
+    const responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === statusCode);
+    if (!responseMeta) {
+      throw new Error(`The route ${request.method}:${request.path} does not define a response for status code ${statusCode}`);
+    }
+    const metadata = getMetadataStorage();
+    const body = responseMeta.body;
+    const responseName = body!.name;
+    const responseMetadata = metadata.entities[responseName];
+    const data = responseMetadata.data;
+    const resp = this.getMockData(data.objectType as string);
+    return {
+      data: resp
+    }
+  }
+
+  private getMockData(modelName: string) {
+    const resp: any = {};
+    const metadata = getMetadataStorage();
+    const dataModel = metadata.entities[modelName];
+    for (const key in dataModel) {
+      if (dataModel.hasOwnProperty(key)) {
+        const keyMetadata = dataModel[key];
+        if (!["object", "array"].includes(keyMetadata.type)) {
+          resp[key] = this.getRandomValue(keyMetadata);
+        }
+        if (keyMetadata.type === "object") {
+          const subModelName = keyMetadata.objectType as string;
+          resp[key] = this.getMockData(subModelName);
+        }
+      }
+    }
+    return resp;
+  }
+
   handleEvent = async (request: Request): Promise<Response<any>> => {
     Logger.time("[TIMING] Router");
 
@@ -45,7 +102,7 @@ export class Router {
         if (inputValidationErrors && inputValidationErrors.length) {
           Logger.timeEnd("[TIMING] Router");
           return new Response<Envelope>(StatusCode.badRequest).setBody({
-            errors: inputValidationErrors
+            errors: inputValidationErrors,
           });
         }
         Logger.timeEnd("[TIMING] Router validate request");
@@ -114,14 +171,14 @@ export class Router {
         Logger.log("Validating output");
         const body = resp!.getBody();
 
-        const outputValidationResult = Validator.validate(resp!.getBody(), responseMeta.body.name);
+        const outputValidationResult = Validator.validate(body, responseMeta.body.name);
         Logger.timeEnd("[TIMING] Router validate response");
         if (outputValidationResult && outputValidationResult.length) {
           // the API broke the contract with the client, fail the request
           console.log(outputValidationResult);
           Logger.timeEnd("[TIMING] Router");
           return new Response<Envelope>(StatusCode.internalServerError).setBody({
-            errors: outputValidationResult
+            errors: outputValidationResult,
           });
         }
       }
@@ -136,9 +193,9 @@ export class Router {
       errors: [
         {
           code: "not-found",
-          message: "404 Not found"
-        }
-      ]
+          message: "404 Not found",
+        },
+      ],
     });
   };
 
@@ -148,7 +205,7 @@ export class Router {
 
   private executeMiddlewareBefore = async (
     before: BeforeMiddlewareHandler[],
-    request: Request
+    request: Request,
   ): Promise<[Request | null, Response<any> | null]> => {
     let response: Response<any> | null = null;
     for (const handler of before) {
@@ -176,7 +233,7 @@ export class Router {
 
   private resolveHandler = (
     method: string,
-    path: string
+    path: string,
   ): [RouteMetadata | null, IPathParams | null, IMiddleware | null] => {
     const requestPath = this.removeTrailingSlash(path);
     let pathParams: IPathParams | null = null;
@@ -213,7 +270,7 @@ export class Router {
                 pathParams[paramName] = {
                   name: paramName,
                   value: decodeURIComponent(basePathComponents[i]),
-                  index: i
+                  index: i,
                 } as IPathParam;
               } else {
                 isValidRoute = false;

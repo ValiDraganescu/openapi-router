@@ -91,6 +91,25 @@ export class App extends LambdaRouter {
   };
 
   @Route({
+    description: "simple method, just says hello to the user",
+    summary: "This is the summary",
+    method: HttpMethod.GET,
+    path: "/hello-mock",
+    responses: [{
+      statusCode: 200,
+      description: "hello response",
+      body: HelloResponse
+    }],
+    tags: [
+      "hello"
+    ]
+  })
+  async sayHelloHandlerMock(_request: Request): Promise<Response<HelloResponse>> {
+    const mockResponse = getRouter().mockResponse(_request, 200);
+    return new Response<HelloResponse>().setBody(mockResponse);
+  };
+
+  @Route({
     description: "returns the doc for this API",
     method: HttpMethod.GET,
     path: "/api/doc",
