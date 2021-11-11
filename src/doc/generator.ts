@@ -33,14 +33,16 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
   if (response.body?.name) {
     docContent[contentType] = {
       schema: {
-        $ref: `#/components/schemas/${response.body?.name}`
+        $ref: `#/components/schemas/${response.body?.name}`,
       },
-      example: response.example
-    }
+      example: response.example,
+    };
   }
 
   if (response.schema) {
-    docContent[contentType].schema = response.schema;
+    docContent[contentType] = {
+      schema: response.schema,
+    };
   }
 
   // array schema
@@ -50,11 +52,11 @@ const getResponseContent = (response: ResponseMetadata): DocContent => {
         schema: {
           type: "array",
           items: {
-            $ref: `#/components/schemas/${response.body?.name}`
-          }
+            $ref: `#/components/schemas/${response.body?.name}`,
+          },
         },
-        example: response.example
-      }
+        example: response.example,
+      },
     };
     if (response.schema) {
       docContent[contentType].schema = response.schema;
@@ -67,7 +69,7 @@ const resolveResponses = (routeMetadata: RouteMetadata): DocResponses => {
   const responses: DocResponses = {};
   for (const response of routeMetadata.responses) {
     responses[String(response.statusCode)] = {
-      description: response.description
+      description: response.description,
     };
 
     responses[String(response.statusCode)].content = getResponseContent(response);
@@ -96,7 +98,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
             description: routeMetadata.description,
             summary: routeMetadata.summary,
             operationId: `${method}-${path}`,
-            security: routeMetadata.security ?? metadata.docMetadata?.security
+            security: routeMetadata.security ?? metadata.docMetadata?.security,
           };
           if (routeMetadata.responses) {
             thisDoc.paths[path][loweredMethod].responses = resolveResponses(routeMetadata);
@@ -105,7 +107,7 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
                 if (!thisDoc.paths[path][loweredMethod].responses[globalResponse.statusCode]) {
                   thisDoc.paths[path][loweredMethod].responses[globalResponse.statusCode] = {
                     description: globalResponse.description,
-                    content: getResponseContent(globalResponse)
+                    content: getResponseContent(globalResponse),
                   };
                 }
               }
@@ -117,11 +119,11 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
               content: {
                 [(contentTypeHeader && contentTypeHeader.length) ? contentTypeHeader[0].default as any : "application/json"]: {
                   schema: {
-                    $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`
+                    $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`,
                   },
-                  example: routeMetadata.example
-                }
-              }
+                  example: routeMetadata.example,
+                },
+              },
             };
           }
 
@@ -141,24 +143,24 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
   if (propMeta.type === "object") {
     if (Array.isArray(propMeta.objectType)) {
       const objectModel: any = {
-        oneOf: []
+        oneOf: [],
       };
       for (const type of propMeta.objectType) {
         console.log("Adding type", type);
         if (primitiveTypes.includes(type)) {
           objectModel.oneOf.push({
-            type
+            type,
           });
           continue;
         }
         objectModel.oneOf.push({
-          $ref: `#/components/schemas/${type}`
+          $ref: `#/components/schemas/${type}`,
         });
       }
       return objectModel;
     }
     return {
-      $ref: `#/components/schemas/${propMeta.objectType}`
+      $ref: `#/components/schemas/${propMeta.objectType}`,
     };
   }
   const model: { [key: string]: any } = {
@@ -167,7 +169,7 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
     description: propMeta.description,
     format: propMeta.format,
     enum: propMeta.enum,
-    default: propMeta.default
+    default: propMeta.default,
   };
   if (propMeta.type === "string") {
     model.minLength = propMeta.minSize;
@@ -190,22 +192,22 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
           console.log("generating for type", type);
           if (primitiveTypes.includes(type)) {
             model.items.oneOf.push({
-              type
+              type,
             });
           } else {
             model.items.oneOf.push({
-              $ref: `#/components/schemas/${type}`
+              $ref: `#/components/schemas/${type}`,
             });
           }
         }
       } else {
         if (primitiveTypes.includes(propMeta.objectType)) {
           model.items = {
-            type: propMeta.objectType
+            type: propMeta.objectType,
           };
         } else {
           model.items = {
-            $ref: `#/components/schemas/${propMeta.objectType}`
+            $ref: `#/components/schemas/${propMeta.objectType}`,
           };
         }
       }
@@ -219,7 +221,7 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
 const resolveModelDocumentation = (
   propKeys: string[],
   metadata: RouterMetadata,
-  entityName: string
+  entityName: string,
 ): [any, string[]] => {
   const properties: any = {};
   const required: string[] = [];
@@ -262,7 +264,7 @@ export const generateDoc = (version: string): DocApi => {
     const [properties, required] = resolveModelDocumentation(propKeys, metadata, entityName);
 
     schemas[entityName] = {
-      properties
+      properties,
     };
 
     if (required.length) {
@@ -271,7 +273,7 @@ export const generateDoc = (version: string): DocApi => {
   }
 
   apiDoc.components = {
-    schemas
+    schemas,
   };
 
   if (metadata.docMetadata?.securitySchemes) {

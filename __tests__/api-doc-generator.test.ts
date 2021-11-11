@@ -156,6 +156,7 @@ describe("Test the api doc generation capabilities", () => {
             } else {
               expect(item.$ref).toBeDefined();
               expect(typeof item.$ref).toEqual("string");
+              expect(item.$ref.includes('undefined')).toBe(false);
             }
           }
         } else {

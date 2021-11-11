@@ -65,8 +65,7 @@ import { BaseResponse } from "./model/response/base-response";
     }, {
       statusCode: StatusCode.notFound,
       description: "Not found",
-      type: "array",
-      body: BaseResponse
+      type: "array"
     }
   ]
 })
