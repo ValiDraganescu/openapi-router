@@ -23,5 +23,5 @@ export class DocSchema {
   $ref?: string;
   format?: string;
   properties?: { [key: string]: any };
-  enum?: string[];
+  enum?: (string | number)[];
 }
