@@ -1,5 +1,5 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from "http";
-import { HttpMethod, Router, StatusCode } from "..";
+import { HttpMethod, Router } from "..";
 import { Request } from "./request";
 
 const paramsToObject = (params: URLSearchParams) => {
@@ -10,11 +10,7 @@ const paramsToObject = (params: URLSearchParams) => {
   return result;
 };
 
-const getRequestFromEvent = (
-  request: IncomingMessage,
-  parsedBody: any,
-  rawBody: string
-): Request => {
+const getRequestFromEvent = (request: IncomingMessage, parsedBody: any, rawBody: string): Request => {
   const headers: any = request.headers;
   const method = request.method as HttpMethod;
   const urlString = `${headers.host}${request.url}`;
@@ -28,7 +24,7 @@ const getRequestFromEvent = (
     method,
     body: parsedBody,
     rawBody,
-    queryParams
+    queryParams,
   });
   console.log("Router request", routerRequest);
   return routerRequest;
@@ -44,7 +40,7 @@ export class DevServer {
 
   onRequest = async (request: IncomingMessage, response: ServerResponse) => {
     let data = "";
-    request.on("data", (chunk) => {
+    request.on("data", chunk => {
       data += chunk;
     });
     request.on("end", async () => {
@@ -58,25 +54,25 @@ export class DevServer {
             errors: [
               {
                 code: "1",
-                message: e.message
-              }
-            ]
+                message: e.message,
+              },
+            ],
           });
         }
       }
 
       const routerRequest = getRequestFromEvent(request, parsedBody, data);
       if (request.method?.toUpperCase() === HttpMethod.OPTIONS) {
-        response.setHeader('Access-Control-Expose-Headers', '*');
-        response.setHeader('Access-Control-Allow-Credentials', 'true');
-        response.setHeader('Access-Control-Max-Age', '3600');
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.setHeader('Access-Control-Allow-Headers', '*');
-        response.setHeader('Access-Control-Allow-Methods', '*');
-        response.setHeader('Connection', 'keep-alive');
-        response.setHeader('Access-Control-Request-Method', 'POST');
-        response.setHeader('Allow', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
-        response.setHeader('Allowed', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
+        response.setHeader("Access-Control-Expose-Headers", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Connection", "keep-alive");
+        response.setHeader("Access-Control-Request-Method", "POST");
+        response.setHeader("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        response.setHeader("Allowed", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
         response.writeHead(200);
         return response.end();
       }
@@ -91,9 +87,9 @@ export class DevServer {
           errors: [
             {
               code: "1",
-              message: e.message
-            }
-          ]
+              message: e.message,
+            },
+          ],
         });
       }
       return;

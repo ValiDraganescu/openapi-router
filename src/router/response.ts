@@ -29,7 +29,7 @@ export class Response<ResponseBody> {
     Pragma: "no-cache",
     "Access-Control-Expose-Headers": "X-Api-Version",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Credentials": "true"
+    "Access-Control-Allow-Credentials": "true",
   };
 
   constructor(statusCode?: StatusCode) {

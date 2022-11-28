@@ -19,7 +19,6 @@ import { RouterMetadata } from "./router-metadata";
 const _global: any = {};
 
 export const getMetadataStorage = (): RouterMetadata => {
-
   if (!_global.routerMetadata) {
     _global.routerMetadata = new RouterMetadata();
   }

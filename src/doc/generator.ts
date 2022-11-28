@@ -114,10 +114,14 @@ const generatePathDoc = (apiDoc: DocApi, metadata: RouterMetadata): DocApi => {
             }
           }
           if (routeMetadata.requestBody) {
-            const contentTypeHeader = routeMetadata.parameters?.filter(param => param.in === "header" && param.name.toLowerCase() === "content-type");
+            const contentTypeHeader = routeMetadata.parameters?.filter(
+              param => param.in === "header" && param.name.toLowerCase() === "content-type",
+            );
             thisDoc.paths[path][loweredMethod].requestBody = {
               content: {
-                [(contentTypeHeader && contentTypeHeader.length) ? contentTypeHeader[0].default as any : "application/json"]: {
+                [contentTypeHeader && contentTypeHeader.length
+                  ? (contentTypeHeader[0].default as any)
+                  : "application/json"]: {
                   schema: {
                     $ref: `#/components/schemas/${routeMetadata.requestBody?.name}`,
                   },
@@ -211,7 +215,6 @@ const resolvePropertyDocumentation = (propMeta: PropertyMetadata): any => {
           };
         }
       }
-
     }
   }
 

@@ -4,21 +4,20 @@ Vivamus tellus velit, accumsan vitae sollicitudin a, iaculis et ex. Sed mollis m
 Phasellus non neque efficitur, porta massa in, aliquam nunc. Suspendisse malesuada, dui et tincidunt consequat, lacus nisi malesuada quam, nec efficitur ante nisi ullamcorper neque. Maecenas a odio porta mauris sodales euismod in sit amet metus. Cras egestas vestibulum arcu, sed tristique neque ullamcorper ut. Donec tempor pharetra bibendum. Suspendisse mauris mauris, elementum at vulputate convallis, ullamcorper ac tellus. Nunc finibus ultricies sem, et varius urna aliquet eu. Vivamus nibh tellus, facilisis a odio vel, sollicitudin interdum mauris. Donec rhoncus, felis sed mollis pellentesque, justo ex congue sapien, et varius tortor orci non magna. Ut eleifend diam dignissim, blandit urna eget, commodo nulla.
 Nulla pulvinar dolor egestas commodo dignissim. Nam molestie metus dolor. Aliquam lacinia malesuada tincidunt. Nullam at rutrum ligula, aliquet molestie lorem. Aenean pulvinar lacus et vulputate condimentum. Morbi feugiat ligula eget dui porta tempor. Vestibulum venenatis consectetur ipsum, eget scelerisque dui sollicitudin id. Ut mattis maximus augue, id vestibulum purus egestas vehicula. Nulla aliquet ligula eget orci euismod vulputate.`;
 
-const strings = stringsBase.split(' ');
+const strings = stringsBase.split(" ");
 
 export const getDefaultRandomString = (): string => {
-    const index = getRandomInt(0, strings.length);
-    return strings[index];
-}
+  const index = getRandomInt(0, strings.length);
+  return strings[index];
+};
 
 export const getDefaultRandomInteger = (): number => {
   return getRandomInt(0, 1000);
-}
+};
 
-export const getRandomBoolean = ():boolean => {
-  return getRandomInt(0,1) === 0;
-}
-
+export const getRandomBoolean = (): boolean => {
+  return getRandomInt(0, 1) === 0;
+};
 
 export const getRandomInt = (min: number, max: number) => {
   min = Math.ceil(min);

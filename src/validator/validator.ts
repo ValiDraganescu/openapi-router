@@ -25,7 +25,7 @@ const validateIsRequired = (
   propMeta: PropertyMetadata,
   propertyValue: any,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.isRequired && (propertyValue === undefined || propertyValue === null)) {
     // return `${modelName}.${modelKey} is required`;
@@ -38,7 +38,7 @@ const validateIsCorrectType = (
   propType: PropType,
   propMeta: PropertyMetadata,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   Logger.log("Validating type", propType, propMeta, modelName, modelKey);
   if (propType === "number" || propType === "bigint") {
@@ -54,7 +54,6 @@ const validateIsCorrectType = (
       return `${modelName}.${modelKey} should be of type ${propMeta.type}`;
     }*/
 
-
   return null;
 };
 
@@ -63,7 +62,7 @@ const validateMinSize = (
   propType: PropType,
   property: any,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   Logger.log(`validating minSize ${propMeta.minSize} for propType ${propType}`);
   if (propMeta.minSize) {
@@ -88,7 +87,7 @@ const validateFormat = (
   propMeta: PropertyMetadata,
   property: string,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.format) {
     const regex = new RegExp(propMeta.format);
@@ -106,7 +105,7 @@ const validateMaxSize = (
   propType: PropType,
   property: any,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): string | null => {
   if (propMeta.maxSize) {
     if (propType === "string" || propType === "object" || propType === "array") {
@@ -141,7 +140,7 @@ const validateRequiredProperties = (
   property: any,
   propMeta: PropertyMetadata,
   modelName: string,
-  modelKey: string
+  modelKey: string,
 ): ApiError[] => {
   const errors: ApiError[] = [];
   let error: string | null;
@@ -179,8 +178,6 @@ const baseTypes = ["string", "number"];
 
 export class Validator {
   static validate = (body: any, objectType: string | string[]): ApiError[] => {
-
-
     let modelNames: string[];
     if (Array.isArray(objectType)) {
       modelNames = objectType;
@@ -203,14 +200,13 @@ export class Validator {
 
       if (entityMeta && (body === null || body === undefined)) {
         if (entityMeta) {
-          Logger.log('entity metadata', JSON.stringify(entityMeta));
+          Logger.log("entity metadata", JSON.stringify(entityMeta));
           errors.push({
-            message: `${modelName} is required`
+            message: `${modelName} is required`,
           });
           return errors;
         }
       }
-
 
       if (Array.isArray(body)) {
         for (const item of body) {
@@ -246,8 +242,10 @@ export class Validator {
 
                   if (propMeta.enum && propMeta.isRequired && !propMeta.enum.includes(propertyValue)) {
                     errors.push({
-                      message: `The property ${modelKey} value must be one of [${propMeta.enum.join(',')}], ${propertyValue} was provided instead`
-                    })
+                      message: `The property ${modelKey} value must be one of [${propMeta.enum.join(
+                        ",",
+                      )}], ${propertyValue} was provided instead`,
+                    });
                   }
                 }
               }

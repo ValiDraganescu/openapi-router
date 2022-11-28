@@ -30,7 +30,7 @@ export class RouteMetadata {
   };
 
   setResponses = (responses: ResponseMetadata[]): RouteMetadata => {
-    Logger.log('setResponses', responses);
+    Logger.log("setResponses", responses);
     this.responses = responses;
     return this;
   };

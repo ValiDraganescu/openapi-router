@@ -19,5 +19,9 @@ import { Request } from "./request";
 import { Envelope } from "../response/envelope";
 
 export type RequestHandler = (request: Request) => Promise<Response<Envelope | string | Buffer>>;
-export type BeforeMiddlewareHandler = (request: Request) => Promise<[Request, Response<Envelope | string | Buffer> | null]>;
-export type AfterMiddlewareHandler = (response: Response<Envelope | string | Buffer>) => Promise<Response<Envelope | string | Buffer>>;
+export type BeforeMiddlewareHandler = (
+  request: Request,
+) => Promise<[Request, Response<Envelope | string | Buffer> | null]>;
+export type AfterMiddlewareHandler = (
+  response: Response<Envelope | string | Buffer>,
+) => Promise<Response<Envelope | string | Buffer>>;

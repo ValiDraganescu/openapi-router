@@ -27,8 +27,14 @@ import { IPathParam } from "./path-param";
 import { PropertyMetadata } from "../metadata/property-metadata";
 import { getDefaultRandomInteger, getDefaultRandomString, getRandomBoolean } from "./mock/get-random";
 
-export class Router {
+const isPrimitive = (type: any): boolean => {
+  if (typeof type === "string") {
+    return ["string", "number", "integer", "boolean"].includes(type);
+  }
+  return false;
+};
 
+export class Router {
   private getRandomValue(keyMetadata: PropertyMetadata) {
     switch (keyMetadata.type) {
       case "string": {
@@ -51,7 +57,9 @@ export class Router {
 
     const responseMeta: ResponseMetadata | undefined = route.responses.find(r => r.statusCode === statusCode);
     if (!responseMeta) {
-      throw new Error(`The route ${request.method}:${request.path} does not define a response for status code ${statusCode}`);
+      throw new Error(
+        `The route ${request.method}:${request.path} does not define a response for status code ${statusCode}`,
+      );
     }
     const metadata = getMetadataStorage();
     const body = responseMeta.body;
@@ -60,8 +68,8 @@ export class Router {
     const data = responseMetadata.data;
     const resp = this.getMockData(data.objectType as string);
     return {
-      data: resp
-    }
+      data: resp,
+    };
   }
 
   private getMockData(modelName: string) {
@@ -71,7 +79,7 @@ export class Router {
     for (const key in dataModel) {
       if (dataModel.hasOwnProperty(key)) {
         const keyMetadata = dataModel[key];
-        if (!["object", "array"].includes(keyMetadata.type)) {
+        if (!isPrimitive(keyMetadata.type)) {
           resp[key] = this.getRandomValue(keyMetadata);
         }
         if (keyMetadata.type === "object") {
@@ -217,7 +225,10 @@ export class Router {
     return [request, null];
   };
 
-  private executeMiddlewareAfter = async (after: AfterMiddlewareHandler[], response: Response<Envelope | string | Buffer>): Promise<Response<Envelope | string | Buffer>> => {
+  private executeMiddlewareAfter = async (
+    after: AfterMiddlewareHandler[],
+    response: Response<Envelope | string | Buffer>,
+  ): Promise<Response<Envelope | string | Buffer>> => {
     for (const handler of after) {
       response = await handler(response);
     }
