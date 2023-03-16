@@ -175,21 +175,21 @@ export class Router {
         throw new Error(`No response defined for status code ${resp!.statusCode}`);
       }
 
-      if (responseMeta.body) {
-        Logger.log("Validating output");
-        const body = resp!.getBody();
-
-        const outputValidationResult = Validator.validate(body, responseMeta.body.name);
-        Logger.timeEnd("[TIMING] Router validate response");
-        if (outputValidationResult && outputValidationResult.length) {
-          // the API broke the contract with the client, fail the request
-          console.log(outputValidationResult);
-          Logger.timeEnd("[TIMING] Router");
-          return new Response<Envelope>(StatusCode.internalServerError).setBody({
-            errors: outputValidationResult,
-          });
-        }
-      }
+      // if (responseMeta.body) {
+      //   Logger.log("Validating output");
+      //   const body = resp!.getBody();
+      //
+      //   const outputValidationResult = Validator.validate(body, responseMeta.body.name);
+      //   Logger.timeEnd("[TIMING] Router validate response");
+      //   if (outputValidationResult && outputValidationResult.length) {
+      //     // the API broke the contract with the client, fail the request
+      //     console.log(outputValidationResult);
+      //     Logger.timeEnd("[TIMING] Router");
+      //     return new Response<Envelope>(StatusCode.internalServerError).setBody({
+      //       errors: outputValidationResult,
+      //     });
+      //   }
+      // }
 
       Logger.timeEnd("[TIMING] Router");
       return resp!;

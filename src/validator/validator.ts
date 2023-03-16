@@ -187,18 +187,21 @@ export class Validator {
 
     const errors: ApiError[] = [];
 
-    for (const modelName of modelNames) {
-      Logger.log("Validating", modelName, JSON.stringify(body));
-      const metadata = getMetadataStorage();
-      const entityMeta = metadata.entities[modelName];
+    // TODO: dirty hack to get around the fact that we cannot distinguish between types
 
-      if (!entityMeta && !baseTypes.includes(modelName)) {
-        const message = `Entity ${modelName} is not registered with the router`;
-        console.error(message);
-        errors.push({ message });
-      }
+    const modelName = modelNames[0];
 
-      if (entityMeta && (body === null || body === undefined)) {
+    // for (const modelName of modelNames) {
+    const metadata = getMetadataStorage();
+    const entityMeta = metadata.entities[modelName];
+
+    if (!entityMeta && !baseTypes.includes(modelName)) {
+      const message = `Entity ${modelName} is not registered with the router`;
+      console.error(message);
+      errors.push({ message });
+    }
+
+    if (entityMeta && (body === null || body === undefined)) {
         if (entityMeta) {
           Logger.log("entity metadata", JSON.stringify(entityMeta));
           errors.push({
@@ -214,6 +217,7 @@ export class Validator {
         }
       } else {
         if (typeof body === "object" && entityMeta !== undefined) {
+          console.log("Validating object", body.constructor.name);
           try {
             const modelKeys = Object.keys(entityMeta);
 
@@ -256,7 +260,7 @@ export class Validator {
           }
         }
       }
-    }
+    // }
 
     return errors;
   };

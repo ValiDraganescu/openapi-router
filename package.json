@@ -1,7 +1,8 @@
 {
   "name": "typescript-openapi-router",
-  "version": "3.1.0",
+  "version": "3.1.5",
   "description": "Multi purpose yet simple nodejs router with OpenAPI 3 compatibility for REST APIs",
+  "main": "dist/index.js",
   "author": {
     "name": "Vali Draganescu",
     "email": "vali.draganescu88+github@gmail.com"
@@ -42,7 +43,7 @@
     "ts-jest": "^25.0.0",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.5"
+    "typescript": "4.9.3"
   },
   "files": [
     "dist/**/*"
